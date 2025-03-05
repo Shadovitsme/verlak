@@ -13,7 +13,13 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable,HasRoles;
+    protected $guarded = [];
 
+    public function hasRole($role)
+{
+    echo($this->role);
+    return $this->role === $role; // Предполагая, что колонка role есть в таблице users
+}
 
     /**
      * The attributes that are mass assignable.

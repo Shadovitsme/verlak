@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Closure;
@@ -16,13 +17,17 @@ class RoleMiddleware
      * @param  string  $role
      * @return mixed
      */
-    public function handle(
-        Request $request,
-        Closure $next,
-    ) {
-        // if (!Auth::check()) {
-        //     abort(403, 'Unauthorized');
-        // }
+    public function handle(Request $request, Closure $next, $role)
+    {
+        if (!Auth::check()) {
+            dd('User not authenticated');
+        }
+
+        $user = Auth::user();
+        echo (!$user->role == 'administrator');
+        if ($user->role != 'administrator') {
+            abort(403, 'aasasas');
+        }
 
         return $next($request);
     }
