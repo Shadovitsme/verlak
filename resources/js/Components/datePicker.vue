@@ -1,18 +1,9 @@
 <template>
     <VDatePicker v-model="date" color="indigo">
         <template #footer>
-            <div class="flex w-full gap-2 px-3 pb-3">
-                <justButton
-                    color="gray"
-                    text="Отмена"
-                    @click="setToday"
-                ></justButton>
-                <button
-                    class="w-full rounded-md bg-indigo-600 px-3 py-1 font-bold text-white hover:bg-indigo-700"
-                    @click="setToday"
-                >
-                    Today
-                </button>
+            <div class="flex w-full gap-4 px-3 pb-3">
+                <justButton color="gray" class="w-full" @click="setToday">Отмена</justButton>
+                <justButton color="blue" class="w-full" @click="setToday">Выбрать</justButton>
             </div>
         </template>
     </VDatePicker>

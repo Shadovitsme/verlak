@@ -3,13 +3,10 @@ const props = defineProps({
     color: String,
 });
 let colorArray = [
-    [' bg-gray-200 hover:bg-gray-300 active:bg-gray-300 ', 'text-gray-800'],
-    [
-        ' bg-gray-800 hover:bg-gray-700 disabled:bg-gray-600 ',
-        'text-white disabled:text-gray-500',
-    ],
-    [' bg-gray-200 hover:bg-gray-300 active:bg-gray-300 ', 'text-white'],
-    [' bg-gray-200 hover:bg-gray-300 active:bg-gray-300 ', 'text-gray-800'],
+    ' bg-gray-200 hover:bg-gray-300 active:bg-gray-300 text-gray-800 ',
+    ' bg-gray-800 hover:bg-gray-700 disabled:bg-gray-600 text-white disabled:text-gray-500 ',
+    ' bg-indigo-700 hover:bg-indigo-800 text-white  ',
+    ' text-gray-800 hover:text-indigo-700 ',
 ];
 let style;
 switch (props.color) {
@@ -30,7 +27,7 @@ switch (props.color) {
 }
 </script>
 <template>
-    <button :class="'rounded-lg px-5 py-2.5 text-white ' + style[0]">
-        <slot :class="'text-sm' + style[1]"></slot>
+    <button :class="'rounded-lg px-5 py-2.5 text-sm ' + style">
+        <slot></slot>
     </button>
 </template>
