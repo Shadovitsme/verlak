@@ -3,6 +3,7 @@
         <TablePlaceholder
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
+            :readonly-fields="[1, 0, 0, 0, 0]"
             :data-filler="[
                 [
                     'Иванов Иван Михайлович',
@@ -23,5 +24,5 @@
 
 <script setup>
 import PagePlace from '@/Components/pagePlace.vue';
-import TablePlaceholder from '@/Components/tablePlaceholder.vue';
+import TablePlaceholder from '@/Components/customUniversalTable.vue';
 </script>

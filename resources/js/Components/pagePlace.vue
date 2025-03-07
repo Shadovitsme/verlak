@@ -1,6 +1,5 @@
 <template>
     <Header></Header>
-    <!-- TODO добавить 1600 в кастом таилвинда -->
     <div class="mx-32 mt-20 w-full max-w-[1600px] pt-12">
         <div class="mb-8 flex">
             <h1 class="my-auto mr-4 text-5xl text-gray-900">
