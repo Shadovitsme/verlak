@@ -1,5 +1,5 @@
 <script setup>
-import checkStyle from './js functions/buttonStyleArray';
+import checkStyle from './jsFunctions/buttonStyleArray';
 
 const props = defineProps({
     color: String,

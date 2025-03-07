@@ -1,9 +1,9 @@
 <template>
-    <Header></Header>
-    <TableCard head="test Head" class="mt-20"></TableCard>
+    <PagePlace page-name="sdfkls"></PagePlace>
+    <JustButton color="gray"></JustButton>
 </template>
 
 <script setup>
-import Header from '@/Components/header.vue';
-import TableCard from '@/Components/tableCard.vue';
+import JustButton from '@/Components/justButton.vue';
+import PagePlace from '@/Components/pagePlace.vue';
 </script>

@@ -13,15 +13,17 @@ let notificateStatus = 'Default';
                 ><JustButton color="noColor">Сотрудники</JustButton
                 ><JustButton color="noColor">Счета</JustButton
                 ><JustButton class="flex align-middle" color="noColor"
-                    >Уведомления<img
-                        class="ml-2 inline-block size-5"
+                    >Уведомления
+                    <img
+                        class="imgColorlessButton ml-2 inline-block size-5"
                         :src="
                             '/assets/icons/system/State=' +
                             notificateStatus +
                             '.svg'
                         "
                 /></JustButton>
-                <!-- TODO уведомлениям нужен колокольчик -->
+                <!-- TODO сделать отдельный класс для таких текстов с иконками чтоб красить иконку -->
+                <!-- TODO заставить колокольчик подкрашиваться при наведении на кнопку-->
                 <JustButton color="noColor">Исполнители</JustButton>
             </div>
             <div class="flex">
@@ -36,3 +38,9 @@ let notificateStatus = 'Default';
         </div>
     </div>
 </template>
+<style>
+.imgColorlessButton:hover {
+    filter: brightness(0) saturate(100%) invert(20%) sepia(83%) saturate(3179%)
+        hue-rotate(242deg) brightness(80%) contrast(96%);
+}
+</style>

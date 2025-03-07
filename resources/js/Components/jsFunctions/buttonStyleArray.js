@@ -3,6 +3,7 @@ export default function checkStyle(color) {
 
     switch (color) {
         case 'gray':
+            console.log(0);
             style = colorArray[0];
             break;
         case 'dark':
