@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(function () {
     Route::get('/admin', function () {
-        return Inertia::render('testAdmin');
+        return Inertia::render('managerListPage');
     });
 });
 

@@ -1,14 +1,18 @@
 <template>
     <Header></Header>
-    <div class="mt-20 w-full max-w-[1600px]">
-        <div class="flex">
-            <h1 class="mr-4 text-5xl text-gray-900">{{ props.pageName }}</h1>
+    <!-- TODO добавить 1600 в кастом таилвинда -->
+    <div class="mx-32 mt-20 w-full max-w-[1600px] pt-12">
+        <div class="mb-8 flex">
+            <h1 class="my-auto mr-4 text-5xl text-gray-900">
+                {{ props.pageName }}
+            </h1>
             <IconButton
-                class="rotate-45"
+                class="my-auto rotate-45"
                 color="blue"
                 icon="/assets/icons/system/x.svg"
             ></IconButton>
         </div>
+        <slot></slot>
     </div>
 </template>
 <script setup>
