@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Middleware\RoleMiddleware;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -15,6 +15,19 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/contracts', function () {
+    return Inertia::render('contracts');
+});
+
+Route::get('/scores', function () {
+    return Inertia::render('scores');
+});
+Route::get('/notifications', function () {
+    return Inertia::render('notifications');
+});
+Route::get('/executors', function () {
+    return Inertia::render('executors');
+});
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,4 +44,4 @@ Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(fun
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

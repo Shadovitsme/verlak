@@ -10,22 +10,32 @@ import DropdownLink from './DropdownLink.vue';
     >
         <div class="my-auto flex h-fit w-full justify-between">
             <div class="flex gap-3">
-                <JustButton color="noColor">Договоры</JustButton
-                ><JustButton color="noColor">Сотрудники</JustButton
-                ><JustButton color="noColor">Счета</JustButton
-                ><JustButton class="flex align-middle" color="noColor"
-                    ><p class="my-auto">Уведомления</p>
-                    <img
-                        class="imgColorlessButton my-auto ml-2 inline-block size-5"
-                        :src="
-                            '/assets/icons/system/State=' +
-                            notificateStatus +
-                            '.svg'
-                        "
-                /></JustButton>
-                <!-- TODO сделать отдельный класс для таких текстов с иконками чтоб красить иконку -->
-                <!-- TODO заставить колокольчик подкрашиваться при наведении на кнопку-->
-                <JustButton color="noColor">Исполнители</JustButton>
+                <a class="my-auto" href="/contracts">
+                    <JustButton color="noColor">Договоры</JustButton></a
+                >
+                <a class="my-auto" href="/admin"
+                    ><JustButton color="noColor">Сотрудники</JustButton></a
+                >
+                <a class="my-auto" href="/scores"
+                    ><JustButton color="noColor">Счета</JustButton></a
+                >
+                <a class="my-auto" href="/notifications">
+                    <JustButton class="flex align-middle" color="noColor"
+                        ><p class="my-auto">Уведомления</p>
+                        <img
+                            class="imgColorlessButton my-auto ml-2 inline-block size-5"
+                            :src="
+                                '/assets/icons/system/State=' +
+                                notificateStatus +
+                                '.svg'
+                            "
+                    /></JustButton>
+                    <!-- TODO сделать отдельный класс для таких текстов с иконками чтоб красить иконку -->
+                    <!-- TODO заставить колокольчик подкрашиваться при наведении на кнопку--></a
+                >
+                <a class="my-auto" href="/executors">
+                    <JustButton color="noColor">Исполнители</JustButton>
+                </a>
             </div>
             <div class="flex">
                 <p class="my-auto mr-3.5 flex font-medium text-indigo-600">
