@@ -2,6 +2,7 @@
 import IconButton from './iconButton.vue';
 import JustButton from './justButton.vue';
 let notificateStatus = 'Default';
+import DropdownLink from './DropdownLink.vue';
 </script>
 <template>
     <div
@@ -13,9 +14,9 @@ let notificateStatus = 'Default';
                 ><JustButton color="noColor">Сотрудники</JustButton
                 ><JustButton color="noColor">Счета</JustButton
                 ><JustButton class="flex align-middle" color="noColor"
-                    >Уведомления
+                    ><p class="my-auto">Уведомления</p>
                     <img
-                        class="imgColorlessButton ml-2 inline-block size-5"
+                        class="imgColorlessButton my-auto ml-2 inline-block size-5"
                         :src="
                             '/assets/icons/system/State=' +
                             notificateStatus +
@@ -28,12 +29,16 @@ let notificateStatus = 'Default';
             </div>
             <div class="flex">
                 <p class="my-auto mr-3.5 flex font-medium text-indigo-600">
-                    ivan@mail.ru
+                    {{ $page.props.auth.user.name }}
                 </p>
-                <IconButton
-                    color="gray"
-                    icon="/assets/icons/system/log-out.svg"
-                ></IconButton>
+
+                <DropdownLink :href="route('logout')" method="post" as="button">
+                    <IconButton
+                        type="button"
+                        color="gray"
+                        icon="/assets/icons/system/log-out.svg"
+                    ></IconButton>
+                </DropdownLink>
             </div>
         </div>
     </div>
