@@ -12,7 +12,12 @@ export default async function getDataForTableFill() {
         }
 
         const data = await response.json();
-        return [data][0]; // Возвращаем данные как массив
+        let unassociatedData = [];
+        data.forEach((element) => {
+            unassociatedData.push(Object.values(element));
+        });
+        console.log(unassociatedData);
+        return unassociatedData; // Возвращаем данные как массив
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

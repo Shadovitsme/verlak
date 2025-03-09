@@ -15,7 +15,7 @@ const props = defineProps({
 
 let data = ref([]);
 const columnWidths = ref([]);
-let writable = ref(false);
+let readonlyFlag = ref(true);
 let selectedRow = ref(null);
 
 async function fetchData() {
@@ -51,7 +51,7 @@ onMounted(() => {
 });
 
 function toggleChangableStatus() {
-    writable.value = false;
+    readonlyFlag.value = !readonlyFlag.value;
 }
 </script>
 
@@ -93,7 +93,11 @@ function toggleChangableStatus() {
                         :even="index % 2 !== 0"
                         :placeholder="props.placeholders[indexElem] || ''"
                         :readonly-state="
-                            writable && props.readonlyFields[indexElem]
+                            readonlyFlag
+                                ? true
+                                : props.readonlyFields[indexElem]
+                                  ? true
+                                  : false
                         "
                         :value="field"
                     />

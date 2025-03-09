@@ -12,6 +12,6 @@ class getDataController extends Controller
         foreach ($managers as $manager) {
             $manager->password = '******'; // Маскируем пароль
         }
-        return response()->json($managers);
+        return response()->json($managers->toArray());
     }
 }
