@@ -3,6 +3,8 @@ import IconButton from './iconButton.vue';
 import JustButton from './justButton.vue';
 let notificateStatus = 'Default';
 import DropdownLink from './DropdownLink.vue';
+let locationParts = location.href.split('/');
+let lastPart = locationParts[locationParts.length - 1];
 </script>
 <template>
     <div
@@ -11,16 +13,29 @@ import DropdownLink from './DropdownLink.vue';
         <div class="my-auto flex h-fit w-full justify-between">
             <div class="flex gap-3">
                 <a class="my-auto" href="/contracts">
-                    <JustButton color="noColor">Договоры</JustButton></a
+                    <JustButton
+                        :selected="lastPart == 'contracts'"
+                        color="noColor"
+                        >Договоры</JustButton
+                    ></a
                 >
                 <a class="my-auto" href="/admin"
-                    ><JustButton color="noColor">Сотрудники</JustButton></a
+                    ><JustButton :selected="lastPart == 'admin'" color="noColor"
+                        >Сотрудники</JustButton
+                    ></a
                 >
                 <a class="my-auto" href="/scores"
-                    ><JustButton color="noColor">Счета</JustButton></a
+                    ><JustButton
+                        :selected="lastPart == 'scores'"
+                        color="noColor"
+                        >Счета</JustButton
+                    ></a
                 >
                 <a class="my-auto" href="/notifications">
-                    <JustButton class="flex align-middle" color="noColor"
+                    <JustButton
+                        :selected="lastPart == 'notifications'"
+                        class="flex align-middle"
+                        color="noColor"
                         ><p class="my-auto">Уведомления</p>
                         <img
                             class="imgColorlessButton my-auto ml-2 inline-block size-5"
@@ -34,7 +49,11 @@ import DropdownLink from './DropdownLink.vue';
                     <!-- TODO заставить колокольчик подкрашиваться при наведении на кнопку--></a
                 >
                 <a class="my-auto" href="/executors">
-                    <JustButton color="noColor">Исполнители</JustButton>
+                    <JustButton
+                        :selected="lastPart == 'executors'"
+                        color="noColor"
+                        >Исполнители</JustButton
+                    >
                 </a>
             </div>
             <div class="flex">

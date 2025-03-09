@@ -15,7 +15,7 @@
         "@vue/eslint-config-prettier": "^9.0.0",
         "@vue/server-renderer": "^3.4.0",
         "autoprefixer": "^10.4.12",
-        "axios": "^1.7.4",
+        "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "eslint": "^8.57.0",
         "eslint-plugin-vue": "^9.23.0",
@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.8",
+        "jquery": "^3.7.1",
         "masc-vue": "^0.4.4",
         "v-calendar": "^3.1.2"
     }

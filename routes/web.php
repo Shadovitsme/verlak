@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\getDataController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,5 +44,12 @@ Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(fun
         return Inertia::render('managerListPage');
     });
 });
+
+// Apies
+Route::get('/user', [getDataController::class, 'getAllManagers']);
+
+
+
+
 
 require __DIR__ . '/auth.php';
