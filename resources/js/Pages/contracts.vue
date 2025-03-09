@@ -14,10 +14,6 @@ import CustomUniversalTable from '@/Components/customUniversalTable.vue';
                 'Менеджер',
                 'Статус',
             ]"
-            :data-filler="[
-                ['a', 'd', '3', '5', 'dfd', true],
-                ['a', 'd', '3', '5', 'dfd', false],
-            ]"
             :last-status="true"
         ></CustomUniversalTable
     ></PagePlace>

@@ -4,18 +4,18 @@
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
             :readonly-fields="[1, 0, 0, 0, 0]"
-            :data-filler="[
+            :dataQuery="[
                 [
                     'Иванов Иван Михайлович',
-                    'ivanov@mail.ru',
-                    '+7 (900) 000-00-00',
+                    'ivdsfaanov@mail.ru',
+                    '+7 (900) 000-00fdsad-00',
                     '•••••••••',
                 ],
                 [
-                    'Иванов Иван Михайлович',
+                    'Иванов fd Иван Михайлович',
                     'ivanov@mail.ru',
                     '+7 (900) 000-00-00',
-                    '•••••••••',
+                    '••••••dsf•••',
                 ],
             ]"
         ></TablePlaceholder>
