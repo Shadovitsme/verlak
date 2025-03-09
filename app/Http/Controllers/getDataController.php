@@ -8,9 +8,10 @@ class getDataController extends Controller
 {
     public function getAllManagers()
     {
-        $managers = DB::table('users')->get();
+        $managers = DB::table('users')->where('id', '>', 1)->get(['name', 'email', 'phone', 'password']);
         foreach ($managers as $manager) {
-            echo $manager->name . '<br>';
+            $manager->password = '******'; // Маскируем пароль
         }
+        return response()->json($managers);
     }
 }

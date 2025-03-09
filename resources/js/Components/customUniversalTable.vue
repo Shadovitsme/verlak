@@ -1,97 +1,108 @@
 <script setup>
 import EditDeleteComponent from './editDeleteComponent.vue';
 import StatusLabel from './statusLabel.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import TableInpueElement from './tableInpueElement.vue';
+import getDataForTableFill from './jsFunctions/getDataForTableFill';
 const props = defineProps({
     headItems: Array,
     dataQuery: String,
     lastAction: Boolean,
     lastStatus: Boolean,
-    readonlyFields: Array,
-    placeholders: Array,
+    readonlyFields: { type: Array, default: () => [] },
+    placeholders: { type: Array, default: () => [] },
 });
 
-let readonlyFlag = ref(true);
-let selectedRow = ref();
+let data = ref([]);
+const columnWidths = ref([]);
+let writable = ref(false);
+let selectedRow = ref(null);
 
-// TODO сделать несоклько аякс функций и вынести их в отдельные файлы для заполнения дата квери юзать чтоб понимать куда какие данные сосать
+async function fetchData() {
+    try {
+        const result = await getDataForTableFill();
+        console.log('Данные:', result); // Для отладки
+        data.value = result;
+        calculateColumnWidths();
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+
+function calculateColumnWidths() {
+    const table = document.querySelector('table');
+    const headers = table.querySelectorAll('th');
+    const rows = table.querySelectorAll('tbody tr');
+
+    columnWidths.value = Array.from(headers).map((header, colIndex) => {
+        let maxWidth = header.offsetWidth;
+        rows.forEach((row) => {
+            const cell = row.children[colIndex];
+            if (cell.offsetWidth > maxWidth) {
+                maxWidth = cell.offsetWidth;
+            }
+        });
+        return `${maxWidth}px`;
+    });
+}
+
+onMounted(() => {
+    fetchData();
+});
+
 function toggleChangableStatus() {
-    readonlyFlag.value = !readonlyFlag.value;
+    writable.value = false;
 }
 </script>
+
 <template>
-    <table class="w-full table-auto border-collapse shadow-sm">
+    <table class="w-full border-collapse shadow-sm">
         <thead class="bg-indigo-50 text-left text-gray-500">
             <tr class="h-12">
-                <th class="px-4" v-for="item in props.headItems" :key="item">
+                <th
+                    class="px-4"
+                    v-for="item in props.headItems"
+                    :style="{ width: columnWidths[index] }"
+                    :key="item"
+                >
                     {{ item }}
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr
-                @click="selectedRow = dataItem[0]"
-                :class="
-                    'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100 focus:bg-indigo-100 active:bg-indigo-100 ' +
-                    (selectedRow == dataItem[0]
+                @click="selectedRow = dataItem"
+                :class="[
+                    'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
+                    selectedRow === dataItem
                         ? 'bg-indigo-100'
-                        : index % 2 != 0
+                        : index % 2 !== 0
                           ? 'bg-gray-50'
-                          : 'bg-white')
-                "
-                v-for="(dataItem, index) in props.dataQuery"
-                :key="dataItem[0]"
+                          : 'bg-white',
+                ]"
+                v-for="(dataItem, index) in data"
+                :key="index"
             >
                 <td
                     class="px-4"
-                    v-for="(elem, indexElem) in dataItem"
-                    :key="elem"
+                    v-for="(field, indexElem) in data[index]"
+                    :key="field"
                 >
                     <TableInpueElement
-                        :selected="selectedRow == dataItem[0]"
-                        :even="index % 2 != 0"
-                        :placeholder="props.placeholders[indexElem]"
+                        :selected="selectedRow === dataItem"
+                        :even="index % 2 !== 0"
+                        :placeholder="props.placeholders[indexElem] || ''"
                         :readonly-state="
-                            readonlyFlag
-                                ? true
-                                : props.readonlyFields[indexElem]
+                            writable && props.readonlyFields[indexElem]
                         "
-                        :value="elem"
-                    ></TableInpueElement>
-
-                    <!-- TODO рудимент - убрать инпут как буду уверена что компонент выше сработает -->
-                    <!-- <input
-                        :class="
-                            'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
-                            (selectedRow == dataItem[0]
-                                ? 'bg-indigo-100'
-                                : index % 2 != 0
-                                  ? 'bg-gray-50'
-                                  : 'bg-white') +
-                            ' ' +
-                            (props.readonlyFields[indexElem]
-                                ? 'text-gray-900'
-                                : 'text-gray-500')
-                        "
-                        :placeholder="props.placeholders[indexElem]"
-                        :readonly="
-                            readonlyFlag
-                                ? true
-                                : props.readonlyFields[indexElem]
-                        "
-                        :value="elem"
-                    /> -->
+                        :value="field"
+                    />
                 </td>
-                <td v-if="props.lastAction">
-                    <EditDeleteComponent
-                        @editable="toggleChangableStatus()"
-                        class="my-auto px-4"
-                    ></EditDeleteComponent>
+                <td v-if="props.lastAction" class="px-4">
+                    <EditDeleteComponent @editable="toggleChangableStatus" />
                 </td>
-                <td class="px-4" v-if="props.lastStatus">
-                    <StatusLabel :state="true"></StatusLabel>
-                    <!-- TODO допилить когда начну сосать из бд -->
+                <td v-if="props.lastStatus" class="px-4">
+                    <StatusLabel :state="true" />
                 </td>
             </tr>
         </tbody>
