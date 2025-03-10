@@ -4,6 +4,7 @@ import modalField from './modalField.vue';
 import DeleteManager from './modalTemplates/deleteManager.vue';
 import AddManager from './modalTemplates/addManager.vue';
 import DeleteManagerFromDb from './jsFunctions/deleteFunc/deleteManagerFromDb';
+import addNewManager from './jsFunctions/setters/addNewManager';
 const emit = defineEmits(['close']);
 
 const props = defineProps({
@@ -25,7 +26,24 @@ switch (props.modalType) {
 }
 
 function send() {
-    DeleteManagerFromDb(props.idToDelete);
+    event.preventDefault();
+    let elements = event.target.elements;
+    switch (props.modalType) {
+        case 'deleteManager':
+            DeleteManagerFromDb(props.idToDelete);
+            break;
+        case 'addManager':
+            addNewManager(
+                elements[0].value,
+                elements[1].value,
+                elements[2].value,
+                elements[3].value,
+            );
+            break;
+        default:
+            break;
+    }
+
     emit('close');
 }
 </script>
