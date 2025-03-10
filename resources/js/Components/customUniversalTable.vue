@@ -103,7 +103,10 @@ function toggleChangableStatus() {
                     />
                 </td>
                 <td v-if="props.lastAction" class="px-4">
-                    <EditDeleteComponent @editable="toggleChangableStatus" />
+                    <EditDeleteComponent
+                        modalType="deleteManager"
+                        @editable="toggleChangableStatus"
+                    />
                 </td>
                 <td v-if="props.lastStatus" class="px-4">
                     <StatusLabel :state="true" />

@@ -15,6 +15,7 @@ export default {
         'hover:text-indigo-700',
         'hover:bg-indigo-800',
         'bg-gray-50',
+        'bg-gray-800',
         // Добавьте сюда все hover-классы из colorArray
     ],
     theme: {
