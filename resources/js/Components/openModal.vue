@@ -2,6 +2,7 @@
 import Modal from '@/Components/Modal.vue';
 import modalField from './modalField.vue';
 import DeleteManager from './modalTemplates/deleteManager.vue';
+import AddManager from './modalTemplates/addManager.vue';
 const emit = defineEmits(['close']);
 
 const props = defineProps({
@@ -9,8 +10,16 @@ const props = defineProps({
     toggleModal: Boolean,
 });
 let submitButtonText;
-if (props.modalType == 'deleteManager') {
-    submitButtonText = 'Удалить';
+
+switch (props.modalType) {
+    case 'deleteManager':
+        submitButtonText = 'Удалить';
+        break;
+    case 'addManager':
+        submitButtonText = 'Добавить';
+        break;
+    default:
+        break;
 }
 </script>
 <template>
@@ -19,6 +28,7 @@ if (props.modalType == 'deleteManager') {
             <DeleteManager
                 v-if="props.modalType == 'deleteManager'"
             ></DeleteManager>
+            <AddManager v-if="props.modalType == 'addManager'"></AddManager>
         </modalField>
     </Modal>
 </template>

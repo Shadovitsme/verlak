@@ -1,5 +1,5 @@
 <template>
-    <PagePlace page-name="Список сотрудников">
+    <PagePlace add-modal-type="addManager" page-name="Список сотрудников">
         <TablePlaceholder
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
