@@ -16,7 +16,6 @@ export default async function getDataForTableFill() {
         data.forEach((element) => {
             unassociatedData.push(Object.values(element));
         });
-        console.log(unassociatedData);
         return unassociatedData; // Возвращаем данные как массив
     } catch (error) {
         console.error('Error fetching data:', error);

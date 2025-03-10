@@ -7,14 +7,6 @@ const props = defineProps({
     value: String,
 });
 
-import { watch } from 'vue';
-
-watch(
-    () => props.readonlyState,
-    (newVal) => {
-        console.log('readonlyState changed to:', newVal);
-    },
-);
 </script>
 
 <template>

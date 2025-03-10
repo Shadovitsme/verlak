@@ -3,7 +3,7 @@ import EditDeleteComponent from './editDeleteComponent.vue';
 import StatusLabel from './statusLabel.vue';
 import { ref, onMounted } from 'vue';
 import TableInpueElement from './tableInpueElement.vue';
-import getDataForTableFill from './jsFunctions/getDataForTableFill';
+import getDataForTableFill from './jsFunctions/getters/getDataForTableFill.js';
 const props = defineProps({
     headItems: Array,
     dataQuery: String,
@@ -15,13 +15,12 @@ const props = defineProps({
 
 let data = ref([]);
 const columnWidths = ref([]);
-let readonlyFlag = ref(true);
+let readonlyFlag = ref('');
 let selectedRow = ref(null);
 
 async function fetchData() {
     try {
         const result = await getDataForTableFill();
-        console.log('Данные:', result); // Для отладки
         data.value = result;
         calculateColumnWidths();
     } catch (error) {
@@ -50,8 +49,8 @@ onMounted(() => {
     fetchData();
 });
 
-function toggleChangableStatus() {
-    readonlyFlag.value = !readonlyFlag.value;
+function toggleChangableStatus(id) {
+    readonlyFlag.value = id;
 }
 </script>
 
@@ -71,6 +70,7 @@ function toggleChangableStatus() {
         </thead>
         <tbody>
             <tr
+                :id="data[index][0] + index"
                 @click="selectedRow = dataItem"
                 :class="[
                     'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
@@ -93,7 +93,7 @@ function toggleChangableStatus() {
                         :even="index % 2 !== 0"
                         :placeholder="props.placeholders[indexElem] || ''"
                         :readonly-state="
-                            readonlyFlag
+                            readonlyFlag != dataItem[0] + index
                                 ? true
                                 : props.readonlyFields[indexElem]
                                   ? true
@@ -104,12 +104,13 @@ function toggleChangableStatus() {
                 </td>
                 <td v-if="props.lastAction" class="px-4">
                     <EditDeleteComponent
+                        :key="index"
                         modalType="deleteManager"
-                        @editable="toggleChangableStatus"
+                        @editable="toggleChangableStatus(dataItem[0] + index)"
                     />
                 </td>
                 <td v-if="props.lastStatus" class="px-4">
-                    <StatusLabel :state="true" />
+                    <StatusLabel :key="index" :state="true" />
                 </td>
             </tr>
         </tbody>

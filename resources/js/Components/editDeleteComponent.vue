@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-
 import OpenModal from './openModal.vue';
 const emit = defineEmits(['editable']);
 let toggleModal = ref('false');

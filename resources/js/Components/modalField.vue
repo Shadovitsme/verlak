@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import JustButton from './justButton.vue';
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'submit']);
 const props = defineProps({
     submitButtonText: String,
 });
@@ -15,15 +15,16 @@ const props = defineProps({
             class="absolute right-4 top-4"
             src="/assets/icons/system/x.svg"
         />
-        <form><slot> </slot></form>
-
-        <div class="mt-5 flex w-full justify-center gap-5">
-            <JustButton @click="emit('close')" class="w-full" color="dark"
-                >Отмена</JustButton
-            >
-            <JustButton class="w-full" color="blue">{{
-                props.submitButtonText
-            }}</JustButton>
-        </div>
+        <form @submit.prevent="emit('submit')">
+            <slot></slot>
+            <div class="mt-5 flex w-full justify-center gap-5">
+                <JustButton @click="emit('close')" class="w-full" color="dark"
+                    >Отмена</JustButton
+                >
+                <JustButton class="w-full" color="blue">{{
+                    props.submitButtonText
+                }}</JustButton>
+            </div>
+        </form>
     </div>
 </template>
