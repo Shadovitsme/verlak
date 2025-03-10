@@ -2,13 +2,12 @@ export default async function DeleteManagerFromDb(id) {
     try {
         const response = await fetch('/deleteManager', {
             method: 'DELETE',
-
-            data: { id: id },
             headers: {
                 Accept: 'application/json',
                 'X-CSRF-TOKEN': document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute('content'),
+                id: id,
             },
         });
 

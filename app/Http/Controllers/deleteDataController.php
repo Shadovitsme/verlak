@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class deleteDataController extends Controller
 {
-    public function deleteManager()
+    public function deleteManager(Request $request)
     {
-        echo ('lol kek');
+        $id = $request->header('id');
+
+        DB::table('users')->where('id', '=', $id)->delete();
     }
 }
