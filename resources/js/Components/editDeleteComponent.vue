@@ -1,15 +1,17 @@
 <script setup>
 import { ref } from 'vue';
 import OpenModal from './openModal.vue';
-const emit = defineEmits(['editable']);
+const emit = defineEmits(['editable', 'deleteId']);
 let toggleModal = ref('false');
 const props = defineProps({
     modalType: String,
+    idToDelete: String,
 });
 </script>
 
 <template>
     <OpenModal
+        :idToDelete="props.idToDelete"
         :toggle-modal="toggleModal"
         @close="toggleModal = !toggleModal"
         :modal-type="props.modalType"

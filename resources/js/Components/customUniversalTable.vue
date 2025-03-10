@@ -85,7 +85,7 @@ function toggleChangableStatus(id) {
             >
                 <td
                     class="px-4"
-                    v-for="(field, indexElem) in data[index]"
+                    v-for="(field, indexElem) in data[index].slice(1)"
                     :key="field"
                 >
                     <TableInpueElement
@@ -104,6 +104,7 @@ function toggleChangableStatus(id) {
                 </td>
                 <td v-if="props.lastAction" class="px-4">
                     <EditDeleteComponent
+                        :id-to-delete="data[index][0]"
                         :key="index"
                         modalType="deleteManager"
                         @editable="toggleChangableStatus(dataItem[0] + index)"
