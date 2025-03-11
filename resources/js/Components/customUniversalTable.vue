@@ -49,9 +49,64 @@ onMounted(() => {
     fetchData();
 });
 
-function toggleChangableStatus(id) {
+let selectedRowIndex = ref();
+
+function toggleChangableStatus(id, index) {
     readonlyFlag.value = id;
+    selectedRowIndex.value = Number(index);
 }
+import { watch } from 'vue';
+
+watch(
+    [readonlyFlag, selectedRowIndex],
+    (
+        [newReadonlyFlag, newSelectedRowIndex],
+        [oldReadonlyFlag, oldSelectedRowIndex],
+    ) => {
+        if (
+            newReadonlyFlag !== oldReadonlyFlag ||
+            newSelectedRowIndex !== oldSelectedRowIndex
+        ) {
+            let id = data.value[0][0];
+
+            if (oldSelectedRowIndex != undefined && oldSelectedRowIndex > 0) {
+                data.value[oldSelectedRowIndex].forEach((element, index) => {
+                    if (index == 0) {
+                        return;
+                    }
+                    if (
+                        document
+                            .getElementById(oldReadonlyFlag)
+                            .getElementsByTagName('input')[index - 1] ==
+                        undefined
+                    ) {
+                        return 1;
+                    }
+                    data.value[oldSelectedRowIndex][index] = document
+                        .getElementById(oldReadonlyFlag)
+                        .getElementsByTagName('input')[index - 1].value;
+                });
+            } else if (oldSelectedRowIndex == 0) {
+                data.value[0].forEach((element, index) => {
+                    if (index == 0) {
+                        return;
+                    }
+                    if (
+                        document
+                            .getElementById(id)
+                            .getElementsByTagName('input')[index - 1] ==
+                        undefined
+                    ) {
+                        return 1;
+                    }
+                    data.value[0][index] = document
+                        .getElementById(id)
+                        .getElementsByTagName('input')[index - 1].value;
+                });
+            }
+        }
+    },
+);
 </script>
 
 <template>
@@ -70,7 +125,7 @@ function toggleChangableStatus(id) {
         </thead>
         <tbody>
             <tr
-                :id="data[index][0] + index"
+                :id="data[index][0]"
                 @click="selectedRow = dataItem"
                 :class="[
                     'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
@@ -93,7 +148,7 @@ function toggleChangableStatus(id) {
                         :even="index % 2 !== 0"
                         :placeholder="props.placeholders[indexElem] || ''"
                         :readonly-state="
-                            readonlyFlag != dataItem[0] + index
+                            readonlyFlag != dataItem[0]
                                 ? true
                                 : props.readonlyFields[indexElem]
                                   ? true
@@ -107,7 +162,7 @@ function toggleChangableStatus(id) {
                         :id-to-delete="data[index][0]"
                         :key="index"
                         modalType="deleteManager"
-                        @editable="toggleChangableStatus(dataItem[0] + index)"
+                        @editable="toggleChangableStatus(dataItem[0], index)"
                     />
                 </td>
                 <td v-if="props.lastStatus" class="px-4">
