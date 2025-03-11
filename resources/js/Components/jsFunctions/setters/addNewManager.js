@@ -1,13 +1,14 @@
 export default async function addNewManager(name, email, phone, pass) {
+    console.log(name, email, phone, pass);
     try {
         const response = await fetch('/addManager', {
             method: 'POST',
-            body: {
+            body: JSON.stringify({
                 name: name,
                 email: email,
                 phone: phone,
                 pass: pass,
-            },
+            }),
             headers: {
                 Accept: 'application/json',
                 'X-CSRF-TOKEN': document

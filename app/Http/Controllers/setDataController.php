@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class setDataController extends Controller
 {
@@ -13,7 +14,7 @@ class setDataController extends Controller
         DB::table('users')->insert([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => $data['pass'],
+            'password' => Hash::make($data['pass']),
             'phone' => $data['phone'],
         ]);
     }

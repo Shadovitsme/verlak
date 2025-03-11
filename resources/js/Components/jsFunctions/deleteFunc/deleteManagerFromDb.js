@@ -1,7 +1,7 @@
 export default async function DeleteManagerFromDb(id) {
     try {
         const response = await fetch('/deleteManager', {
-            method: 'DELETE',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'X-CSRF-TOKEN': document

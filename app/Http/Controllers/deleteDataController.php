@@ -10,7 +10,6 @@ class deleteDataController extends Controller
     public function deleteManager(Request $request)
     {
         $id = $request->header('id');
-
-        DB::table('users')->where('id', '=', $id)->delete();
+        DB::table('users')->where('id', '=', $id)->update(['active'=> false]);
     }
 }

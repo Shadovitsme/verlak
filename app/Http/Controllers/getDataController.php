@@ -8,7 +8,7 @@ class getDataController extends Controller
 {
     public function getAllManagers()
     {
-        $managers = DB::table('users')->where('id', '>', 1)->get(['id', 'name', 'email', 'phone', 'password']);
+        $managers = DB::table('users')->where('id', '>', 1)->where('active', '=', true)->get(['id', 'name', 'email', 'phone', 'password']);
         foreach ($managers as $manager) {
             $manager->password = '******';  // Маскируем пароль
         }
