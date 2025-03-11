@@ -4,6 +4,8 @@ import StatusLabel from './statusLabel.vue';
 import { ref, onMounted } from 'vue';
 import TableInpueElement from './tableInpueElement.vue';
 import getDataForTableFill from './jsFunctions/getters/getDataForTableFill.js';
+import { watch } from 'vue';
+
 const props = defineProps({
     headItems: Array,
     dataQuery: String,
@@ -17,45 +19,37 @@ let data = ref([]);
 const columnWidths = ref([]);
 let readonlyFlag = ref('');
 let selectedRow = ref(null);
+let selectedRowIndex = ref();
 
 async function fetchData() {
     try {
         const result = await getDataForTableFill();
         data.value = result;
-        calculateColumnWidths();
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
 
-function calculateColumnWidths() {
-    const table = document.querySelector('table');
-    const headers = table.querySelectorAll('th');
-    const rows = table.querySelectorAll('tbody tr');
-
-    columnWidths.value = Array.from(headers).map((header, colIndex) => {
-        let maxWidth = header.offsetWidth;
-        rows.forEach((row) => {
-            const cell = row.children[colIndex];
-            if (cell.offsetWidth > maxWidth) {
-                maxWidth = cell.offsetWidth;
-            }
-        });
-        return `${maxWidth}px`;
-    });
-}
-
-onMounted(() => {
-    fetchData();
-});
-
-let selectedRowIndex = ref();
-
 function toggleChangableStatus(id, index) {
     readonlyFlag.value = id;
     selectedRowIndex.value = Number(index);
 }
-import { watch } from 'vue';
+
+function checkUndefinedTableColumn(oldReadonlyFlag, index) {
+    if (
+        document.getElementById(oldReadonlyFlag).getElementsByTagName('input')[
+            index - 1
+        ] == undefined
+    ) {
+        return 1;
+    }
+}
+
+function refillDataArray(selectedRowIndex, columtIndex, id) {
+    data.value[selectedRowIndex][columtIndex] = document
+        .getElementById(id)
+        .getElementsByTagName('input')[columtIndex - 1].value;
+}
 
 watch(
     [readonlyFlag, selectedRowIndex],
@@ -74,39 +68,32 @@ watch(
                     if (index == 0) {
                         return;
                     }
-                    if (
-                        document
-                            .getElementById(oldReadonlyFlag)
-                            .getElementsByTagName('input')[index - 1] ==
-                        undefined
-                    ) {
-                        return 1;
-                    }
-                    data.value[oldSelectedRowIndex][index] = document
-                        .getElementById(oldReadonlyFlag)
-                        .getElementsByTagName('input')[index - 1].value;
+                    checkUndefinedTableColumn(oldReadonlyFlag, index);
+                    refillDataArray(
+                        oldSelectedRowIndex,
+                        index,
+                        oldReadonlyFlag,
+                    );
                 });
-            } else if (oldSelectedRowIndex == 0) {
+                return;
+            }
+            if (oldSelectedRowIndex == 0) {
                 data.value[0].forEach((element, index) => {
                     if (index == 0) {
                         return;
                     }
-                    if (
-                        document
-                            .getElementById(id)
-                            .getElementsByTagName('input')[index - 1] ==
-                        undefined
-                    ) {
-                        return 1;
-                    }
-                    data.value[0][index] = document
-                        .getElementById(id)
-                        .getElementsByTagName('input')[index - 1].value;
+                    checkUndefinedTableColumn(oldReadonlyFlag, index);
+                    refillDataArray(0, index, id);
                 });
+                return;
             }
         }
     },
 );
+
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <template>
