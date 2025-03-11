@@ -1,8 +1,9 @@
-export default async function addNewManager(name, email, phone, pass) {
+export default async function updateManagerData(id, name, email, phone, pass) {
     try {
-        const response = await fetch('/addManager', {
+        const response = await fetch('/updateManager', {
             method: 'POST',
             body: JSON.stringify({
+                id: id,
                 name: name,
                 email: email,
                 phone: phone,

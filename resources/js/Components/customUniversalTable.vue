@@ -74,8 +74,15 @@ watch(
                         index,
                         oldReadonlyFlag,
                     );
+                    updateManagerData(
+                        id,
+                        data.value[oldSelectedRowIndex][1],
+                        data.value[oldSelectedRowIndex][2],
+                        data.value[oldSelectedRowIndex][3],
+                        data.value[oldSelectedRowIndex][4],
+                    );
+                    return;
                 });
-                return;
             }
             if (oldSelectedRowIndex == 0) {
                 data.value[0].forEach((element, index) => {
@@ -84,6 +91,13 @@ watch(
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
+                    updateManagerData(
+                        id,
+                        data.value[0][1],
+                        data.value[0][2],
+                        data.value[0][3],
+                        data.value[0][4],
+                    );
                 });
                 return;
             }
@@ -94,10 +108,28 @@ watch(
 onMounted(() => {
     fetchData();
 });
+const target = ref(null);
+const handleBodyClick = (event) => {
+    if (target.value || !target.value.contains(event.target)) {
+        readonlyFlag.value = undefined;
+        selectedRow.value = undefined;
+        selectedRowIndex.value = undefined;
+    }
+};
+
+// Добавляем и убираем слушатель через onMounted/onUnmounted
+import { onUnmounted } from 'vue';
+import updateManagerData from './jsFunctions/setters/updateManagerData';
+onMounted(() => {
+    document.addEventListener('click', handleBodyClick);
+});
+onUnmounted(() => {
+    document.removeEventListener('click', handleBodyClick);
+});
 </script>
 
 <template>
-    <table class="w-full border-collapse shadow-sm">
+    <table @click="handleBodyClick" class="w-full border-collapse shadow-sm">
         <thead class="bg-indigo-50 text-left text-gray-500">
             <tr class="h-12">
                 <th
@@ -110,7 +142,7 @@ onMounted(() => {
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody ref="target" @click.stop>
             <tr
                 :id="data[index][0]"
                 @click="selectedRow = dataItem"

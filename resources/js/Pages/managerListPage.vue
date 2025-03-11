@@ -3,7 +3,7 @@
         <TablePlaceholder
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
-            :readonly-fields="[true, false, false, true, true]"
+            :readonly-fields="[false, false, false, false, false]"
             dataQuery="getAllManagers"
         ></TablePlaceholder>
     </PagePlace>
