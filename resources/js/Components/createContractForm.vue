@@ -2,6 +2,7 @@
 import CustomInput from './customInput.vue';
 import DropdownCalendarButton from './dropdownCalendarButton.vue';
 import DropdownInputButton from './dropdownInputButton.vue';
+import DropdownStatusButton from './dropdownStatusButton.vue';
 import JustButton from './justButton.vue';
 </script>
 
@@ -15,14 +16,14 @@ import JustButton from './justButton.vue';
             <form id="addRoom" class="w-full">
                 <p class="mb-5 text-2xl text-gray-900">Основная информация</p>
                 <div class="z-20 pb-8">
-                    <div class="mb-4 flex gap-x-10 z-20">
+                    <div class="z-20 mb-4 flex gap-x-10">
                         <CustomInput
                             :static-width="false"
                             label-text="Номер контракта"
                             placeholder="Введите номер контракта"
                         ></CustomInput>
 
-                        <div class="w-full z-20">
+                        <div class="z-20 w-full">
                             <DropdownInputButton
                                 :static-width="false"
                                 label-text="Название организации"
@@ -31,7 +32,7 @@ import JustButton from './justButton.vue';
                                 :label-text-arr="['верлак', 'не верлак']"
                             ></DropdownInputButton>
                         </div>
-                        <div class="w-full z-20">
+                        <div class="z-20 w-full">
                             <DropdownCalendarButton
                                 :static-width="false"
                                 label-text="Дата"
@@ -49,14 +50,14 @@ import JustButton from './justButton.vue';
                             :label-text-arr="['В работе', 'Выполнено']"
                         >
                         </DropdownInputButton>
-                        <DropdownInputButton
+                        <DropdownStatusButton
                             :static-width="false"
                             label-text="Статус"
                             placeholder="Выберите статус"
                             check-type="radio"
                             :label-text-arr="['В работе', 'Выполнено']"
                         >
-                        </DropdownInputButton>
+                        </DropdownStatusButton>
                     </div>
                 </div>
 
