@@ -12,5 +12,5 @@
 
 <script setup>
 import PagePlace from '@/Components/pagePlace.vue';
-import TablePlaceholder from '@/Components/customUniversalTable.vue';
+import TablePlaceholder from '@/Components/tables/customUniversalTable.vue';
 </script>

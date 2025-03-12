@@ -8,7 +8,7 @@ let lastPart = locationParts[locationParts.length - 1];
 </script>
 <template>
     <div
-        class="fixed top-0 mx-auto flex h-20 w-full max-w-[1600px] bg-white pl-28 pr-32"
+        class="fixed top-0 z-30 mx-auto flex h-20 w-full max-w-[1600px] bg-white pl-28 pr-32"
     >
         <div class="my-auto flex h-fit w-full justify-between">
             <div class="flex gap-3">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CustomUniversalTable from '@/Components/customUniversalTable.vue';
+import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import PagePlace from '@/Components/pagePlace.vue';
 </script>
 

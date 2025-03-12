@@ -10,6 +10,7 @@ let style = checkStyle(props.color);
 </script>
 <template>
     <button
+        type="button"
         :class="
             'rounded-lg px-5 py-2.5 text-sm ' +
             style +

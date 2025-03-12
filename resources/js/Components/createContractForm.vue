@@ -4,6 +4,11 @@ import DropdownCalendarButton from './dropdowns/dropdownCalendarButton.vue';
 import DropdownInputButton from './dropdowns/dropdownInputButton.vue';
 import DropdownStatusButton from './dropdowns/dropdownStatusButton.vue';
 import JustButton from './justButton.vue';
+import { ref } from 'vue';
+import EmptyTable from './tables/emptyTable.vue';
+import IconButton from './iconButton.vue';
+const tableShow = ref(false);
+let rowCounter = ref(1);
 </script>
 
 <template>
@@ -66,12 +71,60 @@ import JustButton from './justButton.vue';
                 </div>
 
                 <div class="mt-8 w-fit">
-                    <p class="mb-5 text-2xl text-gray-900">Адреса</p>
-                    <p class="mb-3 text-sm text-gray-900">Адресов пока нет</p>
-                    <JustButton type="button" class="w-full" color="blue"
+                    <div class="mb-5 flex h-fit content-center items-center">
+                        <p class="my-auto mr-4 text-2xl text-gray-900">
+                            Адреса
+                        </p>
+                        <IconButton
+                            @click="rowCounter++"
+                            v-if="tableShow"
+                            type="button"
+                            class="my-auto rotate-45"
+                            icon="/assets/icons/system/x.svg"
+                            color="blue"
+                        ></IconButton>
+                    </div>
+                    <p v-if="!tableShow" class="mb-3 text-sm text-gray-900">
+                        Адресов пока нет
+                    </p>
+                    <JustButton
+                        @click="tableShow = !tableShow"
+                        v-if="!tableShow"
+                        type="button"
+                        class="w-full"
+                        color="blue"
                         >Добавить</JustButton
                     >
                 </div>
+                <EmptyTable
+                    :row-counter="rowCounter"
+                    v-if="tableShow"
+                    :headItems="[
+                        'Административный округ',
+                        'Район',
+                        'Адрес многоквартирного дома ',
+                        'Кол-во лифтов',
+                        'Подъезд',
+                        'Серия дома',
+                        'Тип проекта',
+                        'Дата начала',
+                        'Дата окончания',
+                        'Стоимость(с НДС 20%),₽',
+                        'Действия',
+                    ]"
+                    :placeholders="[
+                        'Название округа',
+                        'Название района',
+                        'Адрес ',
+                        'n',
+                        '№',
+                        '№',
+                        'Наименование типа',
+                        'дд.мм.гггг',
+                        'дд.мм.гггг',
+                        'Сумма',
+                    ]"
+                ></EmptyTable>
             </form>
         </div>
         <div class="mt-6 flex w-full justify-end">

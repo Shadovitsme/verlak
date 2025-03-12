@@ -16,6 +16,13 @@ export default {
         'hover:bg-indigo-800',
         'bg-gray-50',
         'bg-gray-800',
+        'w-72',
+        'w-60',
+        'w-80',
+        'w-32',
+        'w-24',
+        'w-36',
+        'w-44',
         // Добавьте сюда все hover-классы из colorArray
     ],
     theme: {

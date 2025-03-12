@@ -1,9 +1,9 @@
 <script setup>
-import EditDeleteComponent from './editDeleteComponent.vue';
-import StatusLabel from './statusLabel.vue';
+import EditDeleteComponent from '../editDeleteComponent.vue';
+import StatusLabel from '../statusLabel.vue';
 import { ref, onMounted } from 'vue';
-import TableInpueElement from './tableInpueElement.vue';
-import getDataForTableFill from './jsFunctions/getters/getDataForTableFill.js';
+import TableInpueElement from '../tableInpueElement.vue';
+import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import { watch } from 'vue';
 
 const props = defineProps({
@@ -120,7 +120,7 @@ const handleBodyClick = (event) => {
 
 // Добавляем и убираем слушатель через onMounted/onUnmounted
 import { onUnmounted } from 'vue';
-import updateManagerData from './jsFunctions/setters/updateManagerData';
+import updateManagerData from '../jsFunctions/setters/updateManagerData';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });
@@ -130,7 +130,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <table @click="handleBodyClick" class="w-full border-collapse shadow-sm">
+    <table
+        @click="handleBodyClick"
+        class="w-full border-collapse rounded-lg shadow-sm"
+    >
         <thead class="bg-indigo-50 text-left text-gray-500">
             <tr class="h-12">
                 <th

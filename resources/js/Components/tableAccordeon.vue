@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import TablePlaceholder from './customUniversalTable.vue';
+import TablePlaceholder from './tables/customUniversalTable.vue';
 
 const props = defineProps({
     head: String,
