@@ -1,6 +1,6 @@
 <script setup>
 import CreateContractForm from '@/Components/createContractForm.vue';
-// import CustomUniversalTable from '@/Components/customUniversalTable.vue';
+import CustomUniversalTable from '@/Components/customUniversalTable.vue';
 import Header from '@/Components/header.vue';
 import IconButton from '@/Components/iconButton.vue';
 import { ref } from 'vue';
