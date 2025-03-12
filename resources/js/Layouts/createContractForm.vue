@@ -1,14 +1,39 @@
 <script setup lang="ts">
-import CustomInput from './customInput.vue';
-import DropdownCalendarButton from './dropdowns/dropdownCalendarButton.vue';
-import DropdownInputButton from './dropdowns/dropdownInputButton.vue';
-import DropdownStatusButton from './dropdowns/dropdownStatusButton.vue';
-import JustButton from './justButton.vue';
+import CustomInput from '../Components/customInput.vue';
+import DropdownCalendarButton from '../Components/dropdowns/dropdownCalendarButton.vue';
+import DropdownInputButton from '../Components/dropdowns/dropdownInputButton.vue';
+import DropdownStatusButton from '../Components/dropdowns/dropdownStatusButton.vue';
+import JustButton from '../Components/justButton.vue';
 import { ref } from 'vue';
-import EmptyTable from './tables/emptyTable.vue';
-import IconButton from './iconButton.vue';
+import EmptyTable from '../Components/tables/emptyTable.vue';
+import IconButton from '../Components/iconButton.vue';
 const tableShow = ref(false);
 let rowCounter = ref(1);
+function getDropDownValue(id) {
+    let besideResult = document
+        .getElementById(id)
+        .getElementsByTagName('button')[0].textContent;
+    if (
+        besideResult == 'Введите названии организации' ||
+        besideResult == 'Выберите дату' ||
+        besideResult == 'Выберите город' ||
+        besideResult == 'Выберите статус'
+    ) {
+        return '';
+    }
+    return besideResult;
+}
+function saveData() {
+    event.preventDefault();
+    let number = document
+        .getElementById('contractNumber')
+        .getElementsByTagName('input')[0].value;
+    let organization = getDropDownValue('organization');
+    let date = getDropDownValue('date');
+    let town = getDropDownValue('town');
+    let state = getDropDownValue('state');
+    console.log(number, organization, date, town, state);
+}
 </script>
 
 <template>
@@ -18,17 +43,17 @@ let rowCounter = ref(1);
             {{ 'Менеджер: ' + $page.props.auth.user.name }}
         </p>
         <div class="w-full rounded-3xl bg-white p-10 shadow-sm">
-            <form id="addRoom" class="w-full">
+            <form @submit.prevent="saveData()" id="addRoom" class="w-full">
                 <p class="mb-5 text-2xl text-gray-900">Основная информация</p>
                 <div class="z-20 pb-8">
-                    <div class="z-20 mb-4 flex gap-x-10">
+                    <div id="contractNumber" class="z-20 mb-4 flex gap-x-10">
                         <CustomInput
                             :static-width="false"
                             label-text="Номер контракта"
                             placeholder="Введите номер контракта"
                         ></CustomInput>
 
-                        <div class="z-20 w-full">
+                        <div id="organization" class="z-20 w-full">
                             <DropdownInputButton
                                 :static-width="false"
                                 label-text="Название организации"
@@ -37,7 +62,7 @@ let rowCounter = ref(1);
                                 :label-text-arr="['верлак', 'не верлак']"
                             ></DropdownInputButton>
                         </div>
-                        <div class="z-20 w-full">
+                        <div id="date" class="z-20 w-full">
                             <DropdownCalendarButton
                                 :static-width="false"
                                 label-text="Дата"
@@ -46,7 +71,7 @@ let rowCounter = ref(1);
                             </DropdownCalendarButton>
                         </div>
                     </div>
-                    <div class="z-10 flex w-full gap-x-10">
+                    <div id="town" class="z-10 flex w-full gap-x-10">
                         <DropdownInputButton
                             :static-width="false"
                             label-text="Город"
@@ -60,6 +85,7 @@ let rowCounter = ref(1);
                         >
                         </DropdownInputButton>
                         <DropdownStatusButton
+                            id="state"
                             :static-width="false"
                             label-text="Статус"
                             placeholder="Выберите статус"
