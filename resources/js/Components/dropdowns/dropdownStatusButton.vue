@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import StatusLabel from './statusLabel.vue';
+import StatusLabel from '../statusLabel.vue';
 
 const props = defineProps({
     labelText: String,

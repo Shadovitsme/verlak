@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import CustomInput from './customInput.vue';
-import DropdownCalendarButton from './dropdownCalendarButton.vue';
-import DropdownInputButton from './dropdownInputButton.vue';
-import DropdownStatusButton from './dropdownStatusButton.vue';
+import DropdownCalendarButton from './dropdowns/dropdownCalendarButton.vue';
+import DropdownInputButton from './dropdowns/dropdownInputButton.vue';
+import DropdownStatusButton from './dropdowns/dropdownStatusButton.vue';
 import JustButton from './justButton.vue';
 </script>
 
@@ -47,7 +47,11 @@ import JustButton from './justButton.vue';
                             label-text="Город"
                             placeholder="Выберите город"
                             check-type="radio"
-                            :label-text-arr="['В работе', 'Выполнено']"
+                            :label-text-arr="[
+                                'Астрахань',
+                                'Москва',
+                                'Санкт-Петербург',
+                            ]"
                         >
                         </DropdownInputButton>
                         <DropdownStatusButton

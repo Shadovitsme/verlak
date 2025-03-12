@@ -1,19 +1,19 @@
 <template>
-    <VDatePicker class="z-20" v-model="date" color="indigo">
+    <VDatePicker class="z-20" v-model="tempDate" mode="date" color="indigo">
         <template #footer>
             <div class="flex w-full gap-4 px-3 pb-3">
                 <justButton
                     type="button"
                     color="gray"
                     class="w-full"
-                    @click="setToday"
+                    @click="cancelSelection"
                     >Отмена</justButton
                 >
                 <justButton
                     type="button"
                     color="blue"
                     class="w-full"
-                    @click="setToday"
+                    @click="confirmDate"
                     >Выбрать</justButton
                 >
             </div>
@@ -23,9 +23,20 @@
 <script setup>
 import { ref } from 'vue';
 import justButton from './justButton.vue';
-const date = ref(new Date());
-function setToday() {
-    date.value = new Date();
-}
+const tempDate = ref(null); // Временная дата, которая меняется при выборе в календаре
+const emit = defineEmits(['update:selected-date', 'close']); // Определяем события
+
+// Подтверждение выбора даты
+const confirmDate = () => {
+    if (tempDate.value) {
+        emit('update:selected-date', tempDate.value); // Отправляем дату
+    }
+    emit('close'); // Закрываем календарь
+};
+
+// Отмена выбора
+const cancelSelection = () => {
+    emit('close'); // Просто закрываем календарь без передачи даты
+};
 </script>
 <!-- https://vcalendar.io/?ref=madewithvuejs.com -->
