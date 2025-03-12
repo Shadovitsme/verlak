@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps({
     show: {
@@ -62,8 +62,6 @@ onUnmounted(() => {
 
     document.body.style.overflow = '';
 });
-
-
 </script>
 
 <template>

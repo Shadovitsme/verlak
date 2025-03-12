@@ -1,6 +1,6 @@
-export default async function getDataForTableFill() {
+export default async function getDataForTableFill(api) {
     try {
-        const response = await fetch('/user', {
+        const response = await fetch(api, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

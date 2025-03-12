@@ -6,7 +6,6 @@ const props = defineProps({
     placeholder: String,
     value: String,
 });
-
 </script>
 
 <template>

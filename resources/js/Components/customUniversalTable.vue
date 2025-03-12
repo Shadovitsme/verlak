@@ -11,6 +11,7 @@ const props = defineProps({
     dataQuery: String,
     lastAction: Boolean,
     lastStatus: Boolean,
+    api: String,
     readonlyFields: { type: Array, default: () => [] },
     placeholders: { type: Array, default: () => [] },
 });
@@ -23,7 +24,7 @@ let selectedRowIndex = ref();
 
 async function fetchData() {
     try {
-        const result = await getDataForTableFill();
+        const result = await getDataForTableFill(props.api);
         data.value = result;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
