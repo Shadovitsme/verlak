@@ -7,6 +7,7 @@ import JustButton from '../Components/justButton.vue';
 import { ref } from 'vue';
 import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
+import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 const tableShow = ref(false);
 let rowCounter = ref(1);
 function getDropDownValue(id) {
@@ -32,7 +33,8 @@ function saveData() {
     let date = getDropDownValue('date');
     let town = getDropDownValue('town');
     let state = getDropDownValue('state');
-    console.log(number, organization, date, town, state);
+
+    addNewContract(number, organization, date, town, state);
 }
 </script>
 

@@ -6,7 +6,7 @@ let toggleModal = ref('false');
 const props = defineProps({
     modalType: String,
     idToDelete: String,
-}); 
+});
 </script>
 
 <template>
