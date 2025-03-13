@@ -10,6 +10,31 @@ import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 const tableShow = ref(false);
 let rowCounter = ref(1);
+const headItems = [
+    'Административный округ',
+    'Район',
+    'Адрес многоквартирного дома ',
+    'Кол-во лифтов',
+    'Подъезд',
+    'Серия дома',
+    'Тип проекта',
+    'Дата начала',
+    'Дата окончания',
+    'Стоимость(с НДС 20%),₽',
+    'Действия',
+];
+const dbAdressColumnNames = [
+    'adminDistrict',
+    'townDistrict',
+    'adress',
+    'elevatorCount',
+    'entrance',
+    'buildingSerial',
+    'projectType',
+    'dateStart',
+    'dateEnd',
+    'price',
+];
 function getDropDownValue(id) {
     let besideResult = document
         .getElementById(id)
@@ -34,7 +59,17 @@ function saveData() {
     let town = getDropDownValue('town');
     let state = getDropDownValue('state');
 
-    addNewContract(number, organization, date, town, state);
+    let adressData = {};
+    for (let i = 0; i < rowCounter.value; i++) {
+        dbAdressColumnNames.forEach((element, index) => {
+            adressData[element] = document
+                .getElementById('table')
+                .getElementsByTagName('tbody')[0]
+                .getElementsByTagName('tr')
+                [i].getElementsByTagName('input')[index].value;
+        });
+    }
+    addNewContract(number, organization, date, town, state, adressData);
 }
 </script>
 
@@ -127,19 +162,7 @@ function saveData() {
                 <EmptyTable
                     :row-counter="rowCounter"
                     v-if="tableShow"
-                    :headItems="[
-                        'Административный округ',
-                        'Район',
-                        'Адрес многоквартирного дома ',
-                        'Кол-во лифтов',
-                        'Подъезд',
-                        'Серия дома',
-                        'Тип проекта',
-                        'Дата начала',
-                        'Дата окончания',
-                        'Стоимость(с НДС 20%),₽',
-                        'Действия',
-                    ]"
+                    :headItems="headItems"
                     :placeholders="[
                         'Название округа',
                         'Название района',

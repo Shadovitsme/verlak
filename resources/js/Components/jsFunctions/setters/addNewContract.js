@@ -4,6 +4,7 @@ export default async function addNewContract(
     date,
     town,
     state,
+    tableArrData,
 ) {
     try {
         const response = await fetch('/addContract', {
@@ -14,6 +15,7 @@ export default async function addNewContract(
                 date: date,
                 town: town,
                 state: state,
+                adressData: tableArrData,
             }),
             headers: {
                 Accept: 'application/json',

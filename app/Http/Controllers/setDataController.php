@@ -9,11 +9,41 @@ use Illuminate\Support\Facades\Hash;
 
 class setDataController extends Controller
 {
+    private function addElevatorFromContract($adressId, $entrance, $elevatorCount)
+    {
+        for ($i = 0; $i < $elevatorCount; $i++) {
+            DB::table('elevator')->insertGetId([
+                'adressId' => $adressId,
+                'name' => $i,
+                'entrance' => $entrance
+            ]);
+        }
+    }
+
+    private function addAdress($adressArray, $contractId)
+    {
+        var_dump($adressArray);
+        $adressId = DB::table('adressData')->insertGetId([
+            'adminDistrict' => $adressArray['adminDistrict'],
+            'townDistrict' => $adressArray['townDistrict'],
+            'adress' => $adressArray['adress'],
+            'buildingSerial' => $adressArray['buildingSerial'],
+            'projectType' => $adressArray['projectType'],
+            'dateStart' => $adressArray['dateStart'],
+            'dateEnd' => $adressArray['dateEnd'],
+            'contractId' => $contractId,
+            'price' => $adressArray['price'],
+        ]);
+        $entrance = $adressArray['entrance'];
+        $elevatorCount = $adressArray['elevatorCount'];
+        $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
+    }
+
     public function addNewContract(Request $request)
     {
         $data = json_decode($request->getContent(), true);
         $userId = Auth::user()->id;
-        DB::table('contract')->insert([
+        $contractId = DB::table('contract')->insertGetId([
             'contractNumber' => $data['contractNumber'],
             'date' => $data['date'],
             'town' => ($data['town']),
@@ -21,7 +51,7 @@ class setDataController extends Controller
             'state' => $data['state'],
             'manager' => $userId,
         ]);
-        echo ('success');
+        $this->addAdress($data['adressData'], $contractId);
     }
 
     public function setNewManager(Request $request)

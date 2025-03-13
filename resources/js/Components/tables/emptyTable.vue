@@ -1,7 +1,6 @@
 <script setup>
 import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref, onMounted } from 'vue';
-import TableInpueElement from '../tableInpueElement.vue';
 
 const props = defineProps({
     headItems: Array,
@@ -46,6 +45,7 @@ onUnmounted(() => {
 
 <template>
     <table
+        id="table"
         @click="handleBodyClick"
         class="min-w-full table-fixed border-collapse overflow-x-auto rounded-lg shadow-sm"
     >
@@ -82,10 +82,17 @@ onUnmounted(() => {
                     v-for="(item, index) in props.headItems.slice(1)"
                     :key="item"
                 >
-                    <TableInpueElement
-                        :selected="selectedRow === count"
-                        :even="count % 2 !== 0"
-                        :placeholder="props.placeholders[index] || ''"
+                    <input
+                        :class="
+                            'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
+                            (selectedRow === count
+                                ? 'bg-indigo-100'
+                                : count % 2 !== 0
+                                  ? 'bg-gray-50'
+                                  : 'bg-white') +
+                            ' '
+                        "
+                        :placeholder="props.placeholders[index]"
                     />
                 </td>
                 <td class="px-4">

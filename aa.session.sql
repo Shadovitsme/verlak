@@ -1,23 +1,23 @@
-DROP TABLE contract;
-DROP TABLE adressData;
-DROP TABLE building;
-DROP TABLE contactList;
-DROP TABLE contactPerson;
-DROP TABLE adressDocument;
-DROP TABLE EED;
-DROP TABLE adressPhotoUserFolders;
-DROP TABLE adressPhoto;
-DROP TABLE worker;
-DROP TABLE avances;
-DROP TABLE buildingMaterials;
+-- DROP TABLE contract;
+-- DROP TABLE adressData;
+-- DROP TABLE building;
+-- DROP TABLE contactList;
+-- DROP TABLE contactPerson;
+-- DROP TABLE adressDocument;
+-- DROP TABLE EED;
+-- DROP TABLE adressPhotoUserFolders;
+-- DROP TABLE adressPhoto;
+-- DROP TABLE worker;
+-- DROP TABLE avances;
+-- DROP TABLE buildingMaterials;
 CREATE TABLE contract (
     id integer PRIMARY KEY AUTOINCREMENT,
     contractNumber integer,
-    dateStart varchar(50),
-    dateEnd varchar(50),
+date varchar(50),
     town varchar(100),
-    organization boolean,
+organization varchar(30),
     manager BIGINT,
+state varchar(30),
     foreign key (manager) references users (id)
 );
 CREATE TABLE adressData (
@@ -95,5 +95,13 @@ CREATE TABLE buildingMaterials (
     name varchar(100),
     summ varchar(100),
     comment varchar(100),
+foreign key (adressId) references adressData (id)
+);
+CREATE TABLE elevator (
+    adressId integer,
+    name varchar(100),
+    descriptionName varchar(100),
+    descriptionValue varchar(100),
+    entrance varchar(100),
     foreign key (adressId) references adressData (id)
 )
