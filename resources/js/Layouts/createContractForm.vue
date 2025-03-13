@@ -49,6 +49,7 @@ function getDropDownValue(id) {
     }
     return besideResult;
 }
+const emit = defineEmits(['close']);
 function saveData() {
     event.preventDefault();
     let number = document
@@ -74,11 +75,13 @@ function saveData() {
         adressData[i] = besideResult;
     }
     addNewContract(number, organization, date, town, state, adressData);
+    emit('close');
 }
 </script>
 
 <template>
     <div class="mx-32 mt-20 w-[1348px] pt-12">
+        <slot></slot>
         <h1 class="mb-3 text-4xl text-gray-900">Создание договора</h1>
         <p class="mb-6 text-base text-gray-700">
             {{ 'Менеджер: ' + $page.props.auth.user.name }}

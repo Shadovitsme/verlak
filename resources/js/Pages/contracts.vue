@@ -1,9 +1,9 @@
 <script setup>
 import CreateContractForm from '@/Layouts/createContractForm.vue';
-import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import Header from '@/Components/header.vue';
 import IconButton from '@/Components/iconButton.vue';
 import { ref } from 'vue';
+import TableWithStatus from '@/Components/tables/tableWithStatus.vue';
 let toggleCreateContract = ref(false);
 </script>
 
@@ -23,7 +23,8 @@ let toggleCreateContract = ref(false);
                 icon="/assets/icons/system/x.svg"
             ></IconButton>
         </div>
-        <CustomUniversalTable
+        <TableWithStatus
+            api="/getContracts"
             :head-items="[
                 'Номер договора',
                 'Дата',
@@ -33,8 +34,22 @@ let toggleCreateContract = ref(false);
                 'Статус',
             ]"
             :last-status="true"
-        ></CustomUniversalTable>
+        ></TableWithStatus>
     </div>
 
-    <CreateContractForm v-if="toggleCreateContract"></CreateContractForm>
+    <CreateContractForm
+        @close="toggleCreateContract = !toggleCreateContract"
+        v-if="toggleCreateContract"
+    >
+        <div class="mb-5 flex gap-x-4" v-if="toggleCreateContract">
+            <p
+                @click="toggleCreateContract = !toggleCreateContract"
+                class="my-auto text-sm text-gray-700 hover:underline"
+            >
+                Учёт договоров
+            </p>
+            <img class="size-5" src="/assets/icons/arrows/arrow-right-1.svg" />
+            <p class="my-auto text-sm text-gray-700">Создание договора</p>
+        </div></CreateContractForm
+    >
 </template>

@@ -49,6 +49,8 @@ Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(fun
 
 // Apies
 Route::get('/user', [getDataController::class, 'getAllManagers']);
+Route::get('/getContracts', [getDataController::class, 'getAllContracts']);
+
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/addManager', [setDataController::class, 'setNewManager']);

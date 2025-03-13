@@ -14,4 +14,13 @@ class getDataController extends Controller
         }
         return response()->json($managers->toArray());
     }
+
+    public function getAllContracts()
+    {
+        $contracts = DB::table('contract')->get(['id','contractNumber','date','town','organization','manager','state']);
+        foreach ($contracts as $contract) {
+            $contract->manager = DB::table('users')->where('id', '=', $contract->manager)->pluck('name');
+        }
+        return response()->json($contracts->toArray());
+    }
 }
