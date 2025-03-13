@@ -10,6 +10,7 @@
 -- DROP TABLE worker;
 -- DROP TABLE avances;
 -- DROP TABLE buildingMaterials;
+-- DROP TABLE elevator;
 CREATE TABLE contract (
     id integer PRIMARY KEY AUTOINCREMENT,
     contractNumber integer,

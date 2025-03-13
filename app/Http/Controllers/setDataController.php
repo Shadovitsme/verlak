@@ -22,21 +22,22 @@ class setDataController extends Controller
 
     private function addAdress($adressArray, $contractId)
     {
-        var_dump($adressArray);
-        $adressId = DB::table('adressData')->insertGetId([
-            'adminDistrict' => $adressArray['adminDistrict'],
-            'townDistrict' => $adressArray['townDistrict'],
-            'adress' => $adressArray['adress'],
-            'buildingSerial' => $adressArray['buildingSerial'],
-            'projectType' => $adressArray['projectType'],
-            'dateStart' => $adressArray['dateStart'],
-            'dateEnd' => $adressArray['dateEnd'],
-            'contractId' => $contractId,
-            'price' => $adressArray['price'],
-        ]);
-        $entrance = $adressArray['entrance'];
-        $elevatorCount = $adressArray['elevatorCount'];
-        $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
+        foreach ($adressArray as $tableRow) {
+            $adressId = DB::table('adressData')->insertGetId([
+                'adminDistrict' => $tableRow['adminDistrict'],
+                'townDistrict' => $tableRow['townDistrict'],
+                'adress' => $tableRow['adress'],
+                'buildingSerial' => $tableRow['buildingSerial'],
+                'projectType' => $tableRow['projectType'],
+                'dateStart' => $tableRow['dateStart'],
+                'dateEnd' => $tableRow['dateEnd'],
+                'contractId' => $contractId,
+                'price' => $tableRow['price'],
+            ]);
+            $entrance = $tableRow['entrance'];
+            $elevatorCount = $tableRow['elevatorCount'];
+            $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
+        }
     }
 
     public function addNewContract(Request $request)

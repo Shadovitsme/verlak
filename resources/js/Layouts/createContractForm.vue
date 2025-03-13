@@ -59,15 +59,19 @@ function saveData() {
     let town = getDropDownValue('town');
     let state = getDropDownValue('state');
 
-    let adressData = {};
+    let adressData = [];
     for (let i = 0; i < rowCounter.value; i++) {
+        let besideResult = {};
+
         dbAdressColumnNames.forEach((element, index) => {
-            adressData[element] = document
+            besideResult[element] = document
                 .getElementById('table')
                 .getElementsByTagName('tbody')[0]
                 .getElementsByTagName('tr')
                 [i].getElementsByTagName('input')[index].value;
         });
+        console.log(adressData);
+        adressData[i] = besideResult;
     }
     addNewContract(number, organization, date, town, state, adressData);
 }
