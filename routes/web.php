@@ -10,12 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 });
 
 Route::get('/contracts', function () {
@@ -32,7 +27,7 @@ Route::get('/executors', function () {
     return Inertia::render('executors');
 });
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('managerListPage');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -50,6 +45,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(fun
 // Apies
 Route::get('/user', [getDataController::class, 'getAllManagers']);
 Route::get('/getContracts', [getDataController::class, 'getAllContracts']);
+Route::get('/getExecContract', [getDataController::class, 'getExecContract']);
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);

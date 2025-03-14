@@ -4,7 +4,19 @@ import Header from '@/Components/header.vue';
 import IconButton from '@/Components/iconButton.vue';
 import { ref } from 'vue';
 import TableWithStatus from '@/Components/tables/tableWithStatus.vue';
+import getExecData from '@/Components/jsFunctions/getters/getExecData';
 let toggleCreateContract = ref(false);
+let data = ref();
+async function fetchData() {
+    try {
+        const result = await getExecData('/getExecContract', '54454');
+        data.value = result;
+        console.log(data.value);
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+fetchData();
 </script>
 
 <template>

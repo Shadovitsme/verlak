@@ -20,7 +20,11 @@ let lastPart = locationParts[locationParts.length - 1];
                     ></a
                 >
                 <a class="my-auto" href="/admin"
-                    ><JustButton :selected="lastPart == 'admin'" color="noColor"
+                    ><JustButton
+                        :selected="
+                            lastPart == 'admin' || lastPart == 'dashboard'
+                        "
+                        color="noColor"
                         >Сотрудники</JustButton
                     ></a
                 >

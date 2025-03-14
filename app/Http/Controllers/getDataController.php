@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class getDataController extends Controller
@@ -15,12 +16,28 @@ class getDataController extends Controller
         return response()->json($managers->toArray());
     }
 
+    private function findElementById($id, $table, $searchableColumn)
+    {
+        return DB::table($table)->where('id', '=', $id)->pluck($searchableColumn)[0];
+    }
+
     public function getAllContracts()
     {
-        $contracts = DB::table('contract')->get(['id','contractNumber','date','town','organization','manager','state']);
+        $contracts = DB::table('contract')->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state']);
         foreach ($contracts as $contract) {
-            $contract->manager = DB::table('users')->where('id', '=', $contract->manager)->pluck('name');
+            $contract->manager = $this->findElementById($contract->manager, 'users', 'name');
         }
         return response()->json($contracts->toArray());
+    }
+
+    public function getExecContract(Request $request)
+    {
+        $contractNumber = $request->header('byWhatChoose');
+
+        $contract = DB::table('contract')->where('contractNumber', '=', $contractNumber)->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state'])[0];
+
+        $contract->manager = $this->findElementById($contract->manager, 'users', 'name');
+
+        return response()->json($contract);
     }
 }

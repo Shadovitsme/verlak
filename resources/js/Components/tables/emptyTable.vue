@@ -12,6 +12,7 @@ const columnWidths = [
     'w-72',
     'w-60',
     'w-80',
+    'w-32',
     'w-24',
     'w-32',
     'w-60',
@@ -44,65 +45,66 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <table
-        id="table"
-        @click="handleBodyClick"
-        class="min-w-full table-fixed border-collapse overflow-x-auto rounded-lg shadow-sm"
-    >
-        <thead class="rounded-lg bg-indigo-50 text-left text-gray-500">
-            <tr class="h-12 rounded-lg">
-                <th
-                    class="px-4"
-                    :class="columnWidths[index]"
-                    v-for="(item, index) in props.headItems"
-                    :key="item"
+    <div class="w-full overflow-x-auto">
+        <table
+            id="table"
+            @click="handleBodyClick"
+            class="min-w-max table-fixed border-collapse rounded-lg shadow-sm"
+        >
+            <thead class="rounded-lg bg-indigo-50 text-left text-gray-500">
+                <tr class="h-12 rounded-lg">
+                    <th
+                        class="px-4 text-xs text-gray-500"
+                        :class="columnWidths[index]"
+                        v-for="(item, index) in props.headItems"
+                        :key="item"
+                    >
+                        {{ item }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody ref="target" @click.stop>
+                <tr
+                    v-for="count in props.rowCounter"
+                    :id="count"
+                    @click="selectedRow = count"
+                    :class="[
+                        'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
+                        selectedRow === count
+                            ? 'bg-indigo-100'
+                            : count % 2 !== 0
+                              ? 'bg-gray-50'
+                              : 'bg-white',
+                    ]"
+                    :key="count"
                 >
-                    {{ item }}
-                </th>
-            </tr>
-        </thead>
-        <tbody ref="target" @click.stop>
-            <tr
-                v-for="count in props.rowCounter"
-                :id="count"
-                @click="selectedRow = count"
-                :class="[
-                    'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
-                    selectedRow === count
-                        ? 'bg-indigo-100'
-                        : count % 2 !== 0
-                          ? 'bg-gray-50'
-                          : 'bg-white',
-                ]"
-                :key="count"
-            >
-                <td
-                    class="px-4"
-                    :class="columnWidths[index]"
-                    v-for="(item, index) in props.headItems.slice(1)"
-                    :key="item"
-                >
-                    <input
-                        :class="
-                            'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
-                            (selectedRow === count
-                                ? 'bg-indigo-100'
-                                : count % 2 !== 0
-                                  ? 'bg-gray-50'
-                                  : 'bg-white') +
-                            ' '
-                        "
-                        :placeholder="props.placeholders[index]"
-                    />
-                </td>
-                <td class="px-4">
-                    <EditDeleteComponent
-                        id-to-delete="1"
-                        :key="index"
-                        modalType="deleteManager"
-                    />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td
+                        class="px-4"
+                        v-for="(item, index) in props.headItems.slice(1)"
+                        :key="item"
+                    >
+                        <input
+                            :class="
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
+                                (selectedRow === count
+                                    ? 'bg-indigo-100'
+                                    : count % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white') +
+                                ' '
+                            "
+                            :placeholder="props.placeholders[index]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <EditDeleteComponent
+                            id-to-delete="1"
+                            :key="index"
+                            modalType="deleteManager"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
