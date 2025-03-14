@@ -103,31 +103,15 @@ watch(
 onMounted(() => {
     fetchData();
 });
-const target = ref(null);
-const handleBodyClick = (event) => {
-    if (target.value || !target.value.contains(event.target)) {
-        readonlyFlag.value = undefined;
-        selectedRow.value = undefined;
-        selectedRowIndex.value = undefined;
-    }
-};
-
-// Добавляем и убираем слушатель через onMounted/onUnmounted
-import { onUnmounted } from 'vue';
-import updateManagerData from '../jsFunctions/setters/updateManagerData';
-onMounted(() => {
-    document.addEventListener('click', handleBodyClick);
-});
-onUnmounted(() => {
-    document.removeEventListener('click', handleBodyClick);
-});
+function rowClick(dataItem) {
+    selectedRow.value = dataItem;
+    emit('rowClick', selectedRow.value[0]);
+}
+const emit = defineEmits(['rowClick']);
 </script>
 
 <template>
-    <table
-        @click="handleBodyClick"
-        class="table-auto border-collapse rounded-lg shadow-sm"
-    >
+    <table class="table-auto border-collapse rounded-lg shadow-sm">
         <thead class="bg-indigo-50 text-left text-gray-500">
             <tr class="h-12">
                 <th
@@ -140,10 +124,10 @@ onUnmounted(() => {
                 </th>
             </tr>
         </thead>
-        <tbody ref="target" @click.stop>
+        <tbody>
             <tr
                 :id="data[index][0]"
-                @click="selectedRow = dataItem"
+                @click="rowClick(dataItem)"
                 :class="[
                     'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
                     selectedRow === dataItem

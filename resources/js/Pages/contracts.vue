@@ -4,26 +4,24 @@ import Header from '@/Components/header.vue';
 import IconButton from '@/Components/iconButton.vue';
 import { ref } from 'vue';
 import TableWithStatus from '@/Components/tables/tableWithStatus.vue';
-import getExecData from '@/Components/jsFunctions/getters/getExecData';
+import BreadWay from '@/Components/breadWay.vue';
+import ExecContractData from '@/Components/execContractData.vue';
 let toggleCreateContract = ref(false);
-let data = ref();
-async function fetchData() {
-    try {
-        const result = await getExecData('/getExecContract', '54454');
-        data.value = result;
-        console.log(data.value);
-    } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
-    }
-}
-fetchData();
+let toggleOneContract = ref(false);
+let selectedContractId = ref();
+
+const handleRowClick = (event) => {
+    selectedContractId.value = event;
+    toggleOneContract.value = true;
+    toggleCreateContract.value = false;
+};
 </script>
 
 <template>
     <Header></Header>
 
     <div
-        v-if="!toggleCreateContract"
+        v-if="!toggleCreateContract && !toggleOneContract"
         class="mx-32 mt-20 min-w-full max-w-[1600px] pt-12"
     >
         <div class="mb-8 flex">
@@ -36,6 +34,7 @@ fetchData();
             ></IconButton>
         </div>
         <TableWithStatus
+            @row-click="handleRowClick"
             api="/getContracts"
             :head-items="[
                 'Номер договора',
@@ -53,15 +52,17 @@ fetchData();
         @close="toggleCreateContract = !toggleCreateContract"
         v-if="toggleCreateContract"
     >
-        <div class="mb-5 flex gap-x-4" v-if="toggleCreateContract">
-            <p
-                @click="toggleCreateContract = !toggleCreateContract"
-                class="my-auto text-sm text-gray-700 hover:underline"
-            >
-                Учёт договоров
-            </p>
-            <img class="size-5" src="/assets/icons/arrows/arrow-right-1.svg" />
-            <p class="my-auto text-sm text-gray-700">Создание договора</p>
-        </div></CreateContractForm
-    >
+        <BreadWay
+            @goto-main="toggleCreateContract = !toggleCreateContract"
+            start-point-text="Учёт договоров"
+            current-point-text="Создание договора"
+        ></BreadWay>
+    </CreateContractForm>
+    <ExecContractData :id="selectedContractId" v-if="toggleOneContract">
+        <BreadWay
+            @goto-main="toggleOneContract = !toggleOneContract"
+            start-point-text="Учёт договоров"
+            current-point-text="Создание договора"
+        ></BreadWay
+    ></ExecContractData>
 </template>
