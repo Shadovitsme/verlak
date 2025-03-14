@@ -105,7 +105,7 @@ onMounted(() => {
 });
 function rowClick(dataItem) {
     selectedRow.value = dataItem;
-    emit('rowClick', selectedRow.value[0]);
+    emit('rowClick', selectedRow.value[1]);
 }
 const emit = defineEmits(['rowClick']);
 </script>

@@ -14,6 +14,8 @@ const emit = defineEmits(['gotoMain']);
             {{ props.startPointText }}
         </p>
         <img class="size-5" src="/assets/icons/arrows/arrow-right-1.svg" />
-        <p class="my-auto text-sm text-gray-700">Создание договора</p>
+        <p class="my-auto text-sm text-gray-700">
+            {{ props.currentPointText }}
+        </p>
     </div>
 </template>

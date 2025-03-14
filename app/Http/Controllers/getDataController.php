@@ -32,9 +32,9 @@ class getDataController extends Controller
 
     public function getExecContract(Request $request)
     {
-        $id = $request->header('byWhatChoose');
+        $contractNumber = $request->header('byWhatChoose');
 
-        $contract = DB::table('contract')->where('id', '=', $id)->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state'])[0];
+        $contract = DB::table('contract')->where('contractNumber', '=', $contractNumber)->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state'])[0];
 
         $contract->manager = $this->findElementById($contract->manager, 'users', 'name');
 

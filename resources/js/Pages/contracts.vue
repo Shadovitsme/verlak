@@ -8,10 +8,10 @@ import BreadWay from '@/Components/breadWay.vue';
 import ExecContractData from '@/Components/execContractData.vue';
 let toggleCreateContract = ref(false);
 let toggleOneContract = ref(false);
-let selectedContractId = ref();
+let selectedContractNumber = ref();
 
 const handleRowClick = (event) => {
-    selectedContractId.value = event;
+    selectedContractNumber.value = event;
     toggleOneContract.value = true;
     toggleCreateContract.value = false;
 };
@@ -58,11 +58,11 @@ const handleRowClick = (event) => {
             current-point-text="Создание договора"
         ></BreadWay>
     </CreateContractForm>
-    <ExecContractData :id="selectedContractId" v-if="toggleOneContract">
+    <ExecContractData :id="selectedContractNumber" v-if="toggleOneContract">
         <BreadWay
             @goto-main="toggleOneContract = !toggleOneContract"
             start-point-text="Учёт договоров"
-            current-point-text="Создание договора"
+            :current-point-text="'Договор №' + selectedContractNumber"
         ></BreadWay
     ></ExecContractData>
 </template>

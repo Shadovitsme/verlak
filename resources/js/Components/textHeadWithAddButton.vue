@@ -1,13 +1,14 @@
 <script setup>
+import IconButton from './iconButton.vue';
 const props = defineProps({
     shown: Boolean,
-    Text: String,
+    headText: String,
 });
 const emit = defineEmits(['addItem']);
 </script>
 <template>
     <div class="mb-5 flex h-fit content-center items-center">
-        <p class="my-auto mr-4 text-2xl text-gray-900">{{ props.Text }}</p>
+        <p class="my-auto mr-4 text-2xl text-gray-900">{{ props.headText }}</p>
         <IconButton
             @click="emit('addItem')"
             v-if="props.shown"
