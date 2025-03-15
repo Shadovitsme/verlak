@@ -8,7 +8,7 @@ import BreadWay from '@/Components/breadWay.vue';
 import ExecContractData from '@/Components/execContractData.vue';
 let toggleCreateContract = ref(false);
 let toggleOneContract = ref(false);
-let selectedContractNumber = ref();
+let selectedContractNumber = ref(null);
 
 const handleRowClick = (event) => {
     selectedContractNumber.value = event;
@@ -58,7 +58,23 @@ const handleRowClick = (event) => {
             current-point-text="Создание договора"
         ></BreadWay>
     </CreateContractForm>
-    <ExecContractData :id="selectedContractNumber" v-if="toggleOneContract">
+    <ExecContractData
+        :headItems="[
+            'Административный округ',
+            'Район',
+            'Адрес многоквартирного дома ',
+            'Кол-во лифтов',
+            'Подъезд',
+            'Серия дома',
+            'Тип проекта',
+            'Дата начала',
+            'Дата окончания',
+            'Стоимость(с НДС 20%),₽',
+            'Действия',
+        ]"
+        :contractNumber="selectedContractNumber"
+        v-if="toggleOneContract"
+    >
         <BreadWay
             @goto-main="toggleOneContract = !toggleOneContract"
             start-point-text="Учёт договоров"

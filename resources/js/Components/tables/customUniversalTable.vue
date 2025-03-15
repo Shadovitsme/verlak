@@ -7,11 +7,15 @@ import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import { watch } from 'vue';
 
 const props = defineProps({
+    page: String,
     headItems: Array,
     dataQuery: String,
     lastAction: Boolean,
     lastStatus: Boolean,
     api: String,
+    searchForeignKey: String,
+    exec: Boolean,
+    columnQueue: Array,
     readonlyFields: { type: Array, default: () => [] },
     placeholders: { type: Array, default: () => [] },
 });
@@ -23,11 +27,21 @@ let selectedRow = ref(null);
 let selectedRowIndex = ref();
 
 async function fetchData() {
-    try {
-        const result = await getDataForTableFill(props.api);
-        data.value = result;
-    } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
+    if (props.exec) {
+        try {
+            const result = await getExecData(props.api, props.searchForeignKey);
+            data.value = result;
+            console.log(data.value);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        }
+    } else {
+        try {
+            const result = await getDataForTableFill(props.api);
+            data.value = result;
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        }
     }
 }
 
@@ -75,13 +89,21 @@ watch(
                         index,
                         oldReadonlyFlag,
                     );
-                    updateManagerData(
-                        id,
-                        data.value[oldSelectedRowIndex][1],
-                        data.value[oldSelectedRowIndex][2],
-                        data.value[oldSelectedRowIndex][3],
-                        data.value[oldSelectedRowIndex][4],
-                    );
+                    switch (props.page) {
+                        case 'managers':
+                            updateManagerData(
+                                id,
+                                data.value[oldSelectedRowIndex][1],
+                                data.value[oldSelectedRowIndex][2],
+                                data.value[oldSelectedRowIndex][3],
+                                data.value[oldSelectedRowIndex][4],
+                            );
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     return;
                 });
             }
@@ -121,6 +143,7 @@ const handleBodyClick = (event) => {
 // Добавляем и убираем слушатель через onMounted/onUnmounted
 import { onUnmounted } from 'vue';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
+import getExecData from '../jsFunctions/getters/getExecData';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });
@@ -163,7 +186,9 @@ onUnmounted(() => {
             >
                 <td
                     class="px-4"
-                    v-for="(field, indexElem) in data[index].slice(1)"
+                    v-for="(field, indexElem) in props.exec
+                        ? props.columnQueue
+                        : data[index].slice(1)"
                     :key="field"
                 >
                     <TableInpueElement
@@ -173,11 +198,13 @@ onUnmounted(() => {
                         :readonly-state="
                             readonlyFlag != dataItem[0]
                                 ? true
-                                : props.readonlyFields[indexElem]
-                                  ? true
-                                  : false
+                                : props.exec
+                                  ? false
+                                  : props.readonlyFields[indexElem]
+                                    ? true
+                                    : false
                         "
-                        :value="field"
+                        :value="props.exec ? data[index][field] : field"
                     />
                 </td>
                 <td v-if="props.lastAction" class="px-4">

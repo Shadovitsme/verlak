@@ -3,20 +3,36 @@ import StatusLabel from './statusLabel.vue';
 import { ref } from 'vue';
 import getExecData from './jsFunctions/getters/getExecData';
 import TextHeadWithAddButton from './textHeadWithAddButton.vue';
-import EmptyTable from './tables/emptyTable.vue';
 import IconButton from './iconButton.vue';
+import CustomUniversalTable from './tables/customUniversalTable.vue';
 const props = defineProps({
-    id: String,
+    contractNumber: String,
+    headItems: Array,
 });
 let data = ref();
 async function fetchData() {
     try {
-        const result = await getExecData('/getExecContract', props.id);
+        const result = await getExecData(
+            '/getExecContract',
+            props.contractNumber,
+        );
         data.value = result;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
+const dbAdressColumnNames = [
+    'adminDistrict',
+    'townDistrict',
+    'adress',
+    'elevatorCount',
+    'entrance',
+    'buildingSerial',
+    'projectType',
+    'dateStart',
+    'dateEnd',
+    'price',
+];
 fetchData();
 </script>
 
@@ -53,6 +69,25 @@ fetchData();
             :shown="true"
             head-text="Адреса"
         ></TextHeadWithAddButton>
-        <EmptyTable></EmptyTable>
+        <CustomUniversalTable
+            :column-queue="dbAdressColumnNames"
+            api="/getAdressesforContract"
+            :exec="true"
+            :search-foreign-key="props.contractNumber"
+            :placeholders="[
+                'Название округа',
+                'Название района',
+                'Адрес ',
+                'n',
+                '№',
+                '№',
+                'Наименование типа',
+                'дд.мм.гггг',
+                'дд.мм.гггг',
+                'Сумма',
+            ]"
+            :last-action="true"
+            :head-items="props.headItems"
+        ></CustomUniversalTable>
     </div>
 </template>

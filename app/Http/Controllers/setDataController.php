@@ -68,7 +68,6 @@ class setDataController extends Controller
 
     public function updateManager(Request $request)
     {
-        echo ('hi');
         $data = json_decode($request->getContent(), true);
         if (strpos($data['pass'], '*') === false) {
             DB::table('users')->where('id', $data['id'])->update([

@@ -27,6 +27,7 @@ switch (props.modalType) {
 
 function send() {
     event.preventDefault();
+
     let elements = event.target.elements;
     switch (props.modalType) {
         case 'deleteManager':

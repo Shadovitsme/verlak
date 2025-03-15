@@ -21,7 +21,7 @@ const props = defineProps({
                 <JustButton @click="emit('close')" class="w-full" color="dark"
                     >Отмена</JustButton
                 >
-                <JustButton class="w-full" color="blue">{{
+                <JustButton type="submit" class="w-full" color="blue">{{
                     props.submitButtonText
                 }}</JustButton>
             </div>

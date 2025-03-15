@@ -46,6 +46,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(fun
 Route::get('/user', [getDataController::class, 'getAllManagers']);
 Route::get('/getContracts', [getDataController::class, 'getAllContracts']);
 Route::get('/getExecContract', [getDataController::class, 'getExecContract']);
+Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesforContract']);
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);

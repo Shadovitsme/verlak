@@ -1,6 +1,8 @@
 <template>
     <PagePlace add-modal-type="addManager" page-name="Список сотрудников">
         <TablePlaceholder
+            page="managers"
+            :exec="false"
             api="/user"
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
