@@ -84,4 +84,18 @@ class setDataController extends Controller
             ]);
         }
     }
+
+    public function updateContract(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $contractId = $data['id'];
+        DB::table('contract')->where('id', '=', $contractId)->update([
+            'contractNumber' => $data['contractNumber'],
+            'date' => $data['date'],
+            'town' => ($data['town']),
+            'organization' => $data['organization'],
+            'state' => $data['state'],
+        ]);
+        $this->addAdress($data['adressData'], $contractId);
+    }
 }

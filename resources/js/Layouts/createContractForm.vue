@@ -8,6 +8,7 @@ import { ref } from 'vue';
 import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
+import updateContract from '@/Components/jsFunctions/setters/updateContract';
 const tableShow = ref(false);
 let rowCounter = ref(1);
 const props = defineProps({
@@ -66,7 +67,7 @@ function saveData() {
     let state = getDropDownValue('state');
 
     let adressData = [];
-    for (let i = 0; i < rowCounter.value; i++) {
+    for (let i = 0; i < rowCounter.value - 1; i++) {
         let besideResult = {};
 
         dbAdressColumnNames.forEach((element, index) => {
@@ -76,10 +77,21 @@ function saveData() {
                 .getElementsByTagName('tr')
                 [i].getElementsByTagName('input')[index].value;
         });
-        console.log(adressData);
         adressData[i] = besideResult;
     }
-    addNewContract(number, organization, date, town, state, adressData);
+    if (props.data) {
+        updateContract(
+            props.data.id,
+            number,
+            organization,
+            date,
+            town,
+            state,
+            adressData,
+        );
+    } else {
+        addNewContract(number, organization, date, town, state, adressData);
+    }
     emit('close');
 }
 </script>

@@ -53,5 +53,6 @@ Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
+Route::post('/updateContract', [setDataController::class, 'updateContract']);
 
 require __DIR__ . '/auth.php';
