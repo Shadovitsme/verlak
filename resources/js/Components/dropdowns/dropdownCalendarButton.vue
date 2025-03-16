@@ -5,6 +5,7 @@ const props = defineProps({
     labelText: String,
     placeholder: String,
     staticWidth: Boolean,
+    value: String,
 });
 let showDrop = ref(false);
 let selectedDate = ref(null); // Реактивная переменная для хранения выбранной даты
@@ -31,9 +32,11 @@ const closeCalendar = () => {
                 :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
             >
                 {{
-                    selectedDate
-                        ? selectedDate.toLocaleDateString()
-                        : props.placeholder
+                    props.value
+                        ? props.value
+                        : selectedDate
+                          ? selectedDate.toLocaleDateString()
+                          : props.placeholder
                 }}
             </button>
         </div>

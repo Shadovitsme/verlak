@@ -6,15 +6,32 @@ import { ref } from 'vue';
 import TableWithStatus from '@/Components/tables/tableWithStatus.vue';
 import BreadWay from '@/Components/breadWay.vue';
 import ExecContractData from '@/Components/execContractData.vue';
+import getExecData from '@/Components/jsFunctions/getters/getExecData';
 let toggleCreateContract = ref(false);
 let toggleOneContract = ref(false);
 let selectedContractNumber = ref(null);
+let editContract = ref(false);
 
 const handleRowClick = (event) => {
     selectedContractNumber.value = event;
     toggleOneContract.value = true;
     toggleCreateContract.value = false;
+    fetchData();
 };
+
+let data = ref(null);
+async function fetchData() {
+    try {
+        const result = await getExecData(
+            '/getExecContract',
+            selectedContractNumber.value,
+        );
+        data.value = result;
+        console.log(data.value.state);
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
 </script>
 
 <template>
@@ -50,15 +67,26 @@ const handleRowClick = (event) => {
 
     <CreateContractForm
         @close="toggleCreateContract = !toggleCreateContract"
-        v-if="toggleCreateContract"
+        v-if="toggleCreateContract || editContract"
+        :contractNumber="selectedContractNumber"
+        :data="data"
     >
         <BreadWay
             @goto-main="toggleCreateContract = !toggleCreateContract"
             start-point-text="Учёт договоров"
-            current-point-text="Создание договора"
+            :middle-point-text="
+                editContract ? 'Договор №' + selectedContractNumber : ''
+            "
+            @goto-middle="editContract = false"
+            :current-point-text="
+                toggleCreateContract
+                    ? 'Создание договора'
+                    : 'Изменение договора'
+            "
         ></BreadWay>
     </CreateContractForm>
     <ExecContractData
+        @edit-contract="editContract = true"
         :headItems="[
             'Административный округ',
             'Район',
@@ -72,8 +100,9 @@ const handleRowClick = (event) => {
             'Стоимость(с НДС 20%),₽',
             'Действия',
         ]"
+        :data="data"
         :contractNumber="selectedContractNumber"
-        v-if="toggleOneContract"
+        v-if="toggleOneContract && !editContract"
     >
         <BreadWay
             @goto-main="toggleOneContract = !toggleOneContract"

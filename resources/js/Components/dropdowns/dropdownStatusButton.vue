@@ -8,9 +8,10 @@ const props = defineProps({
     staticWidth: Boolean,
     labelTextArr: Array,
     checkType: String,
+    value: String,
 });
 let showDrop = ref(false);
-let content = ref(props.placeholder);
+let content = ref(props.value ? props.value : props.placeholder);
 function checked(id) {
     content.value = id;
     showDrop.value = false;

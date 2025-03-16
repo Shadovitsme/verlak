@@ -46,11 +46,11 @@ class getDataController extends Controller
         $contractNumber = $request->header('byWhatChoose');
         $contractId = DB::table('contract')->where('contractNumber', '=', $contractNumber)->pluck('id');
         $adressData = DB::table('adressData')->where('contractId', '=', $contractId)->get();
-        // foreach ($adressData as $value) {
-        //     var_dump($$value);
+        foreach ($adressData as $value) {
 
-        //     $value->elevatorCount = DB::table('elevator')->where('adressId', '=', $value->id)->count();
-        // }
+            $value->elevatorCount = DB::table('elevator')->where('adressId', '=', $value->id)->count();
+            $value->entrance=DB::table('elevator')->where('adressId', '=', $value->id)->value('entrance');
+        }
         return response()->json($adressData->toArray());
     }
 }

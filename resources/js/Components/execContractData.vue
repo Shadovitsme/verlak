@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import StatusLabel from './statusLabel.vue';
-import { ref } from 'vue';
-import getExecData from './jsFunctions/getters/getExecData';
 import TextHeadWithAddButton from './textHeadWithAddButton.vue';
 import IconButton from './iconButton.vue';
 import CustomUniversalTable from './tables/customUniversalTable.vue';
 const props = defineProps({
     contractNumber: String,
     headItems: Array,
+    data: Object,
 });
-let data = ref();
-async function fetchData() {
-    try {
-        const result = await getExecData(
-            '/getExecContract',
-            props.contractNumber,
-        );
-        data.value = result;
-    } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
-    }
-}
+const emit = defineEmits(['editContract']);
 const dbAdressColumnNames = [
     'adminDistrict',
     'townDistrict',
@@ -33,28 +21,32 @@ const dbAdressColumnNames = [
     'dateEnd',
     'price',
 ];
-fetchData();
 </script>
 
 <template>
     <div class="mx-32 mt-20 w-[1348px] pt-12">
         <slot></slot>
-
         <div class="flex w-full justify-between">
             <div>
                 <p class="mb-3 text-4xl text-gray-900">
-                    {{ 'Договор №' + data.contractNumber }}
+                    {{ 'Договор №' + props.contractNumber }}
                 </p>
                 <p class="mb-3 text-gray-700">
                     {{ 'Сотрудник: ' + $page.props.auth.user.name }}
+                    <!-- TODO заменить на сотрудника который это дело и создал -->
                 </p>
                 <StatusLabel
                     class="mb-6"
-                    :state="data.state == 'В работе'"
+                    :state="
+                        props.data && props.data.state != null
+                            ? props.data.state === 'В работе'
+                            : false
+                    "
                 ></StatusLabel>
             </div>
             <div class="flex h-11 gap-x-3">
                 <IconButton
+                    @click="emit('editContract')"
                     color="gray"
                     icon="./assets/icons/system/edit.svg"
                 ></IconButton>

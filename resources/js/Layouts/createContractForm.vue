@@ -10,6 +10,11 @@ import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 const tableShow = ref(false);
 let rowCounter = ref(1);
+const props = defineProps({
+    contractNumber: String,
+    organization: String,
+    data: Object,
+});
 const headItems = [
     'Административный округ',
     'Район',
@@ -95,6 +100,9 @@ function saveData() {
                             :static-width="false"
                             label-text="Номер контракта"
                             placeholder="Введите номер контракта"
+                            :value="
+                                props.contractNumber ? props.contractNumber : ''
+                            "
                         ></CustomInput>
 
                         <div id="organization" class="z-20 w-full">
@@ -104,6 +112,11 @@ function saveData() {
                                 placeholder="Введите названии организации"
                                 check-type="radio"
                                 :label-text-arr="['верлак', 'не верлак']"
+                                :value="
+                                    props.data.organization
+                                        ? props.data.organization
+                                        : ''
+                                "
                             ></DropdownInputButton>
                         </div>
                         <div id="date" class="z-20 w-full">
@@ -111,6 +124,7 @@ function saveData() {
                                 :static-width="false"
                                 label-text="Дата"
                                 placeholder="Выберите дату"
+                                :value="props.data.date"
                             >
                             </DropdownCalendarButton>
                         </div>
@@ -120,6 +134,7 @@ function saveData() {
                             :static-width="false"
                             label-text="Город"
                             placeholder="Выберите город"
+                            :value="props.data.town"
                             check-type="radio"
                             :label-text-arr="[
                                 'Астрахань',
@@ -132,6 +147,7 @@ function saveData() {
                             id="state"
                             :static-width="false"
                             label-text="Статус"
+                            :value="props.data.state"
                             placeholder="Выберите статус"
                             check-type="radio"
                             :label-text-arr="['В работе', 'Выполнено']"
