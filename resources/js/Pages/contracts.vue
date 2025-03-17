@@ -27,10 +27,14 @@ async function fetchData() {
             selectedContractNumber.value,
         );
         data.value = result;
-        console.log(data.value.state);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
+}
+
+function closeOneCOntractForm() {
+    toggleOneContract.value = !toggleOneContract.value;
+    selectedContractNumber.value = null;
 }
 </script>
 
@@ -105,7 +109,7 @@ async function fetchData() {
         v-if="toggleOneContract && !editContract"
     >
         <BreadWay
-            @goto-main="toggleOneContract = !toggleOneContract"
+            @goto-main="closeOneCOntractForm"
             start-point-text="Учёт договоров"
             :current-point-text="'Договор №' + selectedContractNumber"
         ></BreadWay
