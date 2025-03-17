@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import StatusLabel from './statusLabel.vue';
-import TextHeadWithAddButton from './textHeadWithAddButton.vue';
 import IconButton from './iconButton.vue';
 import CustomUniversalTable from './tables/customUniversalTable.vue';
 import OpenModal from './openModal.vue';
@@ -69,10 +68,9 @@ const dbAdressColumnNames = [
             </div>
         </div>
 
-        <TextHeadWithAddButton
-            :shown="true"
-            head-text="Адреса"
-        ></TextHeadWithAddButton>
+        <div class="mb-5 flex h-fit content-center items-center">
+            <p class="my-auto mr-4 text-2xl text-gray-900">Адреса</p>
+        </div>
         <CustomUniversalTable
             deleteCommand="deleteAdress"
             :column-queue="dbAdressColumnNames"

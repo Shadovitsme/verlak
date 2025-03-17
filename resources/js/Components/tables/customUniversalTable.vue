@@ -5,6 +5,7 @@ import { ref, onMounted } from 'vue';
 import TableInpueElement from '../tableInpueElement.vue';
 import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import { watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     deleteCommand: String,
@@ -213,7 +214,13 @@ onUnmounted(() => {
                         "
                         :key="index"
                         :modalType="props.deleteCommand"
-                        @editable="toggleChangableStatus(dataItem[0], index)"
+                        @editable="
+                            props.exec
+                                ? router.visit(
+                                      `/contracts/${props.searchForeignKey}/${data[index].id}`,
+                                  )
+                                : toggleChangableStatus(dataItem[0], index)
+                        "
                     />
                 </td>
                 <td v-if="props.lastStatus" class="px-4">

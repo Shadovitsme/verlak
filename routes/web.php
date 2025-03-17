@@ -30,6 +30,13 @@ Route::get('/dashboard', function () {
     return Inertia::render('managerListPage');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/contracts/{contractNumber}/{adressId}', function (string $contractNumber, string $adressId) {
+    return Inertia::render('adress', [
+        'contractNumber' => $contractNumber,
+        'adressId' => $adressId,
+    ]);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
