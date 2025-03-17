@@ -20,7 +20,6 @@ if (
     props.modalType == 'deleteAdress'
 ) {
     submitButtonText = 'Удалить';
-    console.log(props.idToDelete);
 } else {
     switch (props.modalType) {
         case 'addManager':

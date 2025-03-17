@@ -31,7 +31,6 @@ async function fetchData() {
         try {
             const result = await getExecData(props.api, props.searchForeignKey);
             data.value = result;
-            console.log(data.value);
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error);
         }
@@ -39,7 +38,6 @@ async function fetchData() {
         try {
             const result = await getDataForTableFill(props.api);
             data.value = result;
-            console.log(data.value);
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error);
         }

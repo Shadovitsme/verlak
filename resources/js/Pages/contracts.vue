@@ -26,7 +26,7 @@ async function fetchData() {
             '/getExecContract',
             selectedContractNumber.value,
         );
-        data.value = result[0];
+        data.value = result;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
@@ -105,6 +105,7 @@ function closeOneCOntractForm() {
             'Действия',
         ]"
         :data="data"
+        :manager-name="data.manager"
         :contractNumber="selectedContractNumber"
         v-if="toggleOneContract && !editContract"
     >
