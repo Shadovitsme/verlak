@@ -3,11 +3,14 @@ import StatusLabel from './statusLabel.vue';
 import TextHeadWithAddButton from './textHeadWithAddButton.vue';
 import IconButton from './iconButton.vue';
 import CustomUniversalTable from './tables/customUniversalTable.vue';
+import OpenModal from './openModal.vue';
+import { ref } from 'vue';
 const props = defineProps({
     contractNumber: String,
     headItems: Array,
     data: Object,
 });
+let openModal = ref(false);
 const emit = defineEmits(['editContract']);
 const dbAdressColumnNames = [
     'adminDistrict',
@@ -24,6 +27,12 @@ const dbAdressColumnNames = [
 </script>
 
 <template>
+    <OpenModal
+        @close="openModal = !openModal"
+        modal-type="deleteContract"
+        :id-to-delete="props.data != null ? props.data.id : ''"
+        :toggle-modal="openModal"
+    ></OpenModal>
     <div class="mx-32 mt-20 w-[1348px] pt-12">
         <slot></slot>
         <div class="flex w-full justify-between">
@@ -51,6 +60,7 @@ const dbAdressColumnNames = [
                     icon="./assets/icons/system/edit.svg"
                 ></IconButton>
                 <IconButton
+                    @click="openModal = !openModal"
                     color="gray"
                     icon="./assets/icons/system/delete.svg"
                 ></IconButton>

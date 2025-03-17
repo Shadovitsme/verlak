@@ -10,7 +10,7 @@ const props = defineProps({
     value: String,
 });
 let showDrop = ref(false);
-let content = ref(props.value ? props.value : props.placeholder);
+let content = ref(props.value != '' ? props.value : props.placeholder);
 function checked(id) {
     content.value = id;
     showDrop.value = false;

@@ -1,6 +1,6 @@
-export default async function DeleteManagerFromDb(id) {
+export default async function universalDelete(id, api) {
     try {
-        const response = await fetch('/deleteManager', {
+        const response = await fetch(api, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

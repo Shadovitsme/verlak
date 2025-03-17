@@ -77,7 +77,7 @@ async function fetchData() {
             :middle-point-text="
                 editContract ? 'Договор №' + selectedContractNumber : ''
             "
-            @goto-middle="editContract = false"
+            @goto-middle="closeAll()"
             :current-point-text="
                 toggleCreateContract
                     ? 'Создание договора'

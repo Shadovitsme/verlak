@@ -125,7 +125,7 @@ function saveData() {
                                 check-type="radio"
                                 :label-text-arr="['верлак', 'не верлак']"
                                 :value="
-                                    props.data.organization
+                                    props.data != null
                                         ? props.data.organization
                                         : ''
                                 "
@@ -136,7 +136,9 @@ function saveData() {
                                 :static-width="false"
                                 label-text="Дата"
                                 placeholder="Выберите дату"
-                                :value="props.data.date"
+                                :value="
+                                    props.data != null ? props.data.date : ''
+                                "
                             >
                             </DropdownCalendarButton>
                         </div>
@@ -146,7 +148,7 @@ function saveData() {
                             :static-width="false"
                             label-text="Город"
                             placeholder="Выберите город"
-                            :value="props.data.town"
+                            :value="props.data != null ? props.data.town : ''"
                             check-type="radio"
                             :label-text-arr="[
                                 'Астрахань',
@@ -159,7 +161,7 @@ function saveData() {
                             id="state"
                             :static-width="false"
                             label-text="Статус"
-                            :value="props.data.state"
+                            :value="props.data != null ? props.data.state : ''"
                             placeholder="Выберите статус"
                             check-type="radio"
                             :label-text-arr="['В работе', 'Выполнено']"

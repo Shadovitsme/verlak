@@ -1,9 +1,9 @@
 <script setup>
 import Modal from '@/Components/Modal.vue';
 import modalField from './modalField.vue';
-import DeleteManager from './modalTemplates/deleteManager.vue';
+import deleteTemplate from './modalTemplates/deleteTemplate.vue';
 import AddManager from './modalTemplates/addManager.vue';
-import DeleteManagerFromDb from './jsFunctions/deleteFunc/deleteManagerFromDb';
+import universalDelete from './jsFunctions/deleteFunc/universalDelete';
 import addNewManager from './jsFunctions/setters/addNewManager';
 const emit = defineEmits(['close']);
 
@@ -14,15 +14,16 @@ const props = defineProps({
 });
 let submitButtonText;
 
-switch (props.modalType) {
-    case 'deleteManager':
-        submitButtonText = 'Удалить';
-        break;
-    case 'addManager':
-        submitButtonText = 'Добавить';
-        break;
-    default:
-        break;
+if (props.modalType == 'deleteManager' || props.modalType == 'deleteContract') {
+    submitButtonText = 'Удалить';
+} else {
+    switch (props.modalType) {
+        case 'addManager':
+            submitButtonText = 'Добавить';
+            break;
+        default:
+            break;
+    }
 }
 
 function send() {
@@ -31,7 +32,10 @@ function send() {
     let elements = event.target.elements;
     switch (props.modalType) {
         case 'deleteManager':
-            DeleteManagerFromDb(props.idToDelete);
+            universalDelete(props.idToDelete, '/deleteManager');
+            break;
+        case 'deleteContract':
+            universalDelete(props.idToDelete, '/deleteContract');
             break;
         case 'addManager':
             addNewManager(
@@ -55,9 +59,16 @@ function send() {
             @submit="send()"
             :submitButtonText="submitButtonText"
         >
-            <DeleteManager
+            <deleteTemplate
+                top="Удалить сотрудника"
+                body="  Вы уверены, что хотите удалить данные менеджера?"
                 v-if="props.modalType == 'deleteManager'"
-            ></DeleteManager>
+            ></deleteTemplate>
+            <deleteTemplate
+                top="Удалить договор"
+                body="  Вы уверены, что хотите удалить договор ?"
+                v-if="props.modalType == 'deleteContract'"
+            ></deleteTemplate>
             <AddManager v-if="props.modalType == 'addManager'"></AddManager>
         </modalField>
     </Modal>

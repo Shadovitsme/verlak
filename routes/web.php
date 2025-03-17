@@ -50,9 +50,12 @@ Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesfor
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
-Route::post('/addManager', [setDataController::class, 'setNewManager']);
+Route::post('/deleteContract', [deleteDataController::class, 'deleteContract']);
+
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
-Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
+
+Route::post('/addManager', [setDataController::class, 'setNewManager']);
+Route::post('/addContract', [setDataController::class, 'addNewContract']);
 
 require __DIR__ . '/auth.php';
