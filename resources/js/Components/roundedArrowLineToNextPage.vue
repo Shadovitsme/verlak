@@ -1,5 +1,6 @@
 <script setup>
 const props = defineProps(['text']);
+const emit = defineEmits(['delete']);
 </script>
 <template>
     <div class="w-full rounded-lg bg-white px-4 py-2">
@@ -11,7 +12,10 @@ const props = defineProps(['text']);
                     src="/assets/icons/arrows/arrow-right-1.svg"
                 />
             </div>
-            <img src="/assets/icons/system/delete.svg" />
+            <img
+                @click="emit('delete')"
+                src="/assets/icons/system/delete.svg"
+            />
         </div>
     </div>
 </template>

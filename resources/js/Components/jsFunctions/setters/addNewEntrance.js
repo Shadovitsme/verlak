@@ -1,21 +1,22 @@
-export default async function universalDelete(id, api, where = null) {
+export default async function addEntrance(id, name) {
     try {
-        const response = await fetch(api, {
+        const response = await fetch('/addEntrance', {
             method: 'POST',
+            body: JSON.stringify({
+                id: id,
+                name: name,
+            }),
             headers: {
                 Accept: 'application/json',
                 'X-CSRF-TOKEN': document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute('content'),
-                id: id,
-                where: where,
             },
         });
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return 'success'; // Возвращаем данные как массив
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

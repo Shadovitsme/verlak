@@ -57,13 +57,17 @@ Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesfor
 Route::get('/getCurrentAdressData', [getDataController::class, 'getCurrentAdressData']);
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
-Route::post('/deleteContract', [deleteDataController::class, 'deleteContract']);
-Route::post('/deleteAdress', [deleteDataController::class, 'deleteAdress']);
+Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
+Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
+
+
 
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
+Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
+
 
 require __DIR__ . '/auth.php';

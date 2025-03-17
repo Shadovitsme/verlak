@@ -45,6 +45,7 @@ async function fetchData(adressId) {
             ></IconButton>
         </div>
         <EntranceList
+            :id="adressId"
             :items-count="data != null ? data.entranceCount : ''"
         ></EntranceList>
     </div>

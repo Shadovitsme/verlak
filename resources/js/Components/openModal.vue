@@ -5,6 +5,7 @@ import deleteTemplate from './modalTemplates/deleteTemplate.vue';
 import AddManager from './modalTemplates/addManager.vue';
 import universalDelete from './jsFunctions/deleteFunc/universalDelete';
 import addNewManager from './jsFunctions/setters/addNewManager';
+import { ref } from 'vue';
 const emit = defineEmits(['close']);
 
 const props = defineProps({
@@ -13,17 +14,46 @@ const props = defineProps({
     idToDelete: Number,
 });
 let submitButtonText;
+let deleteForm = ref(true);
+let top = ref();
+let body = ref();
 
 if (
     props.modalType == 'deleteManager' ||
     props.modalType == 'deleteContract' ||
-    props.modalType == 'deleteAdress'
+    props.modalType == 'deleteAdress' ||
+    props.modalType == 'deleteEntrance'
 ) {
     submitButtonText = 'Удалить';
+    selectText(props.modalType);
 } else {
     switch (props.modalType) {
         case 'addManager':
             submitButtonText = 'Добавить';
+            deleteForm.value = false;
+            break;
+        default:
+            break;
+    }
+}
+
+function selectText(type) {
+    switch (type) {
+        case 'deleteManager':
+            top.value = 'Удалить сотрудника';
+            body.value = 'Вы уверены, что хотите удалить данные менеджера?';
+            break;
+        case 'deleteContract':
+            top.value = 'Удалить договор';
+            body.value = 'Вы уверены, что хотите удалить договор?';
+            break;
+        case 'deleteAdress':
+            top.value = 'Удалить адрес';
+            body.value = 'Вы уверены, что хотите удалить адрес?';
+            break;
+        case 'deleteEntrance':
+            top.value = 'Удалить подъезд';
+            body.value = 'Вы уверены, что хотите удалить подъезд?';
             break;
         default:
             break;
@@ -39,10 +69,13 @@ function send() {
             universalDelete(props.idToDelete, '/deleteManager');
             break;
         case 'deleteContract':
-            universalDelete(props.idToDelete, '/deleteContract');
+            universalDelete(props.idToDelete, '/universalDelete', 'contract');
             break;
         case 'deleteAdress':
-            universalDelete(props.idToDelete, '/deleteAdress');
+            universalDelete(props.idToDelete, '/universalDelete', 'adressData');
+            break;
+        case 'deleteEntrance':
+            universalDelete(props.idToDelete, '/deleteEntrance');
             break;
         case 'addManager':
             addNewManager(
@@ -67,19 +100,9 @@ function send() {
             :submitButtonText="submitButtonText"
         >
             <deleteTemplate
-                top="Удалить сотрудника"
-                body="  Вы уверены, что хотите удалить данные менеджера?"
-                v-if="props.modalType == 'deleteManager'"
-            ></deleteTemplate>
-            <deleteTemplate
-                top="Удалить договор"
-                body="  Вы уверены, что хотите удалить договор ?"
-                v-if="props.modalType == 'deleteContract'"
-            ></deleteTemplate>
-            <deleteTemplate
-                v-if="props.modalType == 'deleteAdress'"
-                top="Удалить адрес"
-                body="Вы уверены, что хотите удалить адрес?"
+                v-if="deleteForm"
+                :top="top"
+                :body="body"
             ></deleteTemplate>
             <AddManager v-if="props.modalType == 'addManager'"></AddManager>
         </modalField>

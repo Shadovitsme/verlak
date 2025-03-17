@@ -13,15 +13,16 @@ class deleteDataController extends Controller
         DB::table('users')->where('id', '=', $id)->update(['active' => false]);
     }
 
-    public function deleteContract(Request $request)
+    public function universalDelete(Request $request)
     {
         $id = $request->header('id');
-        DB::table('contract')->where('id', '=', $id)->delete();
+        $where = $request->header('where');
+        DB::table($where)->where('id', '=', $id)->delete();
     }
 
-    public function deleteAdress(Request $request)
+    public function deleteEntrance(Request $request)
     {
-        $id = $request->header('id');
-        DB::table('adressData')->where('id', '=', $id)->delete();
+        $name = $request->header('id');
+        DB::table('elevator')->where('entrance', '=', $name)->delete();
     }
 }

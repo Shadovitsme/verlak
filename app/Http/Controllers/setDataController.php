@@ -98,4 +98,15 @@ class setDataController extends Controller
         ]);
         $this->addAdress($data['adressData'], $contractId);
     }
+
+    public function addEntrance(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $adressId = $data['id'];
+        $entranceName = $data['name'];
+        DB::table('elevator')->insert([
+            'adressId' => $adressId,
+            'entrance' => $entranceName,
+        ]);
+    }
 }
