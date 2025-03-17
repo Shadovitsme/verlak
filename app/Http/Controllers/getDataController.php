@@ -40,6 +40,15 @@ class getDataController extends Controller
         return response()->json($contract);
     }
 
+    public function getCurrentAdressData(Request $request)
+    {
+        $adressId = $request->header('byWhatChoose');
+        $adressData = DB::table('adressData')->where('id', '=', $adressId)->get()[0];
+        $adressData->entranceCount = DB::table('elevator')->where('adressId', '=', $adressId)->distinct()->count('entrance');
+
+        return response()->json($adressData);
+    }
+
     public function getAdressesforContract(Request $request)
     {
         $contractNumber = $request->header('byWhatChoose');
