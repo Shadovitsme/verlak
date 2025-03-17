@@ -172,7 +172,7 @@ onUnmounted(() => {
         </thead>
         <tbody ref="target" @click.stop>
             <tr
-                :id="data[index][0]"
+                :id="props.exec ? data[index].id : data[index][0]"
                 @click="selectedRow = dataItem"
                 :class="[
                     'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
@@ -187,7 +187,9 @@ onUnmounted(() => {
             >
                 <td
                     class="px-4"
-                    v-for="(field, indexElem) in props.columnQueue"
+                    v-for="(field, indexElem) in props.exec
+                        ? props.columnQueue
+                        : data[index].slice(1)"
                     :key="field"
                 >
                     <TableInpueElement
@@ -203,12 +205,14 @@ onUnmounted(() => {
                                     ? true
                                     : false
                         "
-                        :value="props.exec ? data[index][indexElem] : field"
+                        :value="props.exec ? data[index][field] : field"
                     />
                 </td>
                 <td v-if="props.lastAction" class="px-4">
                     <EditDeleteComponent
-                        :id-to-delete="data[index][0]"
+                        :id-to-delete="
+                            props.exec ? data[index].id : data[index][0]
+                        "
                         :key="index"
                         :modalType="props.deleteCommand"
                         @editable="toggleChangableStatus(dataItem[0], index)"

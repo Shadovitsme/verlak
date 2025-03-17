@@ -26,7 +26,7 @@ async function fetchData() {
             '/getExecContract',
             selectedContractNumber.value,
         );
-        data.value = result;
+        data.value = result[0];
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }

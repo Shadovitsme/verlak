@@ -33,10 +33,9 @@ class getDataController extends Controller
     public function getExecContract(Request $request)
     {
         $contractNumber = $request->header('byWhatChoose');
+        $contract = DB::table('contract')->where('contractNumber', '=', $contractNumber)->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state']);
 
-        $contract = DB::table('contract')->where('contractNumber', '=', $contractNumber)->get(['id', 'contractNumber', 'date', 'town', 'organization', 'manager', 'state'])[0];
-
-        $contract->manager = $this->findElementById($contract->manager, 'users', 'name');
+        // $contract->manager = $this->findElementById($contract->manager, 'users', 'name');
 
         return response()->json($contract);
     }
@@ -47,9 +46,8 @@ class getDataController extends Controller
         $contractId = DB::table('contract')->where('contractNumber', '=', $contractNumber)->pluck('id');
         $adressData = DB::table('adressData')->where('contractId', '=', $contractId)->get();
         foreach ($adressData as $value) {
-
             $value->elevatorCount = DB::table('elevator')->where('adressId', '=', $value->id)->count();
-            $value->entrance=DB::table('elevator')->where('adressId', '=', $value->id)->value('entrance');
+            $value->entrance = DB::table('elevator')->where('adressId', '=', $value->id)->value('entrance');
         }
         return response()->json($adressData->toArray());
     }

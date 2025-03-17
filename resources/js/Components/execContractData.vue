@@ -48,7 +48,7 @@ const dbAdressColumnNames = [
                     class="mb-6"
                     :state="
                         props.data && props.data.state != null
-                            ? props.data.state === 'В работе'
+                            ? props.data.state == 'В работе'
                             : false
                     "
                 ></StatusLabel>
