@@ -48,9 +48,9 @@ Route::get('/getContracts', [getDataController::class, 'getAllContracts']);
 Route::get('/getExecContract', [getDataController::class, 'getExecContract']);
 Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesforContract']);
 
-
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/deleteContract', [deleteDataController::class, 'deleteContract']);
+Route::post('/deleteAdress', [deleteDataController::class, 'deleteAdress']);
 
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);

@@ -13,8 +13,11 @@ export default async function getExecData(api, byWhatChoose) {
         }
 
         const data = await response.json();
-
-        return data; // Возвращаем данные как массив
+        let unassociatedData = [];
+        data.forEach((element) => {
+            unassociatedData.push(Object.values(element));
+        });
+        return unassociatedData; // Возвращаем данные как массив
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

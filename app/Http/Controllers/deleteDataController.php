@@ -18,4 +18,10 @@ class deleteDataController extends Controller
         $id = $request->header('id');
         DB::table('contract')->where('id', '=', $id)->delete();
     }
+
+    public function deleteAdress(Request $request)
+    {
+        $id = $request->header('id');
+        DB::table('adressData')->where('id', '=', $id)->delete();
+    }
 }

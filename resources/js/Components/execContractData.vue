@@ -72,6 +72,7 @@ const dbAdressColumnNames = [
             head-text="Адреса"
         ></TextHeadWithAddButton>
         <CustomUniversalTable
+            deleteCommand="deleteAdress"
             :column-queue="dbAdressColumnNames"
             api="/getAdressesforContract"
             :exec="true"

@@ -14,8 +14,13 @@ const props = defineProps({
 });
 let submitButtonText;
 
-if (props.modalType == 'deleteManager' || props.modalType == 'deleteContract') {
+if (
+    props.modalType == 'deleteManager' ||
+    props.modalType == 'deleteContract' ||
+    props.modalType == 'deleteAdress'
+) {
     submitButtonText = 'Удалить';
+    console.log(props.idToDelete);
 } else {
     switch (props.modalType) {
         case 'addManager':
@@ -36,6 +41,9 @@ function send() {
             break;
         case 'deleteContract':
             universalDelete(props.idToDelete, '/deleteContract');
+            break;
+        case 'deleteAdress':
+            universalDelete(props.idToDelete, '/deleteAdress');
             break;
         case 'addManager':
             addNewManager(
@@ -68,6 +76,11 @@ function send() {
                 top="Удалить договор"
                 body="  Вы уверены, что хотите удалить договор ?"
                 v-if="props.modalType == 'deleteContract'"
+            ></deleteTemplate>
+            <deleteTemplate
+                v-if="props.modalType == 'deleteAdress'"
+                top="Удалить адрес"
+                body="Вы уверены, что хотите удалить адрес?"
             ></deleteTemplate>
             <AddManager v-if="props.modalType == 'addManager'"></AddManager>
         </modalField>

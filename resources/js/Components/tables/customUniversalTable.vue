@@ -7,7 +7,7 @@ import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import { watch } from 'vue';
 
 const props = defineProps({
-    page: String,
+    deleteCommand: String,
     headItems: Array,
     dataQuery: String,
     lastAction: Boolean,
@@ -39,6 +39,7 @@ async function fetchData() {
         try {
             const result = await getDataForTableFill(props.api);
             data.value = result;
+            console.log(data.value);
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error);
         }
@@ -186,9 +187,7 @@ onUnmounted(() => {
             >
                 <td
                     class="px-4"
-                    v-for="(field, indexElem) in props.exec
-                        ? props.columnQueue
-                        : data[index].slice(1)"
+                    v-for="(field, indexElem) in props.columnQueue"
                     :key="field"
                 >
                     <TableInpueElement
@@ -199,19 +198,19 @@ onUnmounted(() => {
                             readonlyFlag != dataItem[0]
                                 ? true
                                 : props.exec
-                                  ? false
+                                  ? true
                                   : props.readonlyFields[indexElem]
                                     ? true
                                     : false
                         "
-                        :value="props.exec ? data[index][field] : field"
+                        :value="props.exec ? data[index][indexElem] : field"
                     />
                 </td>
                 <td v-if="props.lastAction" class="px-4">
                     <EditDeleteComponent
                         :id-to-delete="data[index][0]"
                         :key="index"
-                        modalType="deleteManager"
+                        :modalType="props.deleteCommand"
                         @editable="toggleChangableStatus(dataItem[0], index)"
                     />
                 </td>
