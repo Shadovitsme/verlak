@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\deleteDataController;
+use App\Http\Controllers\fileUploadController;
 use App\Http\Controllers\getDataController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\setDataController;
@@ -19,6 +20,9 @@ Route::get('/contracts', function () {
 
 Route::get('/scores', function () {
     return Inertia::render('scores');
+});
+Route::get('/up', function () {
+    return Inertia::render('uploadFile');
 });
 Route::get('/notifications', function () {
     return Inertia::render('notifications');
@@ -71,15 +75,16 @@ Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']
 Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
 Route::post('/deleteElevator', [deleteDataController::class, 'deleteElevator']);
 
-
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorData']);
-
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
 Route::post('/addElevator', [setDataController::class, 'addElevator']);
+
+Route::post('/upload-file', [FileUploadController::class, 'upload']);
+Route::post('/delete-file', [FileUploadController::class, 'delete']); 
 
 require __DIR__ . '/auth.php';
