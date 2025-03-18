@@ -31,9 +31,10 @@ let selectedRowIndex = ref();
 
 async function fetchData() {
     if (props.specialGetters == 'elevator') {
-        data.value = elevatorFillerForUniversalTable(props.elevatorData);
-        // TODO вынести в отдельную функцию чтоб там еще заполнять доп датой
-        console.log(props.elevatorData);
+        const result = await elevatorFillerForUniversalTable(
+            props.elevatorData,
+        );
+        data.value = result;
         return 0;
     }
     if (props.exec) {
@@ -89,7 +90,6 @@ watch(
             newSelectedRowIndex !== oldSelectedRowIndex
         ) {
             let id = data.value[0][0];
-
             if (oldSelectedRowIndex != undefined && oldSelectedRowIndex > 0) {
                 data.value[oldSelectedRowIndex].forEach((element, index) => {
                     if (index == 0) {
@@ -119,6 +119,7 @@ watch(
                                 data.value[oldSelectedRowIndex][0],
                                 data.value[oldSelectedRowIndex][1],
                                 data.value[oldSelectedRowIndex][2],
+                                props.elevatorData.entrance,
                             );
                             break;
                         default:
@@ -129,6 +130,16 @@ watch(
                 });
             }
             if (oldSelectedRowIndex == 0) {
+                if (props.deleteCommand == 'deleteElevatorData') {
+                    updateElevatorData(
+                        props.elevatorData.adressId,
+                        props.elevatorData.name,
+                        data.value[0][0],
+                        data.value[0][1],
+                        data.value[0][2],
+                        props.elevatorData.entrance,
+                    );
+                }
                 data.value[0].forEach((element, index) => {
                     if (
                         index == 0 &&
@@ -138,15 +149,7 @@ watch(
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
-                    if (props.deleteCommand == 'deleteElevatorData') {
-                        updateElevatorData(
-                            props.elevatorData.adressId,
-                            props.elevatorData.name,
-                            data.value[0][0],
-                            data.value[0][1],
-                            data.value[0][2],
-                        );
-                    } else {
+                    if (props.deleteCommand != 'deleteElevatorData') {
                         updateManagerData(
                             id,
                             data.value[0][1],
@@ -178,7 +181,7 @@ const handleBodyClick = (event) => {
 import { onUnmounted } from 'vue';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
 import getExecData from '../jsFunctions/getters/getExecData';
-import elevatorFillerForUniversalTable from '../jsFunctions/elevatorFillerForUniversalTable';
+import elevatorFillerForUniversalTable from '../jsFunctions/getters/elevatorFillerForUniversalTable';
 import updateElevatorData from '../jsFunctions/setters/updateElevatorData';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);

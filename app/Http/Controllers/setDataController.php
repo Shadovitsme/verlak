@@ -22,7 +22,23 @@ class setDataController extends Controller
 
     public function updateElevatorData(Request $request)
     {
-        echo $request;
+        $data = json_decode($request->getContent(), true);
+        $descriptionName = $data['descriptionName'];
+        $query = DB::table('elevator')->where('adressId', '=', $data['adressId'])->where('name', '=', $data['elevatorName'])->where('entrance', '=', $data['entrance']);
+        $result = $query->where('descriptionName', '=' , $descriptionName)->get();
+        if ($result->isEmpty()) {
+            var_dump($result);
+            $this->insertElevatorData($data, $query);
+        }
+    }
+
+    public function insertElevatorData($data, $query)
+    {
+        $query->insert(['descriptionName' => $data['descriptionName'],
+            'descriptionValue' => $data['descriptionValue'],
+            'commentValue' => $data['commentValue'], 'adressId' => $data['adressId'], 'name' => $data['elevatorName'], 'entrance' => $data['entrance']]);
+            $query->where('descriptionName', '=' . NULL)->delete();
+
     }
 
     private function addAdress($adressArray, $contractId)

@@ -44,7 +44,7 @@ class getDataController extends Controller
     {
         $adressId = $request->header('adressId');
         $entranceName = $request->header('entranceName');
-        $entranceData = DB::table('elevator')->where('adressId', '=', $adressId)->where('entrance', '=', $entranceName)->get();
+        $entranceData = DB::table('elevator')->where('adressId', '=', $adressId)->where('entrance', '=', $entranceName)->groupBy('name')->get();
         return response()->json($entranceData);
     }
 
@@ -53,6 +53,17 @@ class getDataController extends Controller
         $adressId = $request->header('byWhatChoose');
         $adressData = DB::table('adressData')->where('id', '=', $adressId)->get()[0];
         $adressData->entranceCount = DB::table('elevator')->where('adressId', '=', $adressId)->distinct()->get();
+
+        return response()->json($adressData);
+    }
+
+    public function getExecElevator(Request $request)
+    {
+        $adressId = $request->header('adressId');
+        $elevatorName = $request->header('elevatorName');
+        $entrance = $request->header('entrance');
+
+        $adressData = DB::table('elevator')->where('adressId', '=', $adressId)->where('name', '=', $elevatorName)->where('entrance', '=', $entrance)->get();
 
         return response()->json($adressData);
     }
