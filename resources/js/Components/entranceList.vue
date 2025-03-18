@@ -4,8 +4,7 @@ import OpenModal from './openModal.vue';
 import RoundedArrowLineToNextPage from './roundedArrowLineToNextPage.vue';
 import textHeadWithAddButton from './textHeadWithAddButton.vue';
 import { ref } from 'vue';
-const props = defineProps(['itemsCount', 'id']);
-console.log(props.itemsCount);
+const props = defineProps(['entrances', 'id', 'hrefStart']);
 let showAdd = ref(false);
 let showModal = ref(false);
 let deleteId = ref(null);
@@ -24,13 +23,14 @@ function deleteAction(entranceName) {
     ></OpenModal>
     <textHeadWithAddButton
         :shown="true"
-        head-text="Подъезды"
+        text="Подъезды"
         @click="showAdd = !showAdd"
     ></textHeadWithAddButton>
     <div class="space-y-3">
         <RoundedArrowLineToNextPage
+            :href="props.hrefStart + '/' + item.entrance"
             @delete="deleteAction(item.entrance)"
-            v-for="item in props.itemsCount"
+            v-for="item in props.entrances"
             :text="'Подъезд ' + item.entrance"
             :key="item"
         ></RoundedArrowLineToNextPage>

@@ -37,6 +37,14 @@ Route::get('/contracts/{contractNumber}/{adressId}', function (string $contractN
     ]);
 });
 
+Route::get('/{contractNumber}/{adressId}/{entranceName}', function (string $contractNumber, string $adressId, string $entranceName) {
+    return Inertia::render('entrance', [
+        'contractNumber' => $contractNumber,
+        'adressId' => $adressId,
+        'entranceName' => $entranceName,
+    ]);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -55,12 +63,12 @@ Route::get('/getContracts', [getDataController::class, 'getAllContracts']);
 Route::get('/getExecContract', [getDataController::class, 'getExecContract']);
 Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesforContract']);
 Route::get('/getCurrentAdressData', [getDataController::class, 'getCurrentAdressData']);
+Route::get('/getExecEntrance', [getDataController::class, 'getExecEntrance']);
+
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
 Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
-
-
 
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
@@ -68,6 +76,5 @@ Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
-
 
 require __DIR__ . '/auth.php';
