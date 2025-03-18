@@ -52,6 +52,8 @@ async function fetchData(adressId) {
         <div v-for="(dat, index) in data" :key="dat">
             <RoundedArrowLineDropdown :text="'Лифт ' + index">
                 <CustomUniversalTable
+                    delete-command="deleteElevatorData"
+                    :readonly-fields="[true, false, false, false]"
                     specialGetters="elevator"
                     :elevator-data="dat"
                     :lastAction="true"

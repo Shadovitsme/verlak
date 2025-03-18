@@ -64,7 +64,7 @@ class getDataController extends Controller
         $adressData = DB::table('adressData')->where('contractId', '=', $contractId)->get();
         foreach ($adressData as $value) {
             $value->elevatorCount = DB::table('elevator')->where('adressId', '=', $value->id)->count();
-            $value->entrance = DB::table('elevator')->where('adressId', '=', $value->id)->value('entrance');
+            $value->entrance = DB::table('elevator')->where('adressId', '=', $value->id)->count();
         }
         return response()->json($adressData->toArray());
     }

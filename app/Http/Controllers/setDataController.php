@@ -20,6 +20,11 @@ class setDataController extends Controller
         }
     }
 
+    public function updateElevatorData(Request $request)
+    {
+        echo $request;
+    }
+
     private function addAdress($adressArray, $contractId)
     {
         foreach ($adressArray as $tableRow) {
@@ -107,6 +112,7 @@ class setDataController extends Controller
         DB::table('elevator')->insert([
             'adressId' => $adressId,
             'entrance' => $entranceName,
+            'name' => $entranceName
         ]);
     }
 }

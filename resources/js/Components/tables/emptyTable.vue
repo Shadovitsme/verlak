@@ -83,6 +83,7 @@ onUnmounted(() => {
                         :key="item"
                     >
                         <input
+                            :readonly="index == 3 || index == 4"
                             :class="
                                 'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
                                 (selectedRow === count

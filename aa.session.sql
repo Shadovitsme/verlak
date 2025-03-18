@@ -103,6 +103,7 @@ CREATE TABLE elevator (
     name varchar(100),
     descriptionName varchar(100),
     descriptionValue varchar(100),
+commentValue varchar(100),
     entrance varchar(100),
 foreign key (adressId) references adressData (id) on Delete cascade
 )

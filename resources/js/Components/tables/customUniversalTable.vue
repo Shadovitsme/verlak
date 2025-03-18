@@ -31,12 +31,9 @@ let selectedRowIndex = ref();
 
 async function fetchData() {
     if (props.specialGetters == 'elevator') {
-        const elevatorArrName = elevatorDefaultArray;
-        elevatorArrName.forEach((element) => {
-            data.value.push([element, props.elevatorData.descriptionValue,'']);
-        });
+        data.value = elevatorFillerForUniversalTable(props.elevatorData);
         // TODO вынести в отдельную функцию чтоб там еще заполнять доп датой
-        console.log(data.value);
+        console.log(props.elevatorData);
         return 0;
     }
     if (props.exec) {
@@ -72,9 +69,13 @@ function checkUndefinedTableColumn(oldReadonlyFlag, index) {
 }
 
 function refillDataArray(selectedRowIndex, columtIndex, id) {
+    let index =
+        props.deleteCommand == 'deleteElevatorData'
+            ? columtIndex
+            : columtIndex - 1;
     data.value[selectedRowIndex][columtIndex] = document
         .getElementById(id)
-        .getElementsByTagName('input')[columtIndex - 1].value;
+        .getElementsByTagName('input')[index].value;
 }
 
 watch(
@@ -100,8 +101,9 @@ watch(
                         index,
                         oldReadonlyFlag,
                     );
-                    switch (props.page) {
-                        case 'managers':
+
+                    switch (props.deleteCommand) {
+                        case 'deleteManager':
                             updateManagerData(
                                 id,
                                 data.value[oldSelectedRowIndex][1],
@@ -110,7 +112,15 @@ watch(
                                 data.value[oldSelectedRowIndex][4],
                             );
                             break;
-
+                        case 'deleteElevatorData':
+                            updateElevatorData(
+                                props.elevatorData.adressId,
+                                props.elevatorData.name,
+                                data.value[oldSelectedRowIndex][0],
+                                data.value[oldSelectedRowIndex][1],
+                                data.value[oldSelectedRowIndex][2],
+                            );
+                            break;
                         default:
                             break;
                     }
@@ -120,18 +130,31 @@ watch(
             }
             if (oldSelectedRowIndex == 0) {
                 data.value[0].forEach((element, index) => {
-                    if (index == 0) {
+                    if (
+                        index == 0 &&
+                        props.deleteCommand != 'deleteElevatorData'
+                    ) {
                         return;
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
-                    updateManagerData(
-                        id,
-                        data.value[0][1],
-                        data.value[0][2],
-                        data.value[0][3],
-                        data.value[0][4],
-                    );
+                    if (props.deleteCommand == 'deleteElevatorData') {
+                        updateElevatorData(
+                            props.elevatorData.adressId,
+                            props.elevatorData.name,
+                            data.value[0][0],
+                            data.value[0][1],
+                            data.value[0][2],
+                        );
+                    } else {
+                        updateManagerData(
+                            id,
+                            data.value[0][1],
+                            data.value[0][2],
+                            data.value[0][3],
+                            data.value[0][4],
+                        );
+                    }
                 });
                 return;
             }
@@ -155,7 +178,8 @@ const handleBodyClick = (event) => {
 import { onUnmounted } from 'vue';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
 import getExecData from '../jsFunctions/getters/getExecData';
-import elevatorDefaultArray from '../jsFunctions/elevatorDefaultArray';
+import elevatorFillerForUniversalTable from '../jsFunctions/elevatorFillerForUniversalTable';
+import updateElevatorData from '../jsFunctions/setters/updateElevatorData';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });
