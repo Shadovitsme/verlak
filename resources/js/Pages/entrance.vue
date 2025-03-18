@@ -8,6 +8,8 @@ import getExecEntrance from '@/Components/jsFunctions/getters/getExecEntrance';
 import textHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
+import OpenModal from '@/Components/openModal.vue';
+import addElevator from '@/Components/jsFunctions/setters/addElevator';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -27,14 +29,16 @@ async function fetchData(adressId) {
     try {
         const result = await getExecEntrance(adressId, entranceName);
         data.value = result;
-        console.log(data.value);
+        console.log(data.value.legth);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
+let toggleModal = ref(false);
 </script>
 
 <template>
+    <OpenModal></OpenModal>
     <Header></Header>
     <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pt-12">
         <BreadWay
@@ -48,9 +52,13 @@ async function fetchData(adressId) {
         <textHeadWithAddButton
             :shown="true"
             text="Лифты"
+            @add-item="addElevator(data.length+1, adressId, entranceName)"
         ></textHeadWithAddButton>
         <div v-for="(dat, index) in data" :key="dat">
-            <RoundedArrowLineDropdown :text="'Лифт ' + index">
+            <RoundedArrowLineDropdown
+                @delete="toggleModal = !toggleModal"
+                :text="'Лифт ' + index"
+            >
                 <CustomUniversalTable
                     delete-command="deleteElevatorData"
                     :readonly-fields="[true, false, false, false]"

@@ -78,5 +78,6 @@ Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorDat
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
+Route::post('/addElevator', [setDataController::class, 'addElevator']);
 
 require __DIR__ . '/auth.php';
