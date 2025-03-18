@@ -10,12 +10,14 @@ import { router } from '@inertiajs/vue3';
 const props = defineProps({
     deleteCommand: String,
     headItems: Array,
-    dataQuery: String,
     lastAction: Boolean,
     lastStatus: Boolean,
     api: String,
+    elevatorData: Object,
     searchForeignKey: String,
+    // TODO заменить эксек на стринг
     exec: Boolean,
+    specialGetters: String,
     columnQueue: Array,
     readonlyFields: { type: Array, default: () => [] },
     placeholders: { type: Array, default: () => [] },
@@ -28,6 +30,15 @@ let selectedRow = ref(null);
 let selectedRowIndex = ref();
 
 async function fetchData() {
+    if (props.specialGetters == 'elevator') {
+        const elevatorArrName = elevatorDefaultArray;
+        elevatorArrName.forEach((element) => {
+            data.value.push([element, props.elevatorData.descriptionValue,'']);
+        });
+        // TODO вынести в отдельную функцию чтоб там еще заполнять доп датой
+        console.log(data.value);
+        return 0;
+    }
     if (props.exec) {
         try {
             const result = await getExecData(props.api, props.searchForeignKey);
@@ -144,6 +155,7 @@ const handleBodyClick = (event) => {
 import { onUnmounted } from 'vue';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
 import getExecData from '../jsFunctions/getters/getExecData';
+import elevatorDefaultArray from '../jsFunctions/elevatorDefaultArray';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });
@@ -188,7 +200,9 @@ onUnmounted(() => {
                     class="px-4"
                     v-for="(field, indexElem) in props.exec
                         ? props.columnQueue
-                        : data[index].slice(1)"
+                        : props.specialGetters != null
+                          ? data[index]
+                          : data[index].slice(1)"
                     :key="field"
                 >
                     <TableInpueElement

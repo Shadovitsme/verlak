@@ -5,7 +5,6 @@ import { ref, onMounted } from 'vue';
 const props = defineProps({
     headItems: Array,
     placeholders: { type: Array, default: () => [] },
-    columtWidth: { type: Array, default: () => [] },
     rowCounter: Number,
 });
 const columnWidths = [

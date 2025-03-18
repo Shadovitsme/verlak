@@ -4,8 +4,10 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 import Header from '@/Components/header.vue';
 import getExecEntrance from '@/Components/jsFunctions/getters/getExecEntrance';
-import elevatorDefaultArray from '@/Components/jsFunctions/elevatorDefaultArray';
+// import elevatorDefaultArray from '@/Components/jsFunctions/elevatorDefaultArray';
 import textHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
+import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
+import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -19,7 +21,7 @@ onMounted(() => {
     console.log(entranceName);
 });
 
-const defaultElevatorTableNamesArray = elevatorDefaultArray;
+// const defaultElevatorTableNamesArray = elevatorDefaultArray;
 
 async function fetchData(adressId) {
     try {
@@ -47,8 +49,20 @@ async function fetchData(adressId) {
             :shown="true"
             text="Лифты"
         ></textHeadWithAddButton>
-        <p v-for="(dat, index) in data" :key="dat">
-            {{ defaultElevatorTableNamesArray[index] }}
-        </p>
+        <div v-for="(dat, index) in data" :key="dat">
+            <RoundedArrowLineDropdown :text="'Лифт ' + index">
+                <CustomUniversalTable
+                    specialGetters="elevator"
+                    :elevator-data="dat"
+                    :lastAction="true"
+                    :head-items="[
+                        'Наименование',
+                        'Значение',
+                        'Примечание',
+                        'Действие',
+                    ]"
+                ></CustomUniversalTable>
+            </RoundedArrowLineDropdown>
+        </div>
     </div>
 </template>

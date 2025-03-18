@@ -15,7 +15,7 @@ export default async function getExecEntrance(adressId, entranceName) {
 
         const data = await response.json();
 
-        return data; // Возвращаем данные как массив
+        return data;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

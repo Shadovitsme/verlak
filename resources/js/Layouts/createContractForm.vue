@@ -67,8 +67,7 @@ function saveData() {
     let state = getDropDownValue('state');
 
     let adressData = [];
-    console.log(rowCounter.value)
-    for (let i = 0; i <= rowCounter.value-1; i++) {
+    for (let i = 1; i < rowCounter.value; i++) {
         let besideResult = {};
 
         dbAdressColumnNames.forEach((element, index) => {
@@ -80,6 +79,7 @@ function saveData() {
         });
         adressData[i] = besideResult;
     }
+
     if (props.data) {
         updateContract(
             props.data.id,
@@ -91,7 +91,6 @@ function saveData() {
             adressData,
         );
     } else {
-
         addNewContract(number, organization, date, town, state, adressData);
     }
     emit('close');
