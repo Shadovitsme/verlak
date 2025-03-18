@@ -69,6 +69,8 @@ Route::get('/getExecElevator', [getDataController::class, 'getExecElevator']);
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
 Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
+Route::post('/deleteElevator', [deleteDataController::class, 'deleteElevator']);
+
 
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);

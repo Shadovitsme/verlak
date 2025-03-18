@@ -25,4 +25,13 @@ class deleteDataController extends Controller
         $name = $request->header('id');
         DB::table('elevator')->where('entrance', '=', $name)->delete();
     }
+
+    public function deleteElevator(Request $request)
+    {
+        $name = $request->header('name');
+        $adressId = $request->header('adressId');
+        $entrance = $request->header('entrance');
+
+        DB::table('elevator')->where('entrance', '=', $entrance)->where('adressId', '=', $adressId)->where('name', '=', $name)->delete();
+    }
 }

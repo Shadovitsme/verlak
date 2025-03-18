@@ -6,12 +6,14 @@ import AddManager from './modalTemplates/addManager.vue';
 import universalDelete from './jsFunctions/deleteFunc/universalDelete';
 import addNewManager from './jsFunctions/setters/addNewManager';
 import { ref } from 'vue';
+import deleteElevator from './jsFunctions/deleteFunc/deleteElevator';
 const emit = defineEmits(['close']);
 
 const props = defineProps({
     modalType: String,
     toggleModal: Boolean,
     idToDelete: Number,
+    speciallAddData: Object,
 });
 let submitButtonText;
 let deleteForm = ref(true);
@@ -22,7 +24,8 @@ if (
     props.modalType == 'deleteManager' ||
     props.modalType == 'deleteContract' ||
     props.modalType == 'deleteAdress' ||
-    props.modalType == 'deleteEntrance'
+    props.modalType == 'deleteEntrance' ||
+    props.modalType == 'deleteElevator'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -55,6 +58,10 @@ function selectText(type) {
             top.value = 'Удалить подъезд';
             body.value = 'Вы уверены, что хотите удалить подъезд?';
             break;
+        case 'deleteElevator':
+            top.value = 'Удалить лифт';
+            body.value = 'Вы уверены, что хотите удалить лифт?';
+            break;
         default:
             break;
     }
@@ -76,6 +83,13 @@ function send() {
             break;
         case 'deleteEntrance':
             universalDelete(props.idToDelete, '/deleteEntrance');
+            break;
+        case 'deleteElevator':
+            deleteElevator(
+                props.speciallAddData.name,
+                props.speciallAddData.adressId,
+                props.speciallAddData.entrance,
+            );
             break;
         case 'addManager':
             addNewManager(

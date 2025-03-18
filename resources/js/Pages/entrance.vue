@@ -35,10 +35,28 @@ async function fetchData(adressId) {
     }
 }
 let toggleModal = ref(false);
+let currentToDelete = ref();
+function deleteElevator(name) {
+    currentToDelete.value = name;
+    toggleModal.value = !toggleModal.value;
+}
+function closeModal() {
+    currentToDelete.value = null;
+    toggleModal.value = !toggleModal.value;
+}
 </script>
 
 <template>
-    <OpenModal></OpenModal>
+    <OpenModal
+        @close="closeModal()"
+        :toggleModal="toggleModal"
+        modal-type="deleteElevator"
+        :speciall-add-data="{
+            name: currentToDelete,
+            adressId: adressId,
+            entrance: entranceName,
+        }"
+    ></OpenModal>
     <Header></Header>
     <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pt-12">
         <BreadWay
@@ -52,11 +70,11 @@ let toggleModal = ref(false);
         <textHeadWithAddButton
             :shown="true"
             text="Лифты"
-            @add-item="addElevator(data.length+1, adressId, entranceName)"
+            @add-item="addElevator(data.length + 1, adressId, entranceName)"
         ></textHeadWithAddButton>
         <div v-for="(dat, index) in data" :key="dat">
             <RoundedArrowLineDropdown
-                @delete="toggleModal = !toggleModal"
+                @delete="deleteElevator(index + 1)"
                 :text="'Лифт ' + index"
             >
                 <CustomUniversalTable
