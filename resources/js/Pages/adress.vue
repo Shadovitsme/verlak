@@ -6,6 +6,8 @@ import Header from '@/Components/header.vue';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
 import IconButton from '@/Components/iconButton.vue';
 import EntranceList from '@/Components/entranceList.vue';
+import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
+import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -49,5 +51,17 @@ async function fetchData(adressId) {
             :id="adressId"
             :entrances="data != null ? data.entranceCount : ''"
         ></EntranceList>
+        <p class="mb-3 mt-10 text-2xl text-gray-900">Дом</p>
+        <RoundedArrowLineDropdown text="Данные"
+            ><CustomUniversalTable
+                :head-items="[
+                    'Наименование',
+                    'Значение',
+                    'Примечание',
+                    'Действия',
+                ]"
+                :last-action="true"
+            ></CustomUniversalTable>
+        </RoundedArrowLineDropdown>
     </div>
 </template>

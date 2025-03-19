@@ -130,16 +130,7 @@ watch(
                 });
             }
             if (oldSelectedRowIndex == 0) {
-                if (props.deleteCommand == 'deleteElevatorData') {
-                    updateElevatorData(
-                        props.elevatorData.adressId,
-                        props.elevatorData.name,
-                        data.value[0][0],
-                        data.value[0][1],
-                        data.value[0][2],
-                        props.elevatorData.entrance,
-                    );
-                }
+
                 data.value[0].forEach((element, index) => {
                     if (
                         index == 0 &&
@@ -149,6 +140,7 @@ watch(
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
+
                     if (props.deleteCommand != 'deleteElevatorData') {
                         updateManagerData(
                             id,
@@ -159,6 +151,17 @@ watch(
                         );
                     }
                 });
+                if (props.deleteCommand == 'deleteElevatorData') {
+                    console.log(data.value[0][1]);
+                    updateElevatorData(
+                        props.elevatorData.adressId,
+                        props.elevatorData.name,
+                        data.value[0][0],
+                        data.value[0][1],
+                        data.value[0][2],
+                        props.elevatorData.entrance,
+                    );
+                }
                 return;
             }
         }

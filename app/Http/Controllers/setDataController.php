@@ -34,6 +34,9 @@ class setDataController extends Controller
         $result = $query->where('descriptionName', '=', $descriptionName)->get();
         if ($result->isEmpty()) {
             $this->insertElevatorData($data, $query);
+        } else {
+            $query->where('descriptionName', '=', $descriptionName)->update(['descriptionValue' => $data['descriptionValue'],
+                'commentValue' => $data['commentValue']]);
         }
     }
 
@@ -42,7 +45,6 @@ class setDataController extends Controller
         $query->insert(['descriptionName' => $data['descriptionName'],
             'descriptionValue' => $data['descriptionValue'],
             'commentValue' => $data['commentValue'], 'adressId' => $data['adressId'], 'name' => $data['elevatorName'], 'entrance' => $data['entrance']]);
-        $query->where('descriptionName', '=' . NULL)->delete();
     }
 
     private function addAdress($adressArray, $contractId)
