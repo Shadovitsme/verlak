@@ -8,6 +8,9 @@ import IconButton from '@/Components/iconButton.vue';
 import EntranceList from '@/Components/entranceList.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
+import ContactBlock from '@/Components/contactBlock.vue';
+import DocumentsData from '@/Components/documentsData.vue';
+import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -52,7 +55,7 @@ async function fetchData(adressId) {
             :entrances="data != null ? data.entranceCount : ''"
         ></EntranceList>
         <p class="mb-3 mt-10 text-2xl text-gray-900">Дом</p>
-        <RoundedArrowLineDropdown text="Данные"
+        <RoundedArrowLineDropdown text="Данные" class="mb-10"
             ><CustomUniversalTable
                 :head-items="[
                     'Наименование',
@@ -63,5 +66,9 @@ async function fetchData(adressId) {
                 :last-action="true"
             ></CustomUniversalTable>
         </RoundedArrowLineDropdown>
+        <ContactBlock></ContactBlock>
+        <DocumentsData text="Документы"></DocumentsData>
+        <DocumentsData text="ИД"></DocumentsData>
+        <ObjectPhotoBLock></ObjectPhotoBLock>
     </div>
 </template>
