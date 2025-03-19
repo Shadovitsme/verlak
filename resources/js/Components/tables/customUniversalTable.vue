@@ -4,8 +4,16 @@ import StatusLabel from '../statusLabel.vue';
 import { ref, onMounted } from 'vue';
 import TableInpueElement from '../tableInpueElement.vue';
 import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
+import defaultHouseArray from '../jsFunctions/default data array/defaultHouseArray';
 import { watch } from 'vue';
 import { router } from '@inertiajs/vue3';
+import { onUnmounted } from 'vue';
+import updateManagerData from '../jsFunctions/setters/updateManagerData';
+import getExecData from '../jsFunctions/getters/getExecData';
+import elevatorFillerForUniversalTable from '../jsFunctions/getters/elevatorFillerForUniversalTable';
+import updateElevatorData from '../jsFunctions/setters/updateElevatorData';
+import universalFillerForUniversalTable from '../jsFunctions/getters/universalFillerForUniversalTable';
+import universalUpdate from '../jsFunctions/setters/universalUpdate';
 
 const props = defineProps({
     deleteCommand: String,
@@ -13,7 +21,7 @@ const props = defineProps({
     lastAction: Boolean,
     lastStatus: Boolean,
     api: String,
-    elevatorData: Object,
+    speciallData: Object,
     searchForeignKey: String,
     // TODO заменить эксек на стринг
     exec: Boolean,
@@ -32,7 +40,16 @@ let selectedRowIndex = ref();
 async function fetchData() {
     if (props.specialGetters == 'elevator') {
         const result = await elevatorFillerForUniversalTable(
-            props.elevatorData,
+            props.speciallData,
+        );
+        data.value = result;
+        return 0;
+    }
+    if (props.specialGetters == 'building') {
+        const result = await universalFillerForUniversalTable(
+            defaultHouseArray,
+            '/getBuildingData',
+            props.specialGetters.adressId,
         );
         data.value = result;
         return 0;
@@ -71,9 +88,7 @@ function checkUndefinedTableColumn(oldReadonlyFlag, index) {
 
 function refillDataArray(selectedRowIndex, columtIndex, id) {
     let index =
-        props.deleteCommand == 'deleteElevatorData'
-            ? columtIndex
-            : columtIndex - 1;
+        props.deleteCommand != 'deleteManager' ? columtIndex : columtIndex - 1;
     data.value[selectedRowIndex][columtIndex] = document
         .getElementById(id)
         .getElementsByTagName('input')[index].value;
@@ -102,7 +117,9 @@ watch(
                         oldReadonlyFlag,
                     );
 
-                    switch (props.deleteCommand) {
+                });
+
+                switch (props.deleteCommand) {
                         case 'deleteManager':
                             updateManagerData(
                                 id,
@@ -114,34 +131,38 @@ watch(
                             break;
                         case 'deleteElevatorData':
                             updateElevatorData(
-                                props.elevatorData.adressId,
-                                props.elevatorData.name,
+                                props.speciallData.adressId,
+                                props.speciallData.name,
                                 data.value[oldSelectedRowIndex][0],
                                 data.value[oldSelectedRowIndex][1],
                                 data.value[oldSelectedRowIndex][2],
-                                props.elevatorData.entrance,
+                                props.speciallData.entrance,
                             );
-                            break;
+                            return;
+                        case 'deleteBuildingData':
+                            universalUpdate(
+                                props.speciallData.adressId,
+                                data.value[oldSelectedRowIndex][0],
+                                data.value[oldSelectedRowIndex][1],
+                                data.value[oldSelectedRowIndex][2],
+                                '/updateHomeData',
+                            );
+                            return;
                         default:
                             break;
                     }
 
                     return;
-                });
             }
             if (oldSelectedRowIndex == 0) {
-
                 data.value[0].forEach((element, index) => {
-                    if (
-                        index == 0 &&
-                        props.deleteCommand != 'deleteElevatorData'
-                    ) {
+                    if (index == 0 && props.deleteCommand == 'deleteManager') {
                         return;
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
 
-                    if (props.deleteCommand != 'deleteElevatorData') {
+                    if (props.deleteCommand == 'deleteManager') {
                         updateManagerData(
                             id,
                             data.value[0][1],
@@ -151,17 +172,31 @@ watch(
                         );
                     }
                 });
-                if (props.deleteCommand == 'deleteElevatorData') {
-                    console.log(data.value[0][1]);
-                    updateElevatorData(
-                        props.elevatorData.adressId,
-                        props.elevatorData.name,
-                        data.value[0][0],
-                        data.value[0][1],
-                        data.value[0][2],
-                        props.elevatorData.entrance,
-                    );
+                switch (props.deleteCommand) {
+                    case 'deleteElevatorData':
+                        updateElevatorData(
+                            props.speciallData.adressId,
+                            props.speciallData.name,
+                            data.value[0][0],
+                            data.value[0][1],
+                            data.value[0][2],
+                            props.speciallData.entrance,
+                        );
+                        break;
+                    case 'deleteBuildingData':
+                        universalUpdate(
+                            props.speciallData.adressId,
+                            data.value[0][0],
+                            data.value[0][1],
+                            data.value[0][2],
+                            '/updateHomeData',
+                        );
+                        break;
+
+                    default:
+                        break;
                 }
+
                 return;
             }
         }
@@ -181,11 +216,7 @@ const handleBodyClick = (event) => {
 };
 
 // Добавляем и убираем слушатель через onMounted/onUnmounted
-import { onUnmounted } from 'vue';
-import updateManagerData from '../jsFunctions/setters/updateManagerData';
-import getExecData from '../jsFunctions/getters/getExecData';
-import elevatorFillerForUniversalTable from '../jsFunctions/getters/elevatorFillerForUniversalTable';
-import updateElevatorData from '../jsFunctions/setters/updateElevatorData';
+
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });

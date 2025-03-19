@@ -79,4 +79,11 @@ class getDataController extends Controller
         }
         return response()->json($adressData->toArray());
     }
+
+    public function getBuildingData(Request $request)
+    {
+        $adressId = $request->header('Id');
+        $buildingData = DB::table('building')->where('adressId','=',$adressId)->get();
+        return response()->json($buildingData->toArray());
+    }
 }

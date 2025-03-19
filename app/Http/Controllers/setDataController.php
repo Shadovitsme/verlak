@@ -126,6 +126,25 @@ class setDataController extends Controller
         $this->addAdress($data['adressData'], $contractId);
     }
 
+    public function updateHomeData(Request $request)
+    {
+        // TODO переделать потом чтоб сюда и материалы можно было запульнуть
+        $data = json_decode($request->getContent(), true);
+        $adressId = $data['id'];
+        $query = DB::table('building')->where('adressId', '=', $adressId);
+        $result = $query->where('name', '=', $data['name'])->get();
+        if ($result->isEmpty()) {
+            $this->insertUniversalData($data, $query);
+        } else {
+            $query->where('name', '=', $data['name'])->update(['value' => $data['value'], 'comment' => $data['comment']]);
+        }
+    }
+
+    private function insertUniversalData($data, $query)
+    {
+        $query->insert(['adressId' => $data['id'], 'name' => $data['name'], 'value' => $data['value'], 'comment' => $data['comment']]);
+    }
+
     public function addEntrance(Request $request)
     {
         $data = json_decode($request->getContent(), true);

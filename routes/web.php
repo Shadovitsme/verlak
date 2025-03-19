@@ -69,6 +69,8 @@ Route::get('/getAdressesforContract', [getDataController::class, 'getAdressesfor
 Route::get('/getCurrentAdressData', [getDataController::class, 'getCurrentAdressData']);
 Route::get('/getExecEntrance', [getDataController::class, 'getExecEntrance']);
 Route::get('/getExecElevator', [getDataController::class, 'getExecElevator']);
+Route::get('/getBuildingData', [getDataController::class, 'getBuildingData']);
+
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
@@ -78,6 +80,8 @@ Route::post('/deleteElevator', [deleteDataController::class, 'deleteElevator']);
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorData']);
+Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
+
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
@@ -85,6 +89,6 @@ Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
 Route::post('/addElevator', [setDataController::class, 'addElevator']);
 
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
-Route::post('/delete-file', [FileUploadController::class, 'delete']); 
+Route::post('/delete-file', [FileUploadController::class, 'delete']);
 
 require __DIR__ . '/auth.php';

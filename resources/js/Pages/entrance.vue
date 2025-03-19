@@ -81,7 +81,7 @@ function closeModal() {
                     delete-command="deleteElevatorData"
                     :readonly-fields="[true, false, false, false]"
                     specialGetters="elevator"
-                    :elevator-data="dat"
+                    :speciallData="dat"
                     :lastAction="true"
                     :head-items="[
                         'Наименование',

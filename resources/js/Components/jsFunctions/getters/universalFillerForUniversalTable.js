@@ -1,14 +1,14 @@
-import elevatorDefaultArray from '../default data array/elevatorDefaultArray';
-
-export default async function elevatorFillerForUniversalTable(elevatorData) {
+export default async function universalFillerForUniversalTable(
+    defaultArray,
+    api,
+    Id = null,
+) {
     try {
-        const response = await fetch('/getExecElevator', {
+        const response = await fetch(api, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
-                adressId: elevatorData.adressId,
-                elevatorName: elevatorData.name,
-                entrance: elevatorData.entrance,
+                Id: Id,
             },
         });
 
@@ -27,7 +27,7 @@ export default async function elevatorFillerForUniversalTable(elevatorData) {
         });
 
         // Формируем результат, проходя по всем элементам elevatorArrNames
-        const besideArr = elevatorArrNames.map((name) => {
+        const besideArr = defaultArray.map((name) => {
             if (dataMap.has(name)) {
                 const item = dataMap.get(name);
                 return [name, item.value, item.comment];
@@ -41,5 +41,3 @@ export default async function elevatorFillerForUniversalTable(elevatorData) {
         throw error;
     }
 }
-
-const elevatorArrNames = elevatorDefaultArray;
