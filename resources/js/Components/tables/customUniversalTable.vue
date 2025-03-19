@@ -116,43 +116,42 @@ watch(
                         index,
                         oldReadonlyFlag,
                     );
-
                 });
 
                 switch (props.deleteCommand) {
-                        case 'deleteManager':
-                            updateManagerData(
-                                id,
-                                data.value[oldSelectedRowIndex][1],
-                                data.value[oldSelectedRowIndex][2],
-                                data.value[oldSelectedRowIndex][3],
-                                data.value[oldSelectedRowIndex][4],
-                            );
-                            break;
-                        case 'deleteElevatorData':
-                            updateElevatorData(
-                                props.speciallData.adressId,
-                                props.speciallData.name,
-                                data.value[oldSelectedRowIndex][0],
-                                data.value[oldSelectedRowIndex][1],
-                                data.value[oldSelectedRowIndex][2],
-                                props.speciallData.entrance,
-                            );
-                            return;
-                        case 'deleteBuildingData':
-                            universalUpdate(
-                                props.speciallData.adressId,
-                                data.value[oldSelectedRowIndex][0],
-                                data.value[oldSelectedRowIndex][1],
-                                data.value[oldSelectedRowIndex][2],
-                                '/updateHomeData',
-                            );
-                            return;
-                        default:
-                            break;
-                    }
+                    case 'deleteManager':
+                        updateManagerData(
+                            id,
+                            data.value[oldSelectedRowIndex][1],
+                            data.value[oldSelectedRowIndex][2],
+                            data.value[oldSelectedRowIndex][3],
+                            data.value[oldSelectedRowIndex][4],
+                        );
+                        break;
+                    case 'deleteElevatorData':
+                        updateElevatorData(
+                            props.speciallData.adressId,
+                            props.speciallData.name,
+                            data.value[oldSelectedRowIndex][0],
+                            data.value[oldSelectedRowIndex][1],
+                            data.value[oldSelectedRowIndex][2],
+                            props.speciallData.entrance,
+                        );
+                        return;
+                    case 'deleteBuildingData':
+                        universalUpdate(
+                            props.speciallData.adressId,
+                            data.value[oldSelectedRowIndex][0],
+                            data.value[oldSelectedRowIndex][1],
+                            data.value[oldSelectedRowIndex][2],
+                            '/updateHomeData',
+                        );
+                        return;
+                    default:
+                        break;
+                }
 
-                    return;
+                return;
             }
             if (oldSelectedRowIndex == 0) {
                 data.value[0].forEach((element, index) => {
@@ -287,6 +286,7 @@ onUnmounted(() => {
                         :id-to-delete="
                             props.exec ? data[index].id : data[index][0]
                         "
+                        :add-data="props.speciallData.adressId"
                         :key="index"
                         :modalType="props.deleteCommand"
                         @editable="

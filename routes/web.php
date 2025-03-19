@@ -76,12 +76,13 @@ Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
 Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
 Route::post('/deleteElevator', [deleteDataController::class, 'deleteElevator']);
+Route::post('/deleteBuildingData', [deleteDataController::class, 'deleteBuildingData']);
+
 
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorData']);
 Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
-
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);

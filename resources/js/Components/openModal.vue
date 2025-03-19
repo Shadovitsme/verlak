@@ -25,7 +25,8 @@ if (
     props.modalType == 'deleteContract' ||
     props.modalType == 'deleteAdress' ||
     props.modalType == 'deleteEntrance' ||
-    props.modalType == 'deleteElevator'
+    props.modalType == 'deleteElevator' ||
+    props.modalType == 'deleteBuildingData'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -62,6 +63,10 @@ function selectText(type) {
             top.value = 'Удалить лифт';
             body.value = 'Вы уверены, что хотите удалить лифт?';
             break;
+        case 'deleteBuildingData':
+            top.value = '';
+            body.value = '';
+            break;
         default:
             break;
     }
@@ -83,6 +88,13 @@ function send() {
             break;
         case 'deleteEntrance':
             universalDelete(props.idToDelete, '/deleteEntrance');
+            break;
+        case 'deleteBuildingData':
+            universalDelete(
+                props.idToDelete,
+                '/deleteBuildingData',
+                props.speciallAddData.adressId,
+            );
             break;
         case 'deleteElevator':
             deleteElevator(
