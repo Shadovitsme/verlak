@@ -70,7 +70,7 @@ async function fetchData(adressId) {
                 :last-action="true"
             ></CustomUniversalTable>
         </RoundedArrowLineDropdown>
-        <ContactBlock></ContactBlock>
+        <ContactBlock :id="adressId"></ContactBlock>
         <DocumentsData text="Документы"></DocumentsData>
         <DocumentsData text="ИД"></DocumentsData>
         <ObjectPhotoBLock></ObjectPhotoBLock>

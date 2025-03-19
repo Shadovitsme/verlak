@@ -86,4 +86,11 @@ class getDataController extends Controller
         $buildingData = DB::table('building')->where('adressId','=',$adressId)->get();
         return response()->json($buildingData->toArray());
     }
+
+    public function getContactListData(Request $request){
+        $adressId = $request->header('byWhatChoose');
+        $contactList=DB::table('contactList')->where('adressId','=',$adressId)->get();
+        return response()->json($contactList->toArray());
+
+    }
 }

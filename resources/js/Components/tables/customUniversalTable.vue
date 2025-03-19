@@ -46,7 +46,6 @@ async function fetchData() {
         return 0;
     }
     if (props.specialGetters == 'building') {
-
         const result = await universalFillerForUniversalTable(
             defaultHouseArray,
             '/getBuildingData',

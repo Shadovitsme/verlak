@@ -1,10 +1,27 @@
 <script setup>
+import { onMounted, ref } from 'vue';
 import RoundedArrowLineDropdown from './roundedArrowLineDropdown.vue';
-import CustomUniversalTable from './tables/customUniversalTable.vue';
 import TextHeadWithAddButton from './textHeadWithAddButton.vue';
-
+import EmptyTable from './tables/emptyTable.vue';
+import LineSaveEntrance from './lineSaveEntrance.vue';
+import getExecData from './jsFunctions/getters/getExecData';
+let showAdd = ref(false);
+const data = ref();
+const rowCounter = ref([]);
 const props = defineProps({
     contractGroupData: Array,
+    id: String,
+});
+
+async function fetchData() {
+    const result = await getExecData('/getContactListData', props.id);
+    data.value = result;
+    data.value.forEach((element) => {
+        rowCounter.value.push(element.length != undefined ? element.length : 1);
+    });
+}
+onMounted(() => {
+    fetchData();
 });
 </script>
 
@@ -12,13 +29,19 @@ const props = defineProps({
     <TextHeadWithAddButton
         :shown="true"
         text="Контакты"
+        @add-item="showAdd = !showAdd"
     ></TextHeadWithAddButton>
     <RoundedArrowLineDropdown
-        v-for="elem in props.contractGroupData"
-        :text="elem"
+        @add="rowCounter[index] = rowCounter[index] + 1"
+        class="mb-3"
+        v-for="(elem, index) in data"
+        :text="elem.name"
         :key="elem"
-        ><CustomUniversalTable
+        ><EmptyTable
+            :all-changable="true"
             :last-action="true"
+            :row-counter="rowCounter[index]"
+            :placeholders="[]"
             :head-items="[
                 'ФИО контактного лица',
                 'Должность',
@@ -26,6 +49,12 @@ const props = defineProps({
                 'Адрес',
                 'Действия',
             ]"
-        ></CustomUniversalTable>
+        ></EmptyTable>
     </RoundedArrowLineDropdown>
+    <LineSaveEntrance
+        place="contact"
+        :id="props.id"
+        @close="showAdd = !showAdd"
+        v-if="showAdd"
+    ></LineSaveEntrance>
 </template>

@@ -67,7 +67,7 @@ function saveData() {
     let state = getDropDownValue('state');
 
     let adressData = [];
-    for (let i = 0; i <= rowCounter.value-1; i++) {
+    for (let i = 0; i <= rowCounter.value - 1; i++) {
         let besideResult = {};
 
         dbAdressColumnNames.forEach((element, index) => {

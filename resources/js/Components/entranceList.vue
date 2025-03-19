@@ -35,6 +35,7 @@ function deleteAction(entranceName) {
             :key="item"
         ></RoundedArrowLineToNextPage>
         <LineSaveEntrance
+            place="entrance"
             :id="props.id"
             @close="showAdd = !showAdd"
             v-if="showAdd"

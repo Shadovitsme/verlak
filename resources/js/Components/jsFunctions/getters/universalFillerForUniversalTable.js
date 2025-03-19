@@ -1,4 +1,8 @@
-export default async function universalFillerForUniversalTable(defaultArray, api, Id) {
+export default async function universalFillerForUniversalTable(
+    defaultArray,
+    api,
+    Id,
+) {
     try {
         const response = await fetch(api, {
             method: 'GET',

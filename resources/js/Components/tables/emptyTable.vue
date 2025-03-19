@@ -1,12 +1,15 @@
 <script setup>
 import EditDeleteComponent from '../editDeleteComponent.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { watch } from 'vue';
 
 const props = defineProps({
     headItems: Array,
     placeholders: { type: Array, default: () => [] },
     rowCounter: Number,
+    allChangable: Boolean,
 });
+
 const columnWidths = [
     'w-72',
     'w-60',
@@ -20,8 +23,9 @@ const columnWidths = [
     'w-44',
     'w-24',
 ];
+
 let readonlyFlag = ref('');
-let selectedRow = ref(null);
+let selectedRow = ref(undefined);
 let selectedRowIndex = ref();
 
 const target = ref(null);
@@ -33,13 +37,25 @@ const handleBodyClick = (event) => {
     }
 };
 
-// Добавляем и убираем слушатель через onMounted/onUnmounted
-import { onUnmounted } from 'vue';
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
 });
 onUnmounted(() => {
     document.removeEventListener('click', handleBodyClick);
+});
+
+// Модифицированный watcher
+watch(selectedRow, (newValue, oldValue) => {
+    // Находим все инпуты в выбранной строке
+    const selectedRowElement = document.getElementById(oldValue);
+    const inputs = selectedRowElement?.querySelectorAll('input');
+
+    if (inputs) {
+        console.log('Row data:');
+        inputs.forEach((input, index) => {
+            console.log(`${props.headItems[index]}: ${input.value || 'empty'}`);
+        });
+    }
 });
 </script>
 
@@ -83,7 +99,11 @@ onUnmounted(() => {
                         :key="item"
                     >
                         <input
-                            :readonly="index == 3 || index == 4"
+                            :readonly="
+                                props.allChangable
+                                    ? false
+                                    : index == 3 || index == 4
+                            "
                             :class="
                                 'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
                                 (selectedRow === count

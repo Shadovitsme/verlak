@@ -2,17 +2,26 @@
 import CustomInput from './customInput.vue';
 import JustButton from './justButton.vue';
 import addEntrance from './jsFunctions/setters/addNewEntrance';
+import addContactFolder from './jsFunctions/setters/addContactFolder';
 const emit = defineEmits(['close']);
-const props = defineProps(['id']);
+const props = defineProps(['id', 'place']);
 
 function save() {
     event.preventDefault();
-    addEntrance(
-        props.id,
-        document
-            .getElementById('entranceNumber')
-            .getElementsByTagName('input')[0].value,
-    );
+    let name = document
+        .getElementById(props.place)
+        .getElementsByTagName('input')[0].value;
+    switch (props.place) {
+        case 'entrance':
+            addEntrance(props.id, name);
+            break;
+        case 'contact':
+            addContactFolder(props.id, name);
+            break;
+
+        default:
+            break;
+    }
 
     emit('close');
 }
@@ -23,7 +32,7 @@ function save() {
     >
         <form @submit.prevent="save" class="flex items-center gap-3">
             <CustomInput
-                id="entranceNumber"
+                :id="props.place"
                 :static-width="true"
                 placeholder="Введите номер подъезда"
             ></CustomInput

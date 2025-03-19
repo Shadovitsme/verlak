@@ -156,4 +156,14 @@ class setDataController extends Controller
             'name' => $entranceName
         ]);
     }
+
+    public function addContactFolder(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'];
+        $name = $data['name'];
+        DB::table('contactList')->insert([
+            'name' => $name, 'adressId' => $id
+        ]);
+    }
 }
