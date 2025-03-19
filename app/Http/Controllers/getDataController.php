@@ -52,7 +52,7 @@ class getDataController extends Controller
     {
         $adressId = $request->header('byWhatChoose');
         $adressData = DB::table('adressData')->where('id', '=', $adressId)->get()[0];
-        $adressData->entranceCount = DB::table('elevator')->where('adressId', '=', $adressId)->distinct()->get();
+        $adressData->entranceCount = DB::table('elevator')->where('adressId', '=', $adressId)->groupBy('entrance')->get();
 
         return response()->json($adressData);
     }

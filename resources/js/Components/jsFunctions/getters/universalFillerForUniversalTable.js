@@ -1,8 +1,4 @@
-export default async function universalFillerForUniversalTable(
-    defaultArray,
-    api,
-    Id = null,
-) {
+export default async function universalFillerForUniversalTable(defaultArray, api, Id) {
     try {
         const response = await fetch(api, {
             method: 'GET',
@@ -20,9 +16,9 @@ export default async function universalFillerForUniversalTable(
         // Создаем Map для быстрого доступа к данным из ответа
         const dataMap = new Map();
         data.forEach((element) => {
-            dataMap.set(element.descriptionName, {
-                value: element.descriptionValue,
-                comment: element.commentValue,
+            dataMap.set(element.name, {
+                value: element.value,
+                comment: element.comment,
             });
         });
 
@@ -34,7 +30,7 @@ export default async function universalFillerForUniversalTable(
             }
             return [name, '-', '-'];
         });
-
+        console.log(besideArr);
         return besideArr;
     } catch (error) {
         console.error('Error fetching data:', error);

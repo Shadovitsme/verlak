@@ -57,6 +57,7 @@ async function fetchData(adressId) {
         <p class="mb-3 mt-10 text-2xl text-gray-900">Дом</p>
         <RoundedArrowLineDropdown text="Данные" class="mb-10"
             ><CustomUniversalTable
+                :readonly-fields="[true, false, false]"
                 :speciall-data="{ adressId: adressId }"
                 delete-command="deleteBuildingData"
                 special-getters="building"

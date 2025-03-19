@@ -7,10 +7,12 @@ export default async function deleteElevator(name, adressId, entrance) {
                 'X-CSRF-TOKEN': document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute('content'),
+            },
+            body: JSON.stringify({
                 name: name,
                 adressId: adressId,
                 entrance: entrance,
-            },
+            }),
         });
 
         if (!response.ok) {

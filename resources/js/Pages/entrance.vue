@@ -74,6 +74,7 @@ function closeModal() {
         ></textHeadWithAddButton>
         <div v-for="(dat, index) in data" :key="dat">
             <RoundedArrowLineDropdown
+                class="mb-2"
                 @delete="deleteElevator(index + 1)"
                 :text="'Лифт ' + index"
             >
