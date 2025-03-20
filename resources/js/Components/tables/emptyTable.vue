@@ -3,15 +3,24 @@ import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { watch } from 'vue';
 import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
+import getExecData from '../jsFunctions/getters/getExecData';
 
 const props = defineProps({
     headItems: Array,
     placeholders: { type: Array, default: () => [] },
     rowCounter: Number,
     allChangable: Boolean,
-    addData: Object,
-    valueData: Array,
+    addData: { type: Object, default: () => ({}) },
+    modalType: { type: String, default: () => '' },
 });
+let data = ref();
+async function fetchData() {
+    const result = await getExecData(
+        '/getContactPersonData',
+        props.addData.groupId,
+    );
+    data.value = result;
+}
 
 const columnWidths = [
     'w-72',
@@ -42,6 +51,7 @@ const handleBodyClick = (event) => {
 
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
+    fetchData();
 });
 onUnmounted(() => {
     document.removeEventListener('click', handleBodyClick);
@@ -55,8 +65,9 @@ watch(selectedRow, (newValue, oldValue) => {
 
     if (inputs) {
         let dataInputArr = [];
-        inputs.forEach((input, index) => {
-            console.log(`${props.headItems[index]}: ${input.value || 'empty'}`);
+        let val = data.value[oldValue - 1]; // Adjust if data.value is 0-based
+
+        inputs.forEach((input) => {
             dataInputArr.push(input.value);
         });
         addUpdateContactPerson(
@@ -65,10 +76,32 @@ watch(selectedRow, (newValue, oldValue) => {
             dataInputArr[2],
             dataInputArr[3],
             props.addData.groupId,
-            '',
+            val?.id || '',
         );
     }
 });
+
+// TODO узнать как добавить функцию внутрь объекта
+
+function chooseValue(indexRow, indexItem) {
+    if (data.value != undefined && data.value[indexRow] != undefined) {
+        let val = data.value[indexRow];
+        console.log(val);
+        switch (indexItem) {
+            case 0:
+                return val.name;
+            case 1:
+                return val.work;
+            case 2:
+                return val.phone;
+            case 3:
+                return val.adress;
+            default:
+                break;
+        }
+    }
+    return '';
+}
 </script>
 
 <template>
@@ -92,7 +125,7 @@ watch(selectedRow, (newValue, oldValue) => {
             </thead>
             <tbody ref="target" @click.stop>
                 <tr
-                    v-for="count in props.rowCounter"
+                    v-for="(count, trIndex) in props.rowCounter"
                     :id="count"
                     @click="selectedRow = count"
                     :class="[
@@ -111,6 +144,7 @@ watch(selectedRow, (newValue, oldValue) => {
                         :key="item"
                     >
                         <input
+                            :value="chooseValue(trIndex, index)"
                             :readonly="
                                 props.allChangable
                                     ? false
@@ -130,9 +164,11 @@ watch(selectedRow, (newValue, oldValue) => {
                     </td>
                     <td class="px-4">
                         <EditDeleteComponent
-                            id-to-delete="1"
+                            :id-to-delete="
+                                data != undefined ? data[trIndex].id : 0
+                            "
                             :key="index"
-                            modalType="deleteManager"
+                            :modalType="props.modalType"
                         />
                     </td>
                 </tr>

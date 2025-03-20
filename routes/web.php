@@ -71,6 +71,8 @@ Route::get('/getExecEntrance', [getDataController::class, 'getExecEntrance']);
 Route::get('/getExecElevator', [getDataController::class, 'getExecElevator']);
 Route::get('/getBuildingData', [getDataController::class, 'getBuildingData']);
 Route::get('/getContactListData', [getDataController::class, 'getContactListData']);
+Route::get('/getContactPersonData', [getDataController::class, 'getContactPersonData']);
+
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);

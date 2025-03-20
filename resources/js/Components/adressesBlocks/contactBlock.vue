@@ -5,6 +5,7 @@ import TextHeadWithAddButton from '../textHeadWithAddButton.vue';
 import EmptyTable from '../tables/emptyTable.vue';
 import LineSaveEntrance from '../lineSaveEntrance.vue';
 import getExecData from '../jsFunctions/getters/getExecData';
+import OpenModal from '../openModal.vue';
 let showAdd = ref(false);
 const data = ref();
 const rowCounter = ref([]);
@@ -16,16 +17,37 @@ const props = defineProps({
 async function fetchData() {
     const result = await getExecData('/getContactListData', props.id);
     data.value = result;
+    console.log(data.value);
     data.value.forEach((element) => {
-        rowCounter.value.push(element.length != undefined ? element.length : 1);
+        rowCounter.value.push(
+            element.personsCount == 0 ? 1 : element.personsCount,
+        );
     });
 }
 onMounted(() => {
     fetchData();
 });
+
+const toggleModal = ref(false);
+const idToDelete = ref();
+
+function openDelete(id) {
+    toggleModal.value = !toggleModal.value;
+    idToDelete.value = id;
+}
+function closeDelete() {
+    toggleModal.value = !toggleModal.value;
+    idToDelete.value = unde;
+}
 </script>
 
 <template>
+    <OpenModal
+        :toggle-modal="toggleModal"
+        :id-to-delete="idToDelete"
+        modal-type="deleteContactListItem"
+        @close="closeDelete()"
+    ></OpenModal>
     <TextHeadWithAddButton
         :shown="true"
         text="Контакты"
@@ -33,11 +55,13 @@ onMounted(() => {
     ></TextHeadWithAddButton>
     <RoundedArrowLineDropdown
         @add="rowCounter[index] = rowCounter[index] + 1"
+        @delete="openDelete(elem.id)"
         class="mb-3"
         v-for="(elem, index) in data"
         :text="elem.name"
         :key="elem"
         ><EmptyTable
+            modalType="deleteContact"
             :add-data="{ groupId: elem.id }"
             :all-changable="true"
             :last-action="true"

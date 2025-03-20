@@ -26,7 +26,9 @@ if (
     props.modalType == 'deleteAdress' ||
     props.modalType == 'deleteEntrance' ||
     props.modalType == 'deleteElevator' ||
-    props.modalType == 'deleteBuildingData'
+    props.modalType == 'deleteBuildingData' ||
+    props.modalType == 'deleteContact' ||
+    props.modalType == 'deleteContactListItem'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -67,6 +69,14 @@ function selectText(type) {
             top.value = '';
             body.value = '';
             break;
+        case 'deleteContact':
+            top.value = 'Удалить контакт';
+            body.value = 'Вы уверены, что хотите удалить контактное лицо?';
+            break;
+        case 'deleteContactListItem':
+            top.value = 'Удалить организацию';
+            body.value = 'Вы уверены, что хотите удалить организацию?';
+            break;
         default:
             break;
     }
@@ -96,11 +106,25 @@ function send() {
                 props.speciallAddData.adressId,
             );
             break;
+        case 'deleteContact':
+            universalDelete(
+                props.idToDelete,
+                '/universalDelete',
+                'contactPerson',
+            );
+            break;
         case 'deleteElevator':
             deleteElevator(
                 props.speciallAddData.name,
                 props.speciallAddData.adressId,
                 props.speciallAddData.entrance,
+            );
+            break;
+        case 'deleteContactListItem':
+            universalDelete(
+                props.idToDelete,
+                '/universalDelete',
+                'contactList',
             );
             break;
         case 'addManager':

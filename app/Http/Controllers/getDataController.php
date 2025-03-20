@@ -90,6 +90,16 @@ class getDataController extends Controller
     public function getContactListData(Request $request){
         $adressId = $request->header('byWhatChoose');
         $contactList=DB::table('contactList')->where('adressId','=',$adressId)->get();
+        foreach ($contactList as $value) {
+            $value->personsCount=DB::table('contactPerson')->where('contactListId','=',$value->id)->count();
+        }
+        return response()->json($contactList->toArray());
+
+    }
+
+    public function getContactPersonData(Request $request){
+        $contactListId = $request->header('byWhatChoose');
+        $contactList=DB::table('contactPerson')->where('contactListId','=',$contactListId)->get();
         return response()->json($contactList->toArray());
 
     }

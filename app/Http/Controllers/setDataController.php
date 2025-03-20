@@ -168,6 +168,7 @@ class setDataController extends Controller
         $idPerson = $data['idPerson'];
 
         if ($idPerson) {
+            echo($idPerson);
             DB::table('contactPerson')->where('id', '=', $idPerson)->update(['name' => $name, 'work' => $work, 'phone' => $phone, 'adress' => $adress]);
         } else {
             $this->addContactPerson($contactGroupId, $name, $work, $phone, $adress);
