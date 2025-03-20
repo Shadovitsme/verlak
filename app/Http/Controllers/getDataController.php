@@ -68,6 +68,14 @@ class getDataController extends Controller
         return response()->json($adressData);
     }
 
+    public function getDocuments(Request $request)
+    {
+        $adressId = $request->header('byWhatChoose');
+        $adressData = DB::table('adressDocument')->where('fatherId', '=', $adressId)->get();
+        return response()->json($adressData);
+    }
+
+
     public function getAdressesforContract(Request $request)
     {
         $contractNumber = $request->header('byWhatChoose');
@@ -96,6 +104,8 @@ class getDataController extends Controller
         return response()->json($contactList->toArray());
 
     }
+
+
 
     public function getContactPersonData(Request $request){
         $contactListId = $request->header('byWhatChoose');

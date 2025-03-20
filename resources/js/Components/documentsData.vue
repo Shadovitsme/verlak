@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import DocumentlittleCard from './documentlittleCard.vue';
 import TextHeadWithAddButton from './textHeadWithAddButton.vue';
 import OpenModal from './openModal.vue';
 import { transliterate } from 'transliteration';
+import getExecData from './jsFunctions/getters/getExecData';
 const props = defineProps({
     text: String,
     id: String,
@@ -11,6 +12,24 @@ const props = defineProps({
 let toggleModal = ref(false);
 let folder = props.id + '/' + transliterate(props.text);
 let tableName = 'adressDocument';
+let data = ref();
+onMounted(() => {
+    fetchData(props.id);
+});
+
+async function fetchData(adressId) {
+    try {
+        const result = await getExecData('/getDocuments', adressId);
+        data.value = result;
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+}
+
+function getLastWordFromString(str) {
+    const parts = str.split('/');
+    return parts[parts.length - 1];
+}
 </script>
 
 <template>
@@ -33,9 +52,9 @@ let tableName = 'adressDocument';
         </TextHeadWithAddButton>
         <div class="mt-3 flex w-full gap-2">
             <DocumentlittleCard
-                v-for="i in 5"
-                text="test text.pdf"
-                :key="i"
+                v-for="item in data"
+                :text="getLastWordFromString(item.pathToDirectory)"
+                :key="item"
             ></DocumentlittleCard>
         </div>
     </div>
