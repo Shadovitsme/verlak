@@ -2,11 +2,11 @@
 -- DROP TABLE adressData;
 -- DROP TABLE building;
 -- DROP TABLE contactList;
-DROP TABLE contactPerson;
--- DROP TABLE adressDocument;
--- DROP TABLE EED;
--- DROP TABLE adressPhotoUserFolders;
--- DROP TABLE adressPhoto;
+-- DROP TABLE contactPerson;
+DROP TABLE adressDocument;
+DROP TABLE EED;
+DROP TABLE adressPhotoUserFolders;
+DROP TABLE adressPhoto;
 -- DROP TABLE worker;
 -- DROP TABLE avances;
 -- DROP TABLE buildingMaterials;
@@ -48,36 +48,36 @@ DROP TABLE contactPerson;
 --     work varchar(100),
 -- foreign key (adressId) references adressData (id) on Delete cascade
 -- );
-CREATE TABLE contactPerson (
-id integer PRIMARY KEY AUTOINCREMENT,
-    name varchar(100),
-    phone varchar(100),
-    adress varchar(100),
-work varchar(100),
-    contactListId integer,
-foreign key (contactListId) references contactList (id) on Delete cascade
-);
--- CREATE TABLE adressDocument (
---     pathToDirectory text,
---     adressId integer,
--- foreign key (adressId) references adressData (id) on Delete cascade
--- );
--- CREATE TABLE EED (
---     pathToDirectory text,
---     adressId integer,
--- foreign key (adressId) references adressData (id) on Delete cascade
--- );
--- CREATE TABLE adressPhotoUserFolders (
---     id integer PRIMARY KEY AUTOINCREMENT,
+-- CREATE TABLE contactPerson (
+-- id integer PRIMARY KEY AUTOINCREMENT,
 --     name varchar(100),
---     adressId integer,
--- foreign key (adressId) references adressData (id) on Delete cascade
+--     phone varchar(100),
+--     adress varchar(100),
+-- work varchar(100),
+--     contactListId integer,
+-- foreign key (contactListId) references contactList (id) on Delete cascade
 -- );
--- CREATE TABLE adressPhoto (
---     pathToDirectory text,
---     adressPhotoUserFoldersId integer,
--- foreign key (adressPhotoUserFoldersId) references adressPhotoUserFolders (id) on Delete cascade
--- );
+CREATE TABLE adressDocument (
+    pathToDirectory text,
+    fatherId integer,
+    foreign key (fatherId) references adressData (id) on Delete cascade
+);
+CREATE TABLE EED (
+    pathToDirectory text,
+    fatherId integer,
+    foreign key (fatherId) references adressData (id) on Delete cascade
+);
+CREATE TABLE adressPhotoUserFolders (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    name varchar(100),
+fatherId integer,
+foreign key (fatherId) references adressData (id) on Delete cascade
+);
+CREATE TABLE adressPhoto (
+    pathToDirectory text,
+    fatherId integer,
+    foreign key (fatherId) references adressPhotoUserFolders (id) on Delete cascade
+);
 -- CREATE TABLE worker (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     adressId integer,

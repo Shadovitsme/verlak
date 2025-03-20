@@ -7,6 +7,7 @@ import universalDelete from './jsFunctions/deleteFunc/universalDelete';
 import addNewManager from './jsFunctions/setters/addNewManager';
 import { ref } from 'vue';
 import deleteElevator from './jsFunctions/deleteFunc/deleteElevator';
+import AddFileTemplate from './modalTemplates/addFileTemplate.vue';
 const emit = defineEmits(['close']);
 
 const props = defineProps({
@@ -33,14 +34,8 @@ if (
     submitButtonText = 'Удалить';
     selectText(props.modalType);
 } else {
-    switch (props.modalType) {
-        case 'addManager':
-            submitButtonText = 'Добавить';
-            deleteForm.value = false;
-            break;
-        default:
-            break;
-    }
+    submitButtonText = 'Добавить';
+    deleteForm.value = false;
 }
 
 function selectText(type) {
@@ -81,8 +76,8 @@ function selectText(type) {
             break;
     }
 }
-
-function send() {
+const fileUploadRef = ref(null);
+async function send() {
     event.preventDefault();
 
     let elements = event.target.elements;
@@ -135,6 +130,10 @@ function send() {
                 elements[3].value,
             );
             break;
+        case 'addFile':
+            await fileUploadRef.value.uploadFile();
+
+            break;
         default:
             break;
     }
@@ -155,6 +154,14 @@ function send() {
                 :body="body"
             ></deleteTemplate>
             <AddManager v-if="props.modalType == 'addManager'"></AddManager>
+            <AddFileTemplate
+                :folder="props.speciallAddData.folder"
+                :fatherId="props.speciallAddData.fatherId"
+                :tableName="props.speciallAddData.tableName"
+
+                ref="fileUploadRef"
+                v-if="props.modalType == 'addFile'"
+            ></AddFileTemplate>
         </modalField>
     </Modal>
 </template>

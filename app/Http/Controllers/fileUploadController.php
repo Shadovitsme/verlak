@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FileUploadController extends Controller
@@ -9,15 +10,31 @@ class FileUploadController extends Controller
     public function upload(Request $request)
     {
         try {
-            // Валидация файла
             $request->validate([
-                'file' => 'required|file|max:10240'  // максимум 10MB
+                'file' => 'required|file|max:10240',  // Максимум 10 МБ
+                'folder' => 'nullable|string|regex:/^[a-zA-Z0-9_\/-]*$/',  // Разрешаем пустую строку
             ]);
 
-            // Сохранение файла в storage/app/public/uploads
+            $folder = $request->input('folder', 'default');
             $file = $request->file('file');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('uploads', $fileName, 'public');
+            $fatherId = $request->input('fatherId', 'default');
+            $tableName = $request->input('tableName', 'default');
+            // Формируем путь для сохранения в public/uploads
+            $destinationPath = public_path("uploads/{$folder}");
+
+            // Создаем папку, если она не существует
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            // Перемещаем файл в public/uploads/{$folder}
+            $file->move($destinationPath, $fileName);
+
+            // Формируем относительный путь для ответа
+            $path = "uploads/{$folder}/{$fileName}";
+
+            DB::table($tableName)->insert(['pathToDirectory' => $path, 'fatherId' => $fatherId]);
 
             return response()->json([
                 'success' => true,
@@ -35,15 +52,15 @@ class FileUploadController extends Controller
     public function delete(Request $request)
     {
         try {
-            // Валидация запроса
             $request->validate([
-                'path' => 'required|string'  // Ожидаем путь к файлу
+                'path' => 'required|string'
             ]);
 
-            $path = $request->input('path');  // Получаем путь из запроса
+            $path = $request->input('path');
+            $fullPath = public_path($path);
 
             // Проверяем, существует ли файл
-            if (!Storage::disk('public')->exists($path)) {
+            if (!file_exists($fullPath)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Файл не найден'
@@ -51,7 +68,7 @@ class FileUploadController extends Controller
             }
 
             // Удаляем файл
-            Storage::disk('public')->delete($path);
+            unlink($fullPath);
 
             return response()->json([
                 'success' => true,

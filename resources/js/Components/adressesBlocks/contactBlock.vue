@@ -17,7 +17,6 @@ const props = defineProps({
 async function fetchData() {
     const result = await getExecData('/getContactListData', props.id);
     data.value = result;
-    console.log(data.value);
     data.value.forEach((element) => {
         rowCounter.value.push(
             element.personsCount == 0 ? 1 : element.personsCount,

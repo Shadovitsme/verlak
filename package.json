@@ -32,6 +32,7 @@
         "@popperjs/core": "^2.11.8",
         "jquery": "^3.7.1",
         "masc-vue": "^0.4.4",
+        "transliteration": "^2.3.5",
         "v-calendar": "^3.1.2"
     }
 }

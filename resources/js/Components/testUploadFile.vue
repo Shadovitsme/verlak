@@ -113,21 +113,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.file-upload {
-    max-width: 500px;
-    margin: 20px auto;
-}
-ul {
-    list-style: none;
-    padding: 0;
-}
-li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.ml-2 {
-    margin-left: 10px;
-}
-</style>
+

@@ -99,4 +99,11 @@ Route::post('/addContactFolder', [setDataController::class, 'addContactFolder'])
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
 Route::post('/delete-file', [FileUploadController::class, 'delete']);
 
+
+// routes/web.php
+Route::get('/test-image', function () {
+    $path = storage_path('app/public/uploads/1/Dokumenty/1742478540_8916ce21fae90b94aa17f399ad70cf75.jpg');
+    return response()->file($path);
+});
+
 require __DIR__ . '/auth.php';

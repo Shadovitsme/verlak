@@ -71,8 +71,8 @@ async function fetchData(adressId) {
             ></CustomUniversalTable>
         </RoundedArrowLineDropdown>
         <ContactBlock :id="adressId"></ContactBlock>
-        <DocumentsData text="Документы"></DocumentsData>
-        <DocumentsData text="ИД"></DocumentsData>
+        <DocumentsData :id="adressId" text="Документы"></DocumentsData>
+        <DocumentsData :id="adressId" text="ИД"></DocumentsData>
         <ObjectPhotoBLock></ObjectPhotoBLock>
     </div>
 </template>
