@@ -8,7 +8,7 @@ import IconButton from '@/Components/iconButton.vue';
 import EntranceList from '@/Components/entranceList.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
-import ContactBlock from '@/Components/contactBlock.vue';
+import ContactBlock from '@/Components/adressesBlocks/contactBlock.vue';
 import DocumentsData from '@/Components/documentsData.vue';
 import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
 let data = ref(null);

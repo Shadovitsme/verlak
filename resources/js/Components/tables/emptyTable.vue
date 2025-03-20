@@ -2,12 +2,15 @@
 import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { watch } from 'vue';
+import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
 
 const props = defineProps({
     headItems: Array,
     placeholders: { type: Array, default: () => [] },
     rowCounter: Number,
     allChangable: Boolean,
+    addData: Object,
+    valueData: Array,
 });
 
 const columnWidths = [
@@ -51,10 +54,19 @@ watch(selectedRow, (newValue, oldValue) => {
     const inputs = selectedRowElement?.querySelectorAll('input');
 
     if (inputs) {
-        console.log('Row data:');
+        let dataInputArr = [];
         inputs.forEach((input, index) => {
             console.log(`${props.headItems[index]}: ${input.value || 'empty'}`);
+            dataInputArr.push(input.value);
         });
+        addUpdateContactPerson(
+            dataInputArr[0],
+            dataInputArr[1],
+            dataInputArr[2],
+            dataInputArr[3],
+            props.addData.groupId,
+            '',
+        );
     }
 });
 </script>

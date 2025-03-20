@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import RoundedArrowLineDropdown from './roundedArrowLineDropdown.vue';
-import TextHeadWithAddButton from './textHeadWithAddButton.vue';
-import EmptyTable from './tables/emptyTable.vue';
-import LineSaveEntrance from './lineSaveEntrance.vue';
-import getExecData from './jsFunctions/getters/getExecData';
+import RoundedArrowLineDropdown from '../roundedArrowLineDropdown.vue';
+import TextHeadWithAddButton from '../textHeadWithAddButton.vue';
+import EmptyTable from '../tables/emptyTable.vue';
+import LineSaveEntrance from '../lineSaveEntrance.vue';
+import getExecData from '../jsFunctions/getters/getExecData';
 let showAdd = ref(false);
 const data = ref();
 const rowCounter = ref([]);
@@ -38,6 +38,7 @@ onMounted(() => {
         :text="elem.name"
         :key="elem"
         ><EmptyTable
+            :add-data="{ groupId: elem.id }"
             :all-changable="true"
             :last-action="true"
             :row-counter="rowCounter[index]"

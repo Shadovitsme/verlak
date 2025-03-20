@@ -160,14 +160,23 @@ class setDataController extends Controller
     public function updateContactPerson(Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        $id = $data['id'];
-        DB::table('contactPerson')->where('id', '=', $id)->update(['name' => $data['name'], 'name' => $data['name'], 'phone' => $data['phone'], 'adress' => $data['adress']]);
+        $contactGroupId = $data['contactGroupId'];
+        $name = $data['name'];
+        $work = $data['work'];
+        $phone = $data['phone'];
+        $adress = $data['adress'];
+        $idPerson = $data['idPerson'];
+
+        if ($idPerson) {
+            DB::table('contactPerson')->where('id', '=', $idPerson)->update(['name' => $name, 'work' => $work, 'phone' => $phone, 'adress' => $adress]);
+        } else {
+            $this->addContactPerson($contactGroupId, $name, $work, $phone, $adress);
+        }
     }
 
-    public function addContactPerson(Request $request)
+    public function addContactPerson($contactGroupId, $name, $work, $phone, $adress)
     {
-        $data = json_decode($request->getContent(), true);
-        DB::table('contactPerson')->insert(['name' => $data['name'], 'name' => $data['name'], 'phone' => $data['phone'], 'adress' => $data['adress'], 'contactList' => $data['contactList']]);
+        DB::table('contactPerson')->insert(['name' => $name, 'name' => $work, 'phone' => $phone, 'adress' => $adress, 'contactListId' => $contactGroupId]);
     }
 
     public function addContactFolder(Request $request)
