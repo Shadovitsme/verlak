@@ -84,6 +84,8 @@ Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorData']);
 Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
+Route::post('/updateContactPerson', [setDataController::class, 'updateContactPerson']);
+
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);

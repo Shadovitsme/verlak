@@ -48,6 +48,7 @@ CREATE TABLE contactList (
 foreign key (adressId) references adressData (id) on Delete cascade
 );
 CREATE TABLE contactPerson (
+id integer PRIMARY KEY AUTOINCREMENT,
     name varchar(100),
     phone varchar(100),
     adress varchar(100),

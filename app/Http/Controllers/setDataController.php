@@ -157,6 +157,19 @@ class setDataController extends Controller
         ]);
     }
 
+    public function updateContactPerson(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'];
+        DB::table('contactPerson')->where('id', '=', $id)->update(['name' => $data['name'], 'name' => $data['name'], 'phone' => $data['phone'], 'adress' => $data['adress']]);
+    }
+
+    public function addContactPerson(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        DB::table('contactPerson')->insert(['name' => $data['name'], 'name' => $data['name'], 'phone' => $data['phone'], 'adress' => $data['adress'], 'contactList' => $data['contactList']]);
+    }
+
     public function addContactFolder(Request $request)
     {
         $data = json_decode($request->getContent(), true);

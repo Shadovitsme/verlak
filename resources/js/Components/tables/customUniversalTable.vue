@@ -21,7 +21,7 @@ const props = defineProps({
     lastAction: Boolean,
     lastStatus: Boolean,
     api: String,
-    speciallData: Object,
+    speciallData: { type: Object, default: () => ({}) },
     searchForeignKey: String,
     // TODO заменить эксек на стринг
     exec: Boolean,
