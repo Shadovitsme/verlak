@@ -218,6 +218,9 @@ class setDataController extends Controller
             case 'montazh':
                 $arr = ['name', 'comment', 'phone'];
                 return $arr;
+            case 'buildingMaterials':
+                $arr = ['name', 'comment', 'summ'];
+                return $arr;
 
             default:
                 // code...

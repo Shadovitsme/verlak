@@ -9,9 +9,9 @@
 -- DROP TABLE adressPhoto;
 -- DROP TABLE worker;
 -- DROP TABLE avances;
--- DROP TABLE buildingMaterials;
+DROP TABLE buildingMaterials;
 -- DROP TABLE elevator;
-DROP TABLE montazh;
+-- DROP TABLE montazh;
 -- CREATE TABLE contract (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     contractNumber integer unique,
@@ -96,13 +96,14 @@ DROP TABLE montazh;
 --     comment varchar(100),
 --     foreign key (workerId) references worker (id) on Delete cascade
 -- );
--- CREATE TABLE buildingMaterials (
---     adressId integer,
---     name varchar(100),
---     summ varchar(100),
---     comment varchar(100),
---     foreign key (adressId) references adressData (id) on Delete cascade
--- );
+CREATE TABLE buildingMaterials (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    adressId integer,
+    name varchar(100),
+    summ varchar(100),
+    comment varchar(100),
+    foreign key (adressId) references adressData (id) on Delete cascade
+);
 -- CREATE TABLE elevator (
 --     adressId integer,
 --     name varchar(100),
@@ -112,11 +113,11 @@ DROP TABLE montazh;
 --     entrance varchar(100),
 --     foreign key (adressId) references adressData (id) on Delete cascade
 -- );
-CREATE TABLE montazh (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    adressId integer,
-name varchar(100),
-    comment varchar(100),
-phone varchar(100),
-foreign key (adressId) references adressData (id) on Delete cascade
-)
+-- CREATE TABLE montazh (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     adressId integer,
+-- name varchar(100),
+--     comment varchar(100),
+-- phone varchar(100),
+-- foreign key (adressId) references adressData (id) on Delete cascade
+-- )

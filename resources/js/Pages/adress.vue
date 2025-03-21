@@ -12,6 +12,7 @@ import ContactBlock from '@/Components/adressesBlocks/contactBlock.vue';
 import DocumentsData from '@/Components/documentsData.vue';
 import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
 import Montazh from '@/Layouts/montazh.vue';
+import BuildingMaterials from '@/Layouts/buildingMaterials.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -35,7 +36,7 @@ async function fetchData(adressId) {
 
 <template>
     <Header></Header>
-    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pb-12 pt-12">
+    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pb-24  pt-12">
         <BreadWay
             start-point-text="Учёт договоров"
             :middle-point-text="'Договор №' + contractNumber"
@@ -86,5 +87,6 @@ async function fetchData(adressId) {
         ></DocumentsData>
         <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
         <Montazh :id="adressId"></Montazh>
+        <BuildingMaterials :id="adressId"></BuildingMaterials>
     </div>
 </template>

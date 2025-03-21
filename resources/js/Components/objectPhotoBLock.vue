@@ -13,7 +13,6 @@ async function fetchData(adressId) {
     try {
         const result = await getExecData('/getPictures', adressId);
         data.value = result;
-        console.log(data.value);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }

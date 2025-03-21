@@ -17,6 +17,7 @@ const props = defineProps({
 let data = ref();
 async function fetchData() {
     let result;
+    console.log(props.modalType);
     switch (props.modalType) {
         case 'deleteContactListItem':
             result = await getExecData(
@@ -31,6 +32,15 @@ async function fetchData() {
                 props.addData.adressId,
                 'adressId',
                 'montazh',
+            );
+            data.value = result;
+            break;
+        case 'deleteMaterial':
+            result = await getExecData(
+                '/universalGetter',
+                props.addData.adressId,
+                'adressId',
+                'buildingMaterials',
             );
             data.value = result;
             break;
@@ -76,14 +86,17 @@ onUnmounted(() => {
 
 // Модифицированный watcher
 watch(selectedRow, (newValue, oldValue) => {
+    console.log(oldValue);
     // Находим все инпуты в выбранной строке
-    const selectedRowElement = document.getElementById(oldValue);
+    const selectedRowElement = document.getElementById(
+        props.headItems[0] + oldValue,
+    );
     const inputs = selectedRowElement?.querySelectorAll('input');
 
     if (inputs) {
         let dataInputArr = [];
         let val = data.value ? data.value[oldValue - 1] : ''; // Adjust if data.value is 0-based
-
+        console.log(val);
         inputs.forEach((input) => {
             dataInputArr.push(input.value);
         });
@@ -96,7 +109,7 @@ watch(selectedRow, (newValue, oldValue) => {
                 props.addData.groupId,
                 val?.id || '',
             );
-        } else {
+        } else if (props.modalType == 'deleteMontazh') {
             universalUpdate(
                 props.addData.adressId,
                 dataInputArr[0],
@@ -105,6 +118,16 @@ watch(selectedRow, (newValue, oldValue) => {
                 '/universalUpdate',
                 val?.id || '',
                 'montazh',
+            );
+        } else {
+            universalUpdate(
+                props.addData.adressId,
+                dataInputArr[0],
+                dataInputArr[1],
+                dataInputArr[2],
+                '/universalUpdate',
+                val?.id || '',
+                'buildingMaterials',
             );
         }
     }
@@ -143,7 +166,19 @@ function chooseValue(indexRow, indexItem) {
                         break;
                 }
                 break;
+            case 'deleteMaterial':
+                switch (indexItem) {
+                    case 0:
+                        return val.name;
+                    case 1:
+                        return val.summ;
+                    case 2:
+                        return val.comment;
 
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
@@ -183,7 +218,7 @@ function chooseValue(indexRow, indexItem) {
             <tbody ref="target" @click.stop>
                 <tr
                     v-for="(count, trIndex) in props.rowCounter"
-                    :id="count"
+                    :id="props.headItems[0] + String(count)"
                     @click="selectedRow = count"
                     :class="[
                         'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',

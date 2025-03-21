@@ -142,6 +142,13 @@ async function send() {
         case 'deleteMontazh':
             universalDelete(props.idToDelete, '/universalDelete', 'montazh');
             break;
+        case 'deleteMaterial':
+            universalDelete(
+                props.idToDelete,
+                '/universalDelete',
+                'buildingMaterial',
+            );
+            break;
         case 'addManager':
             addNewManager(
                 elements[0].value,
