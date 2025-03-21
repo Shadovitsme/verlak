@@ -29,7 +29,8 @@ if (
     props.modalType == 'deleteElevator' ||
     props.modalType == 'deleteBuildingData' ||
     props.modalType == 'deleteContact' ||
-    props.modalType == 'deleteContactListItem'
+    props.modalType == 'deleteContactListItem' ||
+    props.modalType == 'deletePhoto'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -71,6 +72,10 @@ function selectText(type) {
         case 'deleteContactListItem':
             top.value = 'Удалить организацию';
             body.value = 'Вы уверены, что хотите удалить организацию?';
+            break;
+        case 'deletePhoto':
+            top.value = 'Удалить фото';
+            body.value = 'Вы уверены, что хотите удалить приложенный файл?';
             break;
         default:
             break;
@@ -120,6 +125,13 @@ async function send() {
                 props.idToDelete,
                 '/universalDelete',
                 'contactList',
+            );
+            break;
+        case 'deletePhoto':
+            universalDelete(
+                props.idToDelete,
+                '/universalDelete',
+                'adressPhoto',
             );
             break;
         case 'addManager':

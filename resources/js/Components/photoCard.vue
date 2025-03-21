@@ -6,7 +6,7 @@ import { ref } from 'vue';
 import { transliterate } from 'transliteration';
 const props = defineProps({
     text: String,
-    imageArray: Array,
+    imageArray: Object,
     fatherId: String,
     adressId: String,
 });
@@ -38,7 +38,8 @@ let folder = props.adressId + '/' + transliterate(props.text);
             <ImageItem
                 v-for="item in props.imageArray"
                 :key="item"
-                :src="'/' + item"
+                :src="'/' + item.pathToDirectory"
+                :id="item.id"
             ></ImageItem>
         </div>
     </div>

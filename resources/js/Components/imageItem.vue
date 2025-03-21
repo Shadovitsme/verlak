@@ -11,6 +11,7 @@ let toggleModal = ref(false);
 
 <template>
     <OpenModal
+        @close="toggleModal = !toggleModal"
         modal-type="deletePhoto"
         :id-to-delete="props.id"
         :toggle-modal="toggleModal"
