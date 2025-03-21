@@ -11,6 +11,7 @@ import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import ContactBlock from '@/Components/adressesBlocks/contactBlock.vue';
 import DocumentsData from '@/Components/documentsData.vue';
 import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
+import Montazh from '@/Layouts/montazh.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -84,5 +85,6 @@ async function fetchData(adressId) {
             text="ИД"
         ></DocumentsData>
         <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
+        <Montazh></Montazh>
     </div>
 </template>
