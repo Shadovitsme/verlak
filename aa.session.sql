@@ -11,6 +11,7 @@
 -- DROP TABLE avances;
 -- DROP TABLE buildingMaterials;
 -- DROP TABLE elevator;
+DROP TABLE montazh;
 -- CREATE TABLE contract (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     contractNumber integer unique,
@@ -116,5 +117,6 @@ CREATE TABLE montazh (
     adressId integer,
 name varchar(100),
     comment varchar(100),
+phone varchar(100),
 foreign key (adressId) references adressData (id) on Delete cascade
 )

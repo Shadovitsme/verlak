@@ -1,4 +1,12 @@
-export default async function universalUpdate(id, name, value, comment, api) {
+export default async function universalUpdate(
+    id,
+    name,
+    value,
+    comment,
+    api,
+    adressId,
+    table,
+) {
     try {
         const response = await fetch(api, {
             method: 'POST',
@@ -7,6 +15,8 @@ export default async function universalUpdate(id, name, value, comment, api) {
                 name: name,
                 value: value,
                 comment: comment,
+                adressId: adressId,
+                table: table,
             }),
             headers: {
                 Accept: 'application/json',

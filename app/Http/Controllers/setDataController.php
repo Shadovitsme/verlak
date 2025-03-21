@@ -193,4 +193,35 @@ class setDataController extends Controller
             'name' => $name, 'adressId' => $id
         ]);
     }
+
+    public function universalUpdate(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'];
+        $name = $data['name'];
+        $value = $data['value'];
+        $comment = $data['comment'];
+        $adressId = $data['adressId'];
+        $table = $data['table'];
+        $query = DB::table($table);
+        $columnArr = $this->getColumnsNames($table);
+        if ($id) {
+            $query->where('adressId', '=', $adressId)->where('id', '=', $id)->update([$columnArr[0] => $name, $columnArr[1] => $comment, $columnArr[2] => $value]);
+        } else {
+            $query->insert([$columnArr[0] => $name, $columnArr[1] => $comment, $columnArr[2] => $value, 'adressId' => $adressId]);
+        };
+    }
+
+    private function getColumnsNames($table)
+    {
+        switch ($table) {
+            case 'montazh':
+                $arr = ['name', 'comment', 'phone'];
+                return $arr;
+
+            default:
+                // code...
+                break;
+        }
+    }
 }
