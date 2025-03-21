@@ -1,12 +1,4 @@
-export default async function universalUpdate(
-    id,
-    name,
-    value,
-    comment,
-    api,
-    adressId,
-    table,
-) {
+export default async function universalUpdate(adressId, name, value, comment, api, id, table) {
     try {
         const response = await fetch(api, {
             method: 'POST',

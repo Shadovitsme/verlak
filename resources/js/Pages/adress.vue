@@ -35,7 +35,7 @@ async function fetchData(adressId) {
 
 <template>
     <Header></Header>
-    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pt-12">
+    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pb-12 pt-12">
         <BreadWay
             start-point-text="Учёт договоров"
             :middle-point-text="'Договор №' + contractNumber"
@@ -85,6 +85,6 @@ async function fetchData(adressId) {
             text="ИД"
         ></DocumentsData>
         <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
-        <Montazh></Montazh>
+        <Montazh :id="adressId"></Montazh>
     </div>
 </template>

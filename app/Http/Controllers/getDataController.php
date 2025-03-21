@@ -128,4 +128,15 @@ class getDataController extends Controller
         }
         return response()->json($result);
     }
+
+    public function universalGetter(Request $request)
+    {
+        $id = $request->header('byWhatChoose');
+        $column = $request->header('column');
+        $where = $request->header('where');
+
+        $result = DB::table($where)->where($column, '=', $id)->get();
+
+        return response()->json($result);
+    }
 }

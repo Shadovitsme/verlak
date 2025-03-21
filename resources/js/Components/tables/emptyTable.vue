@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { watch } from 'vue';
 import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
 import getExecData from '../jsFunctions/getters/getExecData';
+import universalUpdate from '../jsFunctions/setters/universalUpdate';
 
 const props = defineProps({
     headItems: Array,
@@ -15,11 +16,27 @@ const props = defineProps({
 });
 let data = ref();
 async function fetchData() {
-    const result = await getExecData(
-        '/getContactPersonData',
-        props.addData.groupId,
-    );
-    data.value = result;
+    let result;
+    switch (props.modalType) {
+        case 'deleteContactListItem':
+            result = await getExecData(
+                '/getContactPersonData',
+                props.addData.groupId,
+            );
+            data.value = result;
+            break;
+        case 'deleteMontazh':
+            result = await getExecData(
+                '/universalGetter',
+                props.addData.adressId,
+                'adressId',
+                'montazh',
+            );
+            data.value = result;
+            break;
+        default:
+            break;
+    }
 }
 
 const columnWidths = [
@@ -65,19 +82,31 @@ watch(selectedRow, (newValue, oldValue) => {
 
     if (inputs) {
         let dataInputArr = [];
-        let val = data.value[oldValue - 1]; // Adjust if data.value is 0-based
+        let val = data.value ? data.value[oldValue - 1] : ''; // Adjust if data.value is 0-based
 
         inputs.forEach((input) => {
             dataInputArr.push(input.value);
         });
-        addUpdateContactPerson(
-            dataInputArr[0],
-            dataInputArr[1],
-            dataInputArr[2],
-            dataInputArr[3],
-            props.addData.groupId,
-            val?.id || '',
-        );
+        if (props.modalType == 'deleteContactListItem') {
+            addUpdateContactPerson(
+                dataInputArr[0],
+                dataInputArr[1],
+                dataInputArr[2],
+                dataInputArr[3],
+                props.addData.groupId,
+                val?.id || '',
+            );
+        } else {
+            universalUpdate(
+                props.addData.adressId,
+                dataInputArr[0],
+                dataInputArr[1],
+                dataInputArr[2],
+                '/universalUpdate',
+                val?.id || '',
+                'montazh',
+            );
+        }
     }
 });
 

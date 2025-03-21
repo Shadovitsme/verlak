@@ -75,6 +75,7 @@ Route::get('/getContactPersonData', [getDataController::class, 'getContactPerson
 Route::get('/getDocuments', [getDataController::class, 'getDocuments']);
 Route::get('/getEED', [getDataController::class, 'getEED']);
 Route::get('/getPictures', [getDataController::class, 'getPictures']);
+Route::get('/universalGetter', [getDataController::class, 'universalGetter']);
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
@@ -95,7 +96,6 @@ Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
 Route::post('/addElevator', [setDataController::class, 'addElevator']);
-Route::post('/addContactFolder', [setDataController::class, 'addContactFolder']);
 
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
 Route::post('/delete-file', [FileUploadController::class, 'delete']);
