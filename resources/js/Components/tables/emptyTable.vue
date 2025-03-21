@@ -115,16 +115,35 @@ watch(selectedRow, (newValue, oldValue) => {
 function chooseValue(indexRow, indexItem) {
     if (data.value != undefined && data.value[indexRow] != undefined) {
         let val = data.value[indexRow];
-        console.log(val);
-        switch (indexItem) {
-            case 0:
-                return val.name;
-            case 1:
-                return val.work;
-            case 2:
-                return val.phone;
-            case 3:
-                return val.adress;
+        switch (props.modalType) {
+            case 'deleteContactListItem':
+                switch (indexItem) {
+                    case 0:
+                        return val.name;
+                    case 1:
+                        return val.work;
+                    case 2:
+                        return val.phone;
+                    case 3:
+                        return val.adress;
+                    default:
+                        break;
+                }
+                break;
+            case 'deleteMontazh':
+                switch (indexItem) {
+                    case 0:
+                        return val.name;
+                    case 1:
+                        return val.phone;
+                    case 2:
+                        return val.comment;
+
+                    default:
+                        break;
+                }
+                break;
+
             default:
                 break;
         }
