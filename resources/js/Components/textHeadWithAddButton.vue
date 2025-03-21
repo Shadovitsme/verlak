@@ -7,7 +7,7 @@ const props = defineProps({
 const emit = defineEmits(['addItem']);
 </script>
 <template>
-    <div class="mb-5 flex h-fit content-center items-center">
+    <div class=" flex h-fit content-center items-center">
         <p class="my-auto mr-4 text-2xl text-gray-900">{{ props.text }}</p>
         <IconButton
             @click="emit('addItem')"

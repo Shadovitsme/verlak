@@ -71,8 +71,18 @@ async function fetchData(adressId) {
             ></CustomUniversalTable>
         </RoundedArrowLineDropdown>
         <ContactBlock :id="adressId"></ContactBlock>
-        <DocumentsData :id="adressId" text="Документы"></DocumentsData>
-        <DocumentsData :id="adressId" text="ИД"></DocumentsData>
-        <ObjectPhotoBLock></ObjectPhotoBLock>
+        <DocumentsData
+            where-fetch="/getDocuments"
+            table-name="adressDocument"
+            :id="adressId"
+            text="Документы"
+        ></DocumentsData>
+        <DocumentsData
+            where-fetch="/getEED"
+            table-name="EED"
+            :id="adressId"
+            text="ИД"
+        ></DocumentsData>
+        <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
     </div>
 </template>

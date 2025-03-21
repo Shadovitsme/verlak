@@ -158,7 +158,6 @@ async function send() {
                 :folder="props.speciallAddData.folder"
                 :fatherId="props.speciallAddData.fatherId"
                 :tableName="props.speciallAddData.tableName"
-
                 ref="fileUploadRef"
                 v-if="props.modalType == 'addFile'"
             ></AddFileTemplate>

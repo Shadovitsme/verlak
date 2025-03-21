@@ -1,10 +1,12 @@
-export default async function getExecData(api, byWhatChoose) {
+export default async function getExecData(api, byWhatChoose, column, where) {
     try {
         const response = await fetch(api, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 byWhatChoose: byWhatChoose,
+                column: column,
+                where: where,
             },
         });
 

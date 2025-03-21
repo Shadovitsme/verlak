@@ -63,6 +63,10 @@ class setDataController extends Controller
             ]);
             $entrance = $tableRow['entrance'];
             $elevatorCount = $tableRow['elevatorCount'];
+            $arr = ['До', 'В работе', 'После'];
+            foreach ($arr as $value) {
+                DB::table('adressPhotoUserFolders')->insert(['fatherId' => $adressId, 'name' => $value]);
+            }
             $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
         }
     }
@@ -168,7 +172,7 @@ class setDataController extends Controller
         $idPerson = $data['idPerson'];
 
         if ($idPerson) {
-            echo($idPerson);
+            echo ($idPerson);
             DB::table('contactPerson')->where('id', '=', $idPerson)->update(['name' => $name, 'work' => $work, 'phone' => $phone, 'adress' => $adress]);
         } else {
             $this->addContactPerson($contactGroupId, $name, $work, $phone, $adress);

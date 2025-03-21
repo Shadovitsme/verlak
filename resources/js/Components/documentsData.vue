@@ -8,10 +8,11 @@ import getExecData from './jsFunctions/getters/getExecData';
 const props = defineProps({
     text: String,
     id: String,
+    tableName: String,
+    whereFetch: String,
 });
 let toggleModal = ref(false);
 let folder = props.id + '/' + transliterate(props.text);
-let tableName = 'adressDocument';
 let data = ref();
 onMounted(() => {
     fetchData(props.id);
@@ -19,7 +20,7 @@ onMounted(() => {
 
 async function fetchData(adressId) {
     try {
-        const result = await getExecData('/getDocuments', adressId);
+        const result = await getExecData(props.whereFetch, adressId);
         data.value = result;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
@@ -39,7 +40,7 @@ function getLastWordFromString(str) {
         :speciall-add-data="{
             folder: folder,
             fatherId: props.id,
-            tableName: tableName,
+            tableName: props.tableName,
         }"
         modal-type="addFile"
     ></OpenModal>

@@ -73,8 +73,8 @@ Route::get('/getBuildingData', [getDataController::class, 'getBuildingData']);
 Route::get('/getContactListData', [getDataController::class, 'getContactListData']);
 Route::get('/getContactPersonData', [getDataController::class, 'getContactPersonData']);
 Route::get('/getDocuments', [getDataController::class, 'getDocuments']);
-
-
+Route::get('/getEED', [getDataController::class, 'getEED']);
+Route::get('/getPictures', [getDataController::class, 'getPictures']);
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
@@ -83,13 +83,11 @@ Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
 Route::post('/deleteElevator', [deleteDataController::class, 'deleteElevator']);
 Route::post('/deleteBuildingData', [deleteDataController::class, 'deleteBuildingData']);
 
-
 Route::post('/updateManager', [setDataController::class, 'updateManager']);
 Route::post('/updateContract', [setDataController::class, 'updateContract']);
 Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorData']);
 Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
 Route::post('/updateContactPerson', [setDataController::class, 'updateContactPerson']);
-
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
@@ -97,10 +95,8 @@ Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
 Route::post('/addElevator', [setDataController::class, 'addElevator']);
 Route::post('/addContactFolder', [setDataController::class, 'addContactFolder']);
 
-
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
 Route::post('/delete-file', [FileUploadController::class, 'delete']);
-
 
 // routes/web.php
 Route::get('/test-image', function () {

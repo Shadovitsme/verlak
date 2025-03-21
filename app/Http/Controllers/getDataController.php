@@ -75,6 +75,12 @@ class getDataController extends Controller
         return response()->json($adressData);
     }
 
+    public function getEED(Request $request)
+    {
+        $adressId = $request->header('byWhatChoose');
+        $adressData = DB::table('EED')->where('fatherId', '=', $adressId)->get();
+        return response()->json($adressData);
+    }
 
     public function getAdressesforContract(Request $request)
     {
@@ -91,26 +97,35 @@ class getDataController extends Controller
     public function getBuildingData(Request $request)
     {
         $adressId = $request->header('Id');
-        $buildingData = DB::table('building')->where('adressId','=',$adressId)->get();
+        $buildingData = DB::table('building')->where('adressId', '=', $adressId)->get();
         return response()->json($buildingData->toArray());
     }
 
-    public function getContactListData(Request $request){
+    public function getContactListData(Request $request)
+    {
         $adressId = $request->header('byWhatChoose');
-        $contactList=DB::table('contactList')->where('adressId','=',$adressId)->get();
+        $contactList = DB::table('contactList')->where('adressId', '=', $adressId)->get();
         foreach ($contactList as $value) {
-            $value->personsCount=DB::table('contactPerson')->where('contactListId','=',$value->id)->count();
+            $value->personsCount = DB::table('contactPerson')->where('contactListId', '=', $value->id)->count();
         }
         return response()->json($contactList->toArray());
-
     }
 
-
-
-    public function getContactPersonData(Request $request){
+    public function getContactPersonData(Request $request)
+    {
         $contactListId = $request->header('byWhatChoose');
-        $contactList=DB::table('contactPerson')->where('contactListId','=',$contactListId)->get();
+        $contactList = DB::table('contactPerson')->where('contactListId', '=', $contactListId)->get();
         return response()->json($contactList->toArray());
+    }
 
+    public function getPictures(Request $request)
+    {
+        $adressId = $request->header('byWhatChoose');
+
+        $result = DB::table('adressPhotoUserFolders')->where('fatherId', '=', $adressId)->get();
+        foreach ($result as $value) {
+            $value->picturesArray = DB::table('adressPhoto')->where('fatherId', '=', $value->id)->get('pathToDirectory')->toArray();
+        }
+        return response()->json($result);
     }
 }
