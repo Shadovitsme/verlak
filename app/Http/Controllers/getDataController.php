@@ -124,7 +124,7 @@ class getDataController extends Controller
 
         $result = DB::table('adressPhotoUserFolders')->where('fatherId', '=', $adressId)->get();
         foreach ($result as $value) {
-            $value->picturesArray = DB::table('adressPhoto')->where('fatherId', '=', $value->id)->get('pathToDirectory')->toArray();
+            $value->picturesArray = DB::table('adressPhoto')->where('fatherId', '=', $value->id)->pluck('pathToDirectory')->toArray();
         }
         return response()->json($result);
     }

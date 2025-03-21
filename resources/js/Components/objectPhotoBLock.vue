@@ -24,6 +24,7 @@ async function fetchData(adressId) {
     <div class="mt-10">
         <p class="mb-3 text-2xl text-gray-900">Фото объекта</p>
         <PhotoCard
+            :adress-id="props.id"
             :father-id="item.id"
             :image-array="item.picturesArray"
             v-for="item in data"
