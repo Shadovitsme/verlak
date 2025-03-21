@@ -1,9 +1,26 @@
 <script setup>
 import EmptyTable from '@/Components/tables/emptyTable.vue';
 import TextHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
-import { ref } from 'vue';
-let rowCounter = ref(1);
+import { ref, onMounted } from 'vue';
+import getExecData from '@/Components/jsFunctions/getters/getExecData';
+let rowCounter = ref(0);
+let data = ref();
+async function fetchData() {
+    let result;
 
+    result = await getExecData(
+        '/universalGetter',
+        props.id,
+        'adressId',
+        'montazh',
+    );
+    data.value = result;
+    rowCounter.value = data.value.length;
+}
+
+onMounted(() => {
+    fetchData();
+});
 const props = defineProps({
     id: String,
 });
@@ -23,7 +40,7 @@ const props = defineProps({
             :row-counter="rowCounter"
             :all-changable="true"
             modal-type="deleteMontazh"
-            :add-data="{adressId:props.id}"
+            :add-data="{ adressId: props.id }"
         ></EmptyTable>
     </div>
 </template>

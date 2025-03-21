@@ -157,13 +157,22 @@ function chooseValue(indexRow, indexItem) {
         <table
             id="table"
             @click="handleBodyClick"
-            class="min-w-max table-fixed border-collapse rounded-lg shadow-sm"
+            class="min-w-max border-collapse rounded-lg shadow-sm"
+            :class="
+                props.modalType == 'deleteContactListItem'
+                    ? 'table-fixed'
+                    : 'w-full table-auto'
+            "
         >
             <thead class="rounded-lg bg-indigo-50 text-left text-gray-500">
                 <tr class="h-12 rounded-lg">
                     <th
                         class="px-4 text-xs text-gray-500"
-                        :class="columnWidths[index]"
+                        :class="
+                            props.modalType == 'deleteContactListItem'
+                                ? columnWidths[index]
+                                : ''
+                        "
                         v-for="(item, index) in props.headItems"
                         :key="item"
                     >
