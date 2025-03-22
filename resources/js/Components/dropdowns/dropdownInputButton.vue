@@ -18,7 +18,10 @@ let content = ref(
 function checked(id) {
     content.value = id;
     showDrop.value = false;
+    emit('update:value', content.value);
 }
+
+const emit = defineEmits(['update:value']); // Объявляем событие для v-model
 </script>
 
 <template>

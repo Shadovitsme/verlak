@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import CustomInput from '@/Components/customInput.vue';
+<script setup>
+import customInput from '@/Components/customInput.vue';
 import DropdownInputButton from '@/Components/dropdowns/dropdownInputButton.vue';
 import Header from '@/Components/header.vue';
 import JustButton from '../Components/justButton.vue';
@@ -10,14 +10,18 @@ import { ref } from 'vue';
 let rowCounter = ref([]);
 let adressCounter = ref(0);
 
+const town = ref('');
+const FIO = ref('');
+const adressItem = ref([]);
+
 function addAdress() {
     adressCounter.value++;
-    console.log(adressCounter.value);
     rowCounter.value.push(1);
+    adressItem.value.push('');
 }
 
 function saveData() {
-    console.log('hi');
+    console.log(adressItem.value);
 }
 </script>
 
@@ -29,16 +33,19 @@ function saveData() {
         </h1>
 
         <div class="w-[1348px] rounded-3xl bg-white p-10 shadow-sm">
-            <form @submit.prevent="saveData()" id="addRoom" class="w-full">
+            <form @submit.prevent="saveData" id="addRoom" class="w-full">
                 <p class="mb-5 text-2xl text-gray-900">Основная информация</p>
                 <div class="z-20 flex gap-x-10 pb-8">
-                    <CustomInput
+                    <customInput
+                        :value="FIO"
                         :static-width="true"
                         label-text="ФИО"
                         placeholder="Введите ФИО"
-                    ></CustomInput>
+                        @update:value="(newValue) => (FIO = newValue)"
+                    ></customInput>
 
                     <DropdownInputButton
+                        :value="town"
                         :static-width="true"
                         label-text="Город"
                         placeholder="Выберите город"
@@ -48,6 +55,7 @@ function saveData() {
                             'Москва',
                             'Санкт-Петербург',
                         ]"
+                        @update:value="(newValue) => (town = newValue)"
                     >
                     </DropdownInputButton>
                 </div>
@@ -80,12 +88,16 @@ function saveData() {
                     >
                 </div>
                 <div v-for="i in adressCounter" class="mb-5" :key="i">
-                    <CustomInput
+                    <customInput
+                        :value="adressItem[i - 1]"
                         class="mb-5"
                         :static-width="true"
                         label-text="Адрес"
                         placeholder="Введите адрес дома"
-                    ></CustomInput>
+                        @update:value="
+                            (newValue) => (adressItem[i - 1] = newValue)
+                        "
+                    ></customInput>
                     <EmptyTable
                         :scroll-table="false"
                         :row-counter="rowCounter[i - 1]"

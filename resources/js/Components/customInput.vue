@@ -3,8 +3,14 @@ const props = defineProps({
     labelText: String,
     placeholder: String,
     staticWidth: Boolean,
-    value: String,
-});
+    value: String, // Проп для v-model
+})
+
+const emit = defineEmits(['update:value']) // Объявляем событие для v-model
+
+const handleInput = (event) => {
+    emit('update:value', event.target.value);
+}
 </script>
 
 <template>
@@ -15,6 +21,7 @@ const props = defineProps({
             :placeholder="props.placeholder"
             :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
             :value="props.value"
+            @input="handleInput"
         />
     </div>
 </template>
