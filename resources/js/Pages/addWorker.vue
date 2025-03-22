@@ -24,10 +24,10 @@ function addAdress() {
 // let dbAdressColumnNames = ['name', 'fullPrice', 'comment'];
 async function saveData() {
     let workerId = await addUpdateWorker(FIO.value, town.value);
-    console.log(workerId)
     for (let i = 0; i < adressCounter.value; i++) {
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
     }
+    window.location.href = '/executors';
 }
 </script>
 

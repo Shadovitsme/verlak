@@ -16,6 +16,18 @@ class getDataController extends Controller
         return response()->json($managers->toArray());
     }
 
+    public function getAllWorkerData()
+    {
+       $result=DB::table('worker')->get();
+       foreach ($result as $value) {
+        $value->adressData=DB::table('workerAdress')->where('workerId','=',$value->id)->get();
+        foreach ($value->adressData as $avance) {
+            $value->avansData=DB::table('avances')->where('workerAdressId','=',$avance->id)->get();
+        };
+       }
+        return response()->json($result);
+    }
+
     private function findElementById($id, $table, $searchableColumn)
     {
         return DB::table($table)->where('id', '=', $id)->pluck($searchableColumn)[0];

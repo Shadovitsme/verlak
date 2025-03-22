@@ -79,6 +79,8 @@ Route::get('/getDocuments', [getDataController::class, 'getDocuments']);
 Route::get('/getEED', [getDataController::class, 'getEED']);
 Route::get('/getPictures', [getDataController::class, 'getPictures']);
 Route::get('/universalGetter', [getDataController::class, 'universalGetter']);
+Route::get('/getAllWorkerData', [getDataController::class, 'getAllWorkerData']);
+
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
