@@ -3,6 +3,7 @@ import TextHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import IconButton from '@/Components/iconButton.vue';
 import OpenModal from '@/Components/openModal.vue';
 import { ref } from 'vue';
+import WorkerTable from '@/Components/tables/workerTable.vue';
 
 const props = defineProps({
     data: Object,
@@ -36,5 +37,6 @@ const toggleModal = ref(false);
                 ></IconButton>
             </div>
         </div>
+        <WorkerTable></WorkerTable>
     </div>
 </template>
