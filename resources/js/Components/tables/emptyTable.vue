@@ -13,6 +13,7 @@ const props = defineProps({
     allChangable: Boolean,
     addData: { type: Object, default: () => ({}) },
     modalType: { type: String, default: () => '' },
+    scrollTable: { type: Boolean, default: () => true },
 });
 let data = ref();
 async function fetchData() {
@@ -192,10 +193,10 @@ function chooseValue(indexRow, indexItem) {
         <table
             id="table"
             @click="handleBodyClick"
-            class="min-w-max border-collapse rounded-lg shadow-sm"
+            class="border-collapse rounded-lg shadow-sm"
             :class="
-                props.modalType == 'deleteContactListItem'
-                    ? 'table-fixed'
+                props.scrollTable
+                    ? 'min-w-max table-fixed'
                     : 'w-full table-auto'
             "
         >
@@ -203,11 +204,7 @@ function chooseValue(indexRow, indexItem) {
                 <tr class="h-12 rounded-lg">
                     <th
                         class="px-4 text-xs text-gray-500"
-                        :class="
-                            props.modalType == 'deleteContactListItem'
-                                ? columnWidths[index]
-                                : ''
-                        "
+                        :class="props.scrollTable ? columnWidths[index] : ''"
                         v-for="(item, index) in props.headItems"
                         :key="item"
                     >

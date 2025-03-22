@@ -28,7 +28,10 @@ Route::get('/notifications', function () {
     return Inertia::render('notifications');
 });
 Route::get('/executors', function () {
-    return Inertia::render('executors');
+    return Inertia::render('workers');
+});
+Route::get('/addWorker', function () {
+    return Inertia::render('addWorker');
 });
 Route::get('/dashboard', function () {
     return Inertia::render('managerListPage');
@@ -77,7 +80,6 @@ Route::get('/getEED', [getDataController::class, 'getEED']);
 Route::get('/getPictures', [getDataController::class, 'getPictures']);
 Route::get('/universalGetter', [getDataController::class, 'universalGetter']);
 
-
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);
 Route::post('/deleteEntrance', [deleteDataController::class, 'deleteEntrance']);
@@ -90,7 +92,6 @@ Route::post('/updateElevatorData', [setDataController::class, 'updateElevatorDat
 Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
 Route::post('/updateContactPerson', [setDataController::class, 'updateContactPerson']);
 Route::post('/universalUpdate', [setDataController::class, 'universalUpdate']);
-
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
