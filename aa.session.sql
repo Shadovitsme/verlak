@@ -98,8 +98,7 @@ CREATE TABLE workerAdress (
     id integer PRIMARY KEY AUTOINCREMENT,
     workerId integer,
     name varchar(100),
-    fullPrice decimal,
-    comment varchar(100),
+fullPrice decimal,
     foreign key (workerId) references worker (id) on Delete cascade
 );
 -- CREATE TABLE buildingMaterials (

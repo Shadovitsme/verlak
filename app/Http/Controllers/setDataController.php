@@ -228,6 +228,24 @@ class setDataController extends Controller
         }
     }
 
+    public function addUpdateWorkerAdress(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $workerId = $data['workerId'];
+        $name = $data['name'];
+        $fullPrice = $data['fullPrice'];
+        $comment = $data['comment'];
+        $avanceValue = $data['avanceValue'];
+        $date = $data['date'];
+        $workerAdressId = DB::table('workerAdress')->insertGetId(['name' => $name, 'fullPrice' => $fullPrice, 'workerId' => $workerId]);
+        $this->addUpdateAvances($workerAdressId, $comment, $avanceValue, $date);
+    }
+
+    private function addUpdateAvances($adressId, $comment, $value, $date)
+    {
+        DB::table('avances')->insert(['workerAdressId' => $adressId, 'value' => $value, 'date' => $date, 'comment' => $comment]);
+    }
+
     public function addUpdateWorker(Request $request)
     {
         $data = json_decode($request->getContent(), true);

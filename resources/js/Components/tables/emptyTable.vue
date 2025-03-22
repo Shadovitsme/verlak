@@ -5,6 +5,7 @@ import { watch } from 'vue';
 import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
 import getExecData from '../jsFunctions/getters/getExecData';
 import universalUpdate from '../jsFunctions/setters/universalUpdate';
+import addWorkerAdress from '../jsFunctions/setters/addWorkerAdress';
 
 const props = defineProps({
     headItems: Array,
@@ -52,9 +53,9 @@ async function fetchData() {
             data.value = Array(props.rowCounter)
                 .fill()
                 .map(() => ({
-                    name: '',
-                    value1: '',
-                    value2: '',
+                    summ: '',
+                    avans: '',
+                    date: '',
                     comment: '', // Пример структуры, настройте под свои нужды
                 }));
             break;
@@ -92,9 +93,18 @@ const handleBodyClick = (event) => {
     }
 };
 
-function addAdress(id) {
-    console.log(id);
-    console.log(data.value);
+function addAdress(id, adress) {
+    data.value.forEach((element) => {
+        console.log(element)
+        addWorkerAdress(
+            id,
+            adress,
+            element.summ,
+            element.avans,
+            element.comment,
+            element.date,
+        );
+    });
 }
 
 defineExpose({ addAdress });
@@ -122,9 +132,9 @@ function updateData(trIndex, indexItem, value) {
             else if (indexItem === 2) data.value[trIndex].comment = value;
             break;
         case 'deleteWorkerAdress': // Новый modalType
-            if (indexItem === 0) data.value[trIndex].name = value;
-            else if (indexItem === 1) data.value[trIndex].value1 = value;
-            else if (indexItem === 2) data.value[trIndex].value2 = value;
+            if (indexItem === 0) data.value[trIndex].summ = value;
+            else if (indexItem === 1) data.value[trIndex].avans = value;
+            else if (indexItem === 2) data.value[trIndex].date = value;
             else if (indexItem === 3) data.value[trIndex].comment = value;
             break;
     }
@@ -144,7 +154,7 @@ function chooseValue(trIndex, indexItem) {
                 return [val.name, val.summ, val.comment][indexItem] || '';
             case 'deleteWorkerAdress':
                 return (
-                    [val.name, val.value1, val.value2, val.comment][
+                    [val.summ, val.avans, val.date, val.comment][
                         indexItem
                     ] || ''
                 );
