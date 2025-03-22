@@ -8,7 +8,7 @@ import WorkerTable from '@/Components/tables/workerTable.vue';
 const props = defineProps({
     data: Object,
 });
-
+console.log(props.data)
 const toggleModal = ref(false);
 </script>
 
@@ -37,6 +37,6 @@ const toggleModal = ref(false);
                 ></IconButton>
             </div>
         </div>
-        <WorkerTable></WorkerTable>
+        <WorkerTable :adressData="data.adressData" :avansData="data.avansData"></WorkerTable>
     </div>
 </template>

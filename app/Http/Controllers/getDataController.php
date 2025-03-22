@@ -18,13 +18,17 @@ class getDataController extends Controller
 
     public function getAllWorkerData()
     {
-       $result=DB::table('worker')->get();
-       foreach ($result as $value) {
-        $value->adressData=DB::table('workerAdress')->where('workerId','=',$value->id)->get();
-        foreach ($value->adressData as $avance) {
-            $value->avansData=DB::table('avances')->where('workerAdressId','=',$avance->id)->get();
-        };
-       }
+        $result = DB::table('worker')->get();
+        foreach ($result as $value) {
+            $value->adressData = DB::table('workerAdress')->where('workerId', '=', $value->id)->get();
+            foreach ($value->adressData as $avance) {
+                $value->avansData = DB::table('avances')
+                    ->join('workerAdress', 'avances.workerAdressId', '=', 'workerAdress.id')
+                    ->where('avances.workerAdressId', '=', $avance->id)
+                    ->get(['avances.*', 'workerAdress.fullPrice']);
+
+            };
+        }
         return response()->json($result);
     }
 

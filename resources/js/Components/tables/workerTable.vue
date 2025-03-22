@@ -4,12 +4,12 @@ import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 import addWorkerAdress from '../jsFunctions/setters/addWorkerAdress';
 
 const props = defineProps({
-    data: Array,
+    adressData: Object,
+    avansData: Object,
 });
 
 const selectedRow = ref(undefined);
 const selectedRowIndex = ref(undefined);
-
 const target = ref(null);
 
 let headItems = [
@@ -25,7 +25,6 @@ let placeholders = ['Сумма', 'Сумма', 'дд.мм.гггг', 'Комм�
 
 const handleBodyClick = (event) => {
     if (!target.value?.contains(event.target)) {
-        readonlyFlag.value = undefined;
         selectedRow.value = undefined;
         selectedRowIndex.value = undefined;
     }
@@ -60,8 +59,8 @@ function updateData(trIndex, indexItem, value) {
 }
 
 function chooseValue(trIndex, indexItem) {
-    if (data.value?.[trIndex]) {
-        const val = data.value[trIndex];
+    if (props.avansData?.[trIndex]) {
+        const val = props.avansData[trIndex];
 
         return [val.summ, val.avans, val.date, val.comment][indexItem] || '';
     }
@@ -103,7 +102,7 @@ onUnmounted(() => {
             </thead>
             <tbody ref="target" @click.stop>
                 <tr
-                    v-for="(count, trIndex) in props.rowCounter"
+                    v-for="(count, trIndex) in props.avansData"
                     :id="headItems[0] + String(count)"
                     @click="selectedRow = count"
                     :class="[
@@ -146,7 +145,7 @@ onUnmounted(() => {
                     </td>
                     <td class="px-4">
                         <EditDeleteComponent
-                            :id-to-delete="data?.[trIndex]?.id || 0"
+                            :id-to-delete="adressData?.[trIndex]?.id || 0"
                             :modalType="props.modalType"
                         />
                     </td>
