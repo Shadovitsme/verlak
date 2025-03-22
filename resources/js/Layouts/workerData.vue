@@ -1,13 +1,23 @@
 <script setup>
 import TextHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import IconButton from '@/Components/iconButton.vue';
+import OpenModal from '@/Components/openModal.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     data: Object,
 });
+
+const toggleModal = ref(false);
 </script>
 
 <template>
+    <OpenModal
+        :toggle-modal="toggleModal"
+        @close="toggleModal = !toggleModal"
+        :id-to-delete="data.id"
+        modal-type="deleteWorker"
+    ></OpenModal>
     <div class="mx-32 mt-20 w-[1348px] pt-12">
         <div class="flex w-full justify-between">
             <TextHeadWithAddButton
@@ -20,6 +30,7 @@ const props = defineProps({
                     icon="./assets/icons/system/edit.svg"
                 ></IconButton>
                 <IconButton
+                    @click="toggleModal = !toggleModal"
                     color="gray"
                     icon="./assets/icons/system/delete.svg"
                 ></IconButton>
