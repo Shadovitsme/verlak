@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
+import DropdownInputButton from '@/Components/dropdowns/dropdownInputButton.vue';
 import PagePlace from '@/Components/pagePlace.vue';
 </script>
 
 <template>
-    <PagePlace pageName="Учёт договоров">
-        <CustomUniversalTable
-            :head-items="[
-                'Номер договора',
-                'Дата',
-                'Город',
-                'Организация',
-                'Менеджер',
-                'Статус',
-            ]"
-        ></CustomUniversalTable>
+    <PagePlace pageName="Исполнители">
+        <DropdownInputButton
+            :static-width="false"
+            label-text="Город"
+            placeholder="Выберите город"
+            check-type="radio"
+            :label-text-arr="['Астрахань', 'Москва', 'Санкт-Петербург']"
+        ></DropdownInputButton>
     </PagePlace>
 </template>

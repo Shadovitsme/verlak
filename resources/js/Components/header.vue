@@ -56,7 +56,7 @@ let lastPart = locationParts[locationParts.length - 1];
                     <JustButton
                         :selected="lastPart == 'executors'"
                         color="noColor"
-                        >Исполнители</JustButton
+                        >Выплаты</JustButton
                     >
                 </a>
             </div>

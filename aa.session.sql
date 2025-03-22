@@ -7,9 +7,10 @@
 -- DROP TABLE EED;
 -- DROP TABLE adressPhotoUserFolders;
 -- DROP TABLE adressPhoto;
--- DROP TABLE worker;
--- DROP TABLE avances;
-DROP TABLE buildingMaterials;
+DROP TABLE worker;
+DROP TABLE avances;
+DROP TABLE workerAdress;
+-- DROP TABLE buildingMaterials;
 -- DROP TABLE elevator;
 -- DROP TABLE montazh;
 -- CREATE TABLE contract (
@@ -80,30 +81,35 @@ DROP TABLE buildingMaterials;
 --     fatherId integer,
 --     foreign key (fatherId) references adressPhotoUserFolders (id) on Delete cascade
 -- );
--- CREATE TABLE worker (
+CREATE TABLE worker (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    name varchar(100),
+    town varchar(100)
+);
+CREATE TABLE avances (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    workerAdressId integer,
+    value decimal,
+    date varchar(100),
+    comment varchar(100),
+    foreign key (workerAdressId) references workerAdress (id) on Delete cascade
+);
+CREATE TABLE workerAdress (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    workerId integer,
+    name varchar(100),
+    fullPrice decimal,
+    comment varchar(100),
+    foreign key (workerId) references worker (id) on Delete cascade
+);
+-- CREATE TABLE buildingMaterials (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     adressId integer,
 --     name varchar(100),
---     phone varchar(100),
---     fullPrice decimal,
+--     summ varchar(100),
 --     comment varchar(100),
 --     foreign key (adressId) references adressData (id) on Delete cascade
 -- );
--- CREATE TABLE avances (
---     workerId integer,
---     value decimal,
---     date varchar(50),
---     comment varchar(100),
---     foreign key (workerId) references worker (id) on Delete cascade
--- );
-CREATE TABLE buildingMaterials (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    adressId integer,
-    name varchar(100),
-    summ varchar(100),
-    comment varchar(100),
-    foreign key (adressId) references adressData (id) on Delete cascade
-);
 -- CREATE TABLE elevator (
 --     adressId integer,
 --     name varchar(100),
