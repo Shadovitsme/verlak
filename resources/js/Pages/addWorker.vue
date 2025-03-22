@@ -6,9 +6,11 @@ import JustButton from '../Components/justButton.vue';
 import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import { ref } from 'vue';
+import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
 
 let rowCounter = ref([]);
 let adressCounter = ref(0);
+let testRef = ref(null);
 
 const town = ref('');
 const FIO = ref('');
@@ -19,9 +21,12 @@ function addAdress() {
     rowCounter.value.push(1);
     adressItem.value.push('');
 }
-
+// let dbAdressColumnNames = ['name', 'fullPrice', 'comment'];
 function saveData() {
-    console.log(adressItem.value);
+    addUpdateWorker(FIO.value, town.value);
+    for (let i = 0; i < adressCounter.value; i++) {
+        console.log(testRef.value[i].hi());
+    }
 }
 </script>
 
@@ -99,6 +104,9 @@ function saveData() {
                         "
                     ></customInput>
                     <EmptyTable
+                        modal-type="deleteWorkerAdress"
+                        ref="testRef"
+                        :id="'table' + i"
                         :scroll-table="false"
                         :row-counter="rowCounter[i - 1]"
                         :headItems="[

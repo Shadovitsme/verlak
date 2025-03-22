@@ -227,4 +227,21 @@ class setDataController extends Controller
                 break;
         }
     }
+
+    public function addUpdateWorker(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        var_dump($data);
+        $id = $data['id'];
+        $name = $data['name'];
+        $town = $data['town'];
+        $workerId = '';
+        $query = DB::table('worker');
+        if ($id) {
+            $query->where('id', '=', $id)->update(['name' => $name, 'town' => $town]);
+        } else {
+            $workerId = $query->insertGetId(['name' => $name, 'town' => $town]);
+        };
+        return $workerId;
+    }
 }

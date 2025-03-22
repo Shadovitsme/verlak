@@ -1,6 +1,6 @@
 <script setup>
 import EditDeleteComponent from '../editDeleteComponent.vue';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 import { watch } from 'vue';
 import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
 import getExecData from '../jsFunctions/getters/getExecData';
@@ -76,6 +76,12 @@ const handleBodyClick = (event) => {
         selectedRowIndex.value = undefined;
     }
 };
+
+function hi() {
+    return('hi')
+}
+
+defineExpose({ hi });
 
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);

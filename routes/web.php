@@ -97,6 +97,8 @@ Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);
 Route::post('/addElevator', [setDataController::class, 'addElevator']);
+Route::post('/addWorker', [setDataController::class, 'addUpdateWorker']);
+
 
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
 Route::post('/delete-file', [FileUploadController::class, 'delete']);
