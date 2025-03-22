@@ -22,7 +22,7 @@ function checked(id) {
 </script>
 
 <template>
-    <div class="z-10 h-10 w-full">
+    <div class="z-10 h-10" :class="props.staticWidth ? 'w-[364px]' : 'w-full'">
         <div class="" :class="props.staticWidth ? 'w-[364px]' : 'w-full'">
             <p class="mb-1.5 text-sm text-gray-900">{{ props.labelText }}</p>
             <button
@@ -37,6 +37,7 @@ function checked(id) {
         <div
             v-if="showDrop"
             class="z-10 mt-1.5 h-fit max-h-40 w-full space-y-3 overflow-y-auto overflow-x-visible rounded-lg bg-white p-4 shadow-sm"
+            :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
         >
             <div :key="text" v-for="text in props.labelTextArr">
                 <input

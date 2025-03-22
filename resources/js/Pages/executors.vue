@@ -6,7 +6,7 @@ import PagePlace from '@/Components/pagePlace.vue';
 <template>
     <PagePlace pageName="Исполнители">
         <DropdownInputButton
-            :static-width="false"
+            :static-width="true"
             label-text="Город"
             placeholder="Выберите город"
             check-type="radio"
