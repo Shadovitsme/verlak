@@ -12,20 +12,23 @@ const props = defineProps({
     rowCounter: Number,
     allChangable: Boolean,
     addData: { type: Object, default: () => ({}) },
-    modalType: { type: String, default: () => '' },
-    scrollTable: { type: Boolean, default: () => true },
+    modalType: { type: String, default: '' },
+    scrollTable: { type: Boolean, default: true },
 });
-let data = ref();
+
+// Реактивные данные таблицы
+const data = ref([]);
+
+// Загрузка данных или инициализация для нового modalType
 async function fetchData() {
     let result;
-    console.log(props.modalType);
     switch (props.modalType) {
         case 'deleteContactListItem':
             result = await getExecData(
                 '/getContactPersonData',
                 props.addData.groupId,
             );
-            data.value = result;
+            data.value = result || [];
             break;
         case 'deleteMontazh':
             result = await getExecData(
@@ -34,7 +37,7 @@ async function fetchData() {
                 'adressId',
                 'montazh',
             );
-            data.value = result;
+            data.value = result || [];
             break;
         case 'deleteMaterial':
             result = await getExecData(
@@ -43,9 +46,20 @@ async function fetchData() {
                 'adressId',
                 'buildingMaterials',
             );
-            data.value = result;
+            data.value = result || [];
+            break;
+        case 'deleteWorkerAdress': // Новый modalType без БД
+            data.value = Array(props.rowCounter)
+                .fill()
+                .map(() => ({
+                    name: '',
+                    value1: '',
+                    value2: '',
+                    comment: '', // Пример структуры, настройте под свои нужды
+                }));
             break;
         default:
+            data.value = [];
             break;
     }
 }
@@ -64,134 +78,135 @@ const columnWidths = [
     'w-24',
 ];
 
-let readonlyFlag = ref('');
-let selectedRow = ref(undefined);
-let selectedRowIndex = ref();
+const readonlyFlag = ref('');
+const selectedRow = ref(undefined);
+const selectedRowIndex = ref(undefined);
 
 const target = ref(null);
+
 const handleBodyClick = (event) => {
-    if (target.value || !target.value.contains(event.target)) {
+    if (!target.value?.contains(event.target)) {
         readonlyFlag.value = undefined;
         selectedRow.value = undefined;
         selectedRowIndex.value = undefined;
     }
 };
 
-function hi() {
-    return('hi')
+function addAdress(id) {
+    console.log(id);
+    console.log(data.value);
 }
 
-defineExpose({ hi });
+defineExpose({ addAdress });
+
+// Обновление данных при вводе
+function updateData(trIndex, indexItem, value) {
+    if (!data.value[trIndex]) {
+        data.value[trIndex] = {};
+    }
+    switch (props.modalType) {
+        case 'deleteContactListItem':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].work = value;
+            else if (indexItem === 2) data.value[trIndex].phone = value;
+            else if (indexItem === 3) data.value[trIndex].adress = value;
+            break;
+        case 'deleteMontazh':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].phone = value;
+            else if (indexItem === 2) data.value[trIndex].comment = value;
+            break;
+        case 'deleteMaterial':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].summ = value;
+            else if (indexItem === 2) data.value[trIndex].comment = value;
+            break;
+        case 'deleteWorkerAdress': // Новый modalType
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].value1 = value;
+            else if (indexItem === 2) data.value[trIndex].value2 = value;
+            else if (indexItem === 3) data.value[trIndex].comment = value;
+            break;
+    }
+}
+
+function chooseValue(trIndex, indexItem) {
+    if (data.value?.[trIndex]) {
+        const val = data.value[trIndex];
+        switch (props.modalType) {
+            case 'deleteContactListItem':
+                return (
+                    [val.name, val.work, val.phone, val.adress][indexItem] || ''
+                );
+            case 'deleteMontazh':
+                return [val.name, val.phone, val.comment][indexItem] || '';
+            case 'deleteMaterial':
+                return [val.name, val.summ, val.comment][indexItem] || '';
+            case 'deleteWorkerAdress':
+                return (
+                    [val.name, val.value1, val.value2, val.comment][
+                        indexItem
+                    ] || ''
+                );
+        }
+    }
+    return '';
+}
+
+// Сохранение данных на сервер при смене строки (только для modalType с БД)
+watch(selectedRow, async (newValue, oldValue) => {
+    if (
+        oldValue !== undefined &&
+        data.value[oldValue - 1] &&
+        props.modalType !== 'deleteWorkerAdress'
+    ) {
+        const val = data.value[oldValue - 1];
+        switch (props.modalType) {
+            case 'deleteContactListItem':
+                await addUpdateContactPerson(
+                    val.name || '',
+                    val.work || '',
+                    val.phone || '',
+                    val.adress || '',
+                    props.addData.groupId,
+                    val.id || '',
+                );
+                break;
+            case 'deleteMontazh':
+                await universalUpdate(
+                    props.addData.adressId,
+                    val.name || '',
+                    val.phone || '',
+                    val.comment || '',
+                    '/universalUpdate',
+                    val.id || '',
+                    'montazh',
+                );
+                break;
+            case 'deleteMaterial':
+                await universalUpdate(
+                    props.addData.adressId,
+                    val.name || '',
+                    val.summ || '',
+                    val.comment || '',
+                    '/universalUpdate',
+                    val.id || '',
+                    'buildingMaterials',
+                );
+                break;
+        }
+        await fetchData(); // Обновляем данные после сохранения
+    }
+});
 
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
     fetchData();
 });
+
 onUnmounted(() => {
     document.removeEventListener('click', handleBodyClick);
 });
-
-// Модифицированный watcher
-watch(selectedRow, (newValue, oldValue) => {
-    console.log(oldValue);
-    // Находим все инпуты в выбранной строке
-    const selectedRowElement = document.getElementById(
-        props.headItems[0] + oldValue,
-    );
-    const inputs = selectedRowElement?.querySelectorAll('input');
-
-    if (inputs) {
-        let dataInputArr = [];
-        let val = data.value ? data.value[oldValue - 1] : ''; // Adjust if data.value is 0-based
-        console.log(val);
-        inputs.forEach((input) => {
-            dataInputArr.push(input.value);
-        });
-        if (props.modalType == 'deleteContactListItem') {
-            addUpdateContactPerson(
-                dataInputArr[0],
-                dataInputArr[1],
-                dataInputArr[2],
-                dataInputArr[3],
-                props.addData.groupId,
-                val?.id || '',
-            );
-        } else if (props.modalType == 'deleteMontazh') {
-            universalUpdate(
-                props.addData.adressId,
-                dataInputArr[0],
-                dataInputArr[1],
-                dataInputArr[2],
-                '/universalUpdate',
-                val?.id || '',
-                'montazh',
-            );
-        } else {
-            universalUpdate(
-                props.addData.adressId,
-                dataInputArr[0],
-                dataInputArr[1],
-                dataInputArr[2],
-                '/universalUpdate',
-                val?.id || '',
-                'buildingMaterials',
-            );
-        }
-    }
-});
-
-// TODO узнать как добавить функцию внутрь объекта
-
-function chooseValue(indexRow, indexItem) {
-    if (data.value != undefined && data.value[indexRow] != undefined) {
-        let val = data.value[indexRow];
-        switch (props.modalType) {
-            case 'deleteContactListItem':
-                switch (indexItem) {
-                    case 0:
-                        return val.name;
-                    case 1:
-                        return val.work;
-                    case 2:
-                        return val.phone;
-                    case 3:
-                        return val.adress;
-                    default:
-                        break;
-                }
-                break;
-            case 'deleteMontazh':
-                switch (indexItem) {
-                    case 0:
-                        return val.name;
-                    case 1:
-                        return val.phone;
-                    case 2:
-                        return val.comment;
-
-                    default:
-                        break;
-                }
-                break;
-            case 'deleteMaterial':
-                switch (indexItem) {
-                    case 0:
-                        return val.name;
-                    case 1:
-                        return val.summ;
-                    case 2:
-                        return val.comment;
-
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    return '';
-}
 </script>
 
 <template>
@@ -240,29 +255,30 @@ function chooseValue(indexRow, indexItem) {
                     >
                         <input
                             :value="chooseValue(trIndex, index)"
+                            @input="
+                                updateData(trIndex, index, $event.target.value)
+                            "
                             :readonly="
                                 props.allChangable
-                                    ? false
+                                    ? props.modalType == 'deleteWorkerAdress'
+                                        ? index == 4 || index == 5
+                                        : false
                                     : index == 3 || index == 4
                             "
-                            :class="
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
-                                (selectedRow === count
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === count
                                     ? 'bg-indigo-100'
                                     : count % 2 !== 0
                                       ? 'bg-gray-50'
-                                      : 'bg-white') +
-                                ' '
-                            "
+                                      : 'bg-white',
+                            ]"
                             :placeholder="props.placeholders[index]"
                         />
                     </td>
                     <td class="px-4">
                         <EditDeleteComponent
-                            :id-to-delete="
-                                data != undefined ? data[trIndex].id : 0
-                            "
-                            :key="index"
+                            :id-to-delete="data?.[trIndex]?.id || 0"
                             :modalType="props.modalType"
                         />
                     </td>

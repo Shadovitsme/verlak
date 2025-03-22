@@ -231,7 +231,6 @@ class setDataController extends Controller
     public function addUpdateWorker(Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        var_dump($data);
         $id = $data['id'];
         $name = $data['name'];
         $town = $data['town'];

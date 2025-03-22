@@ -22,10 +22,10 @@ function addAdress() {
     adressItem.value.push('');
 }
 // let dbAdressColumnNames = ['name', 'fullPrice', 'comment'];
-function saveData() {
-    addUpdateWorker(FIO.value, town.value);
+async function saveData() {
+    let workerId = await addUpdateWorker(FIO.value, town.value);
     for (let i = 0; i < adressCounter.value; i++) {
-        console.log(testRef.value[i].hi());
+        testRef.value[i].addAdress(workerId);
     }
 }
 </script>
@@ -105,6 +105,7 @@ function saveData() {
                     ></customInput>
                     <EmptyTable
                         modal-type="deleteWorkerAdress"
+                        :all-changable="true"
                         ref="testRef"
                         :id="'table' + i"
                         :scroll-table="false"
