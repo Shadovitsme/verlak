@@ -7,12 +7,15 @@
 -- DROP TABLE EED;
 -- DROP TABLE adressPhotoUserFolders;
 -- DROP TABLE adressPhoto;
-DROP TABLE worker;
-DROP TABLE avances;
-DROP TABLE workerAdress;
+-- DROP TABLE worker;
+-- DROP TABLE avances;
+-- DROP TABLE workerAdress;
 -- DROP TABLE buildingMaterials;
 -- DROP TABLE elevator;
 -- DROP TABLE montazh;
+-- DROP TABLE accountancy;
+-- DROP TABLE acceptTable;
+-- DROP TABLE disgardTable;
 -- CREATE TABLE contract (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     contractNumber integer unique,
@@ -81,26 +84,26 @@ DROP TABLE workerAdress;
 --     fatherId integer,
 --     foreign key (fatherId) references adressPhotoUserFolders (id) on Delete cascade
 -- );
-CREATE TABLE worker (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    name varchar(100),
-    town varchar(100)
-);
-CREATE TABLE avances (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    workerAdressId integer,
-    value decimal,
-    date varchar(100),
-    comment varchar(100),
-    foreign key (workerAdressId) references workerAdress (id) on Delete cascade
-);
-CREATE TABLE workerAdress (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    workerId integer,
-    name varchar(100),
-fullPrice decimal,
-    foreign key (workerId) references worker (id) on Delete cascade
-);
+-- CREATE TABLE worker (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     name varchar(100),
+--     town varchar(100)
+-- );
+-- CREATE TABLE avances (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     workerAdressId integer,
+--     value decimal,
+--     date varchar(100),
+--     comment varchar(100),
+--     foreign key (workerAdressId) references workerAdress (id) on Delete cascade
+-- );
+-- CREATE TABLE workerAdress (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     workerId integer,
+--     name varchar(100),
+-- fullPrice decimal,
+--     foreign key (workerId) references worker (id) on Delete cascade
+-- );
 -- CREATE TABLE buildingMaterials (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     adressId integer,
@@ -126,3 +129,22 @@ fullPrice decimal,
 -- phone varchar(100),
 -- foreign key (adressId) references adressData (id) on Delete cascade
 -- )
+CREATE TABLE accountancy (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    pathToDirectory text
+);
+CREATE TABLE acceptTable (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    userId integer,
+    accountancyId integer,
+    foreign key (userId) references users (id) on Delete cascade,
+    foreign key (accountancyId) references accountancy (id) on Delete cascade
+);
+CREATE TABLE disgardTable (
+    id integer PRIMARY KEY AUTOINCREMENT,
+    userId integer,
+    accountancyId integer,
+    comment varchar(100),
+    foreign key (userId) references users (id) on Delete cascade,
+    foreign key (accountancyId) references accountancy (id) on Delete cascade
+)

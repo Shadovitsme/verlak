@@ -339,15 +339,15 @@ onUnmounted(() => {
                         </td>
                         <td class="px-4" @click="selectedRow = trIndex">
                             <EditDeleteComponent
-                                :id-to-delete="row.id"
-                                :modalType="props.modalType"
+                                modal-type="deleteAvans"
+                                :id-to-delete="row.avanceId"
                             />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-end mt-4 w-full">
+        <div class="mt-4 flex w-full justify-end">
             <JustButton @click="addNewAvance" color="blue">
                 Добавить выплату
             </JustButton>

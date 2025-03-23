@@ -6,6 +6,7 @@ import OpenModal from './openModal.vue';
 const props = defineProps({
     pageName: String,
     addModalType: String,
+    speciallAddData: Object,
 });
 let toggleModal = ref(false);
 </script>
@@ -15,6 +16,11 @@ let toggleModal = ref(false);
         :toggle-modal="toggleModal"
         @close="toggleModal = !toggleModal"
         :modal-type="props.addModalType"
+        :speciall-add-data="{
+            folder: '/accountancy',
+            fatherId: false,
+            tableName: 'accountancy',
+        }"
     ></OpenModal>
     <Header></Header>
     <div class="mx-32 mt-20 w-full max-w-[1600px] pt-12">

@@ -11,7 +11,7 @@ class FileUploadController extends Controller
     {
         try {
             $request->validate([
-                'file' => 'required|file|max:10240',  // Максимум 10 МБ
+                'file' => 'required|file|max:30720',  // Максимум 30 МБ
                 'folder' => 'nullable|string|regex:/^[a-zA-Z0-9_\/-]*$/',  // Разрешаем пустую строку
             ]);
 
@@ -33,8 +33,11 @@ class FileUploadController extends Controller
 
             // Формируем относительный путь для ответа
             $path = "uploads/{$folder}/{$fileName}";
-
-            DB::table($tableName)->insert(['pathToDirectory' => $path, 'fatherId' => $fatherId]);
+            if ($fatherId != 'false') {
+                DB::table($tableName)->insert(['pathToDirectory' => $path, 'fatherId' => $fatherId]);
+            } else {
+                DB::table($tableName)->insert(['pathToDirectory' => $path]);
+            }
 
             return response()->json([
                 'success' => true,

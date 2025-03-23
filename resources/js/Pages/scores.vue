@@ -2,4 +2,6 @@
 import PagePlace from '@/Components/pagePlace.vue';
 </script>
 
-<template><PagePlace></PagePlace></template>
+<template>
+    <PagePlace add-modal-type="addFile" pageName="Счета"> </PagePlace>
+</template>
