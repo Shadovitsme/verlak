@@ -4,13 +4,13 @@ const props = defineProps({
     placeholder: String,
     staticWidth: Boolean,
     value: String, // Проп для v-model
-})
+});
 
-const emit = defineEmits(['update:value']) // Объявляем событие для v-model
+const emit = defineEmits(['update:value']); // Объявляем событие для v-model
 
 const handleInput = (event) => {
     emit('update:value', event.target.value);
-}
+};
 </script>
 
 <template>

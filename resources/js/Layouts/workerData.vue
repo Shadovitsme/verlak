@@ -3,13 +3,42 @@ import TextHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import IconButton from '@/Components/iconButton.vue';
 import OpenModal from '@/Components/openModal.vue';
 import { ref } from 'vue';
+import EmptyTable from '@/Components/tables/emptyTable.vue';
 import WorkerTable from '@/Components/tables/workerTable.vue';
+import JustButton from '@/Components/justButton.vue';
 
 const props = defineProps({
     data: Object,
 });
-console.log(props.data);
 const toggleModal = ref(false);
+const customAdresses = ref([]);
+const customAvance = ref([]);
+const customIdCounter = ref(0);
+
+function addAvance(id) {
+    customAvance.value.push({
+        comment: '',
+        date: '',
+        value: 0,
+        workerAdressId: id,
+    });
+}
+
+function addAdress() {
+    customAdresses.value.push({
+        id: customIdCounter.value,
+        fullPrice: 0,
+        name: '',
+        workerId: props.data.workerId,
+    });
+    console.log(customAdresses.value);
+    addAvance(customIdCounter.value);
+    customIdCounter.value++;
+}
+
+function getAvanceByWorkerAdressId(id) {
+    return customAvance.value.filter((avance) => avance.workerAdressId === id);
+}
 </script>
 
 <template>
@@ -22,6 +51,7 @@ const toggleModal = ref(false);
     <div class="mx-32 mt-20 w-[1348px] pt-12">
         <div class="mb-6 flex w-full justify-between">
             <TextHeadWithAddButton
+                @add-item="addAdress"
                 :shown="true"
                 :text="props.data.name"
             ></TextHeadWithAddButton>
@@ -47,5 +77,44 @@ const toggleModal = ref(false);
             "
             :adress-data="item"
         ></WorkerTable>
+        <div v-for="item in customIdCounter" :key="item">
+            <EmptyTable
+                modal-type="deleteWorkerAdress"
+                :all-changable="true"
+                ref="testRef"
+                :id="'table' + i"
+                :scroll-table="false"
+                :row-counter="
+                    getAvanceByWorkerAdressId(customAdresses[item - 1].id)
+                        .length
+                "
+                :headItems="[
+                    'Общая стоимость, ₽ ',
+                    'Авансы, ₽ ',
+                    'Дата',
+                    'Примечание',
+                    'Остаток, %',
+                    'Остаток, ₽',
+                    'Действия',
+                ]"
+                :placeholders="[
+                    'Сумма',
+                    'Сумма',
+                    'дд.мм.гггг',
+                    'Комментарий',
+                    '-',
+                    '-',
+                ]"
+            ></EmptyTable>
+            <div class="mt-3 flex w-full justify-end">
+                <JustButton
+                    class="w-fit"
+                    @click="addAvance(customAdresses[item - 1].id)"
+                    type="button"
+                    color="blue"
+                    >Добавить вылату</JustButton
+                >
+            </div>
+        </div>
     </div>
 </template>

@@ -1,218 +1,217 @@
 <script setup>
 import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
+import { watch } from 'vue';
+import addUpdateContactPerson from '../jsFunctions/setters/addUpdateContactPerson';
+import getExecData from '../jsFunctions/getters/getExecData';
+import universalUpdate from '../jsFunctions/setters/universalUpdate';
 import addWorkerAdress from '../jsFunctions/setters/addWorkerAdress';
-import addAvanceForAdress from '../jsFunctions/setters/addAvanceForAdress';
 
 const props = defineProps({
-    avansData: Object,
-    adressData: Object,
+    headItems: Array,
+    placeholders: { type: Array, default: () => [] },
+    rowCounter: Number,
+    allChangable: Boolean,
+    addData: { type: Object, default: () => ({}) },
+    modalType: { type: String, default: '' },
+    scrollTable: { type: Boolean, default: true },
 });
 
+// Реактивные данные таблицы
+const data = ref([]);
+
+// Загрузка данных или инициализация для нового modalType
+async function fetchData() {
+    let result;
+    switch (props.modalType) {
+        case 'deleteContactListItem':
+            result = await getExecData(
+                '/getContactPersonData',
+                props.addData.groupId,
+            );
+            data.value = result || [];
+            break;
+        case 'deleteMontazh':
+            result = await getExecData(
+                '/universalGetter',
+                props.addData.adressId,
+                'adressId',
+                'montazh',
+            );
+            data.value = result || [];
+            break;
+        case 'deleteMaterial':
+            result = await getExecData(
+                '/universalGetter',
+                props.addData.adressId,
+                'adressId',
+                'buildingMaterials',
+            );
+            data.value = result || [];
+            break;
+        case 'deleteWorkerAdress': // Новый modalType без БД
+            data.value = Array(props.rowCounter)
+                .fill()
+                .map(() => ({
+                    summ: '',
+                    avans: '',
+                    date: '',
+                    comment: '', // Пример структуры, настройте под свои нужды
+                }));
+            break;
+        default:
+            data.value = [];
+            break;
+    }
+}
+
+const columnWidths = [
+    'w-72',
+    'w-60',
+    'w-80',
+    'w-32',
+    'w-24',
+    'w-32',
+    'w-60',
+    'w-36',
+    'w-36',
+    'w-44',
+    'w-24',
+];
+
+const readonlyFlag = ref('');
 const selectedRow = ref(undefined);
 const selectedRowIndex = ref(undefined);
+
 const target = ref(null);
 
-let headItems = [
-    'Адрес',
-    'Общая стоимость, ₽ ',
-    'Авансы, ₽ ',
-    'Дата',
-    'Примечание',
-    'Остаток, %',
-    'Остаток, ₽',
-    'Действия',
-];
-let placeholders = ['Сумма', 'Сумма', 'дд.мм.гггг', 'Комментарий', '-', '-'];
-
-const tableData = ref([]);
-const computeTableData = () => {
-    tableData.value = [];
-    let avansIndex = 0;
-
-    props.adressData?.forEach((address, addressIndex) => {
-        let remainingAmount = address.fullPrice || 0;
-        let avansPerAddress = props.avansData
-            ? Math.ceil(props.avansData.length / props.adressData.length)
-            : 0;
-
-        // Добавляем первую строку адреса
-        if (props.avansData?.[avansIndex]) {
-            remainingAmount -= props.avansData[avansIndex].value || 0;
-            tableData.value.push({
-                address: address.name,
-                fullPrice: address.fullPrice,
-                avans: props.avansData[avansIndex].value || 0,
-                date: props.avansData[avansIndex].date || '',
-                comment: props.avansData[avansIndex].comment || '',
-                remainingPercent: address.fullPrice
-                    ? ((remainingAmount / address.fullPrice) * 100).toFixed(1)
-                    : '0.0',
-                remainingAmount: remainingAmount,
-                isFirstRow: true,
-                id: address.id,
-                avanceId: props.avansData[avansIndex].id || null, // Предполагаю, что у avansData есть id
-            });
-            avansIndex++;
-
-            // Добавляем остальные авансы для этого адреса
-            while (
-                avansIndex < props.avansData?.length &&
-                avansIndex < (addressIndex + 1) * avansPerAddress
-            ) {
-                remainingAmount -= props.avansData[avansIndex].value || 0;
-                tableData.value.push({
-                    address: '',
-                    fullPrice: '',
-                    avans: props.avansData[avansIndex].value || 0,
-                    date: props.avansData[avansIndex].date || '',
-                    comment: props.avansData[avansIndex].comment || '',
-                    remainingPercent: address.fullPrice
-                        ? ((remainingAmount / address.fullPrice) * 100).toFixed(
-                              1,
-                          )
-                        : '0.0',
-                    remainingAmount: remainingAmount,
-                    isFirstRow: false,
-                    id: address.id,
-                    avanceId: props.avansData[avansIndex].id || null,
-                });
-                avansIndex++;
-            }
-        } else {
-            // Если авансов нет, добавляем только адрес
-            tableData.value.push({
-                address: address.name,
-                fullPrice: address.fullPrice,
-                avans: 0,
-                date: '',
-                comment: '',
-                remainingPercent: '100.0',
-                remainingAmount: address.fullPrice,
-                isFirstRow: true,
-                id: address.id,
-                avanceId: null,
-            });
-        }
-
-        // Всегда добавляем строку с кнопкой после последнего аванса или адреса
-        tableData.value.push({
-            isAddButton: true,
-            id: address.id,
-            address: '',
-            fullPrice: '',
-            avans: 0,
-            date: '',
-            comment: '',
-            remainingPercent: '',
-            remainingAmount: '',
-        });
-    });
-};
-
-const handleBodyClick = async (event) => {
-    if (
-        !target.value?.contains(event.target) &&
-        selectedRow.value !== undefined
-    ) {
-        const row = tableData.value[selectedRow.value];
-        if (row && !row.isAddButton) {
-            const response = await addAvanceForAdress(
-                row.avanceId || false,
-                row.id,
-                row.comment,
-                row.avans,
-                row.date,
-            );
-            if (!row.avanceId && response?.id) {
-                row.avanceId = response.id;
-            }
-            computeTableData(); // Пересчитываем остатки
-        }
+const handleBodyClick = (event) => {
+    if (!target.value?.contains(event.target)) {
+        readonlyFlag.value = undefined;
         selectedRow.value = undefined;
         selectedRowIndex.value = undefined;
     }
 };
 
 function addAdress(id, adress) {
-    tableData.value.forEach((element) => {
-        if (element.isFirstRow) {
-            addWorkerAdress(
-                id,
-                adress,
-                element.fullPrice,
-                element.avans,
-                element.comment,
-                element.date,
-            );
-        }
+    data.value.forEach((element) => {
+        console.log(element)
+        addWorkerAdress(
+            id,
+            adress,
+            element.summ,
+            element.avans,
+            element.comment,
+            element.date,
+        );
     });
-}
-
-const addNewAvance = (addressId) => {
-    const insertIndex = tableData.value.findIndex(
-        (row) => row.isAddButton && row.id === addressId,
-    );
-
-    tableData.value.splice(insertIndex, 0, {
-        address: '',
-        fullPrice: '',
-        avans: 0,
-        date: '',
-        comment: '',
-        remainingPercent: '',
-        remainingAmount: '',
-        isFirstRow: false,
-        id: addressId,
-        avanceId: null,
-    });
-    computeTableData(); // Пересчитываем остатки
-};
-
-function updateData(trIndex, indexItem, value) {
-    let row = tableData.value[trIndex];
-    if (row.isAddButton) return;
-
-    if (indexItem === 0 && row.isFirstRow) {
-        row.address = value;
-    } else if (indexItem === 1 && row.isFirstRow) {
-        row.fullPrice = parseFloat(value) || 0;
-    } else if (indexItem === 2) {
-        row.avans = parseFloat(value) || 0;
-    } else if (indexItem === 3) row.date = value;
-    else if (indexItem === 4) row.comment = value;
-
-    if (indexItem === 1 || indexItem === 2) {
-        let currentAddressId = row.id;
-        let remainingAmount =
-            tableData.value.find(
-                (r) => r.id === currentAddressId && r.isFirstRow,
-            ).fullPrice || 0;
-
-        tableData.value.forEach((r) => {
-            if (r.id === currentAddressId && !r.isAddButton) {
-                if (r.avans) remainingAmount -= r.avans;
-                r.remainingAmount = remainingAmount;
-                r.remainingPercent = r.fullPrice
-                    ? ((remainingAmount / r.fullPrice) * 100).toFixed(1)
-                    : (
-                          (remainingAmount /
-                              tableData.value.find(
-                                  (r) =>
-                                      r.id === currentAddressId && r.isFirstRow,
-                              ).fullPrice) *
-                          100
-                      ).toFixed(1);
-            }
-        });
-    }
 }
 
 defineExpose({ addAdress });
 
+// Обновление данных при вводе
+function updateData(trIndex, indexItem, value) {
+    if (!data.value[trIndex]) {
+        data.value[trIndex] = {};
+    }
+    switch (props.modalType) {
+        case 'deleteContactListItem':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].work = value;
+            else if (indexItem === 2) data.value[trIndex].phone = value;
+            else if (indexItem === 3) data.value[trIndex].adress = value;
+            break;
+        case 'deleteMontazh':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].phone = value;
+            else if (indexItem === 2) data.value[trIndex].comment = value;
+            break;
+        case 'deleteMaterial':
+            if (indexItem === 0) data.value[trIndex].name = value;
+            else if (indexItem === 1) data.value[trIndex].summ = value;
+            else if (indexItem === 2) data.value[trIndex].comment = value;
+            break;
+        case 'deleteWorkerAdress': // Новый modalType
+            if (indexItem === 0) data.value[trIndex].summ = value;
+            else if (indexItem === 1) data.value[trIndex].avans = value;
+            else if (indexItem === 2) data.value[trIndex].date = value;
+            else if (indexItem === 3) data.value[trIndex].comment = value;
+            break;
+    }
+}
+
+function chooseValue(trIndex, indexItem) {
+    if (data.value?.[trIndex]) {
+        const val = data.value[trIndex];
+        switch (props.modalType) {
+            case 'deleteContactListItem':
+                return (
+                    [val.name, val.work, val.phone, val.adress][indexItem] || ''
+                );
+            case 'deleteMontazh':
+                return [val.name, val.phone, val.comment][indexItem] || '';
+            case 'deleteMaterial':
+                return [val.name, val.summ, val.comment][indexItem] || '';
+            case 'deleteWorkerAdress':
+                return (
+                    [val.summ, val.avans, val.date, val.comment][
+                        indexItem
+                    ] || ''
+                );
+        }
+    }
+    return '';
+}
+
+// Сохранение данных на сервер при смене строки (только для modalType с БД)
+watch(selectedRow, async (newValue, oldValue) => {
+    if (
+        oldValue !== undefined &&
+        data.value[oldValue - 1] &&
+        props.modalType !== 'deleteWorkerAdress'
+    ) {
+        const val = data.value[oldValue - 1];
+        switch (props.modalType) {
+            case 'deleteContactListItem':
+                await addUpdateContactPerson(
+                    val.name || '',
+                    val.work || '',
+                    val.phone || '',
+                    val.adress || '',
+                    props.addData.groupId,
+                    val.id || '',
+                );
+                break;
+            case 'deleteMontazh':
+                await universalUpdate(
+                    props.addData.adressId,
+                    val.name || '',
+                    val.phone || '',
+                    val.comment || '',
+                    '/universalUpdate',
+                    val.id || '',
+                    'montazh',
+                );
+                break;
+            case 'deleteMaterial':
+                await universalUpdate(
+                    props.addData.adressId,
+                    val.name || '',
+                    val.summ || '',
+                    val.comment || '',
+                    '/universalUpdate',
+                    val.id || '',
+                    'buildingMaterials',
+                );
+                break;
+        }
+        await fetchData(); // Обновляем данные после сохранения
+    }
+});
+
 onMounted(() => {
-    computeTableData();
     document.addEventListener('click', handleBodyClick);
+    fetchData();
 });
 
 onUnmounted(() => {
@@ -237,7 +236,7 @@ onUnmounted(() => {
                     <th
                         class="px-4 text-xs text-gray-500"
                         :class="props.scrollTable ? columnWidths[index] : ''"
-                        v-for="(item, index) in headItems"
+                        v-for="(item, index) in props.headItems"
                         :key="item"
                     >
                         {{ item }}
@@ -246,185 +245,52 @@ onUnmounted(() => {
             </thead>
             <tbody ref="target" @click.stop>
                 <tr
-                    v-for="(row, trIndex) in tableData"
-                    :id="headItems[0] + String(trIndex)"
+                    v-for="(count, trIndex) in props.rowCounter"
+                    :id="props.headItems[0] + String(count)"
+                    @click="selectedRow = count"
                     :class="[
-                        'group h-14 border-y-[1px] border-gray-200',
-                        !row.isAddButton ? 'hover:bg-indigo-100' : '',
-                        selectedRow === trIndex
+                        'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
+                        selectedRow === count
                             ? 'bg-indigo-100'
-                            : trIndex % 2 !== 0
+                            : count % 2 !== 0
                               ? 'bg-gray-50'
                               : 'bg-white',
                     ]"
-                    :key="trIndex"
+                    :key="count"
                 >
                     <td
                         class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
+                        v-for="(item, index) in props.headItems.slice(1)"
+                        :key="item"
                     >
                         <input
-                            v-if="!row.isAddButton"
-                            :value="row.address"
-                            @input="updateData(trIndex, 0, $event.target.value)"
-                            :readonly="!row.isFirstRow"
+                            :value="chooseValue(trIndex, index)"
+                            @input="
+                                updateData(trIndex, index, $event.target.value)
+                            "
+                            :readonly="
+                                props.allChangable
+                                    ? props.modalType == 'deleteWorkerAdress'
+                                        ? index == 4 || index == 5
+                                        : false
+                                    : index == 3 || index == 4
+                            "
                             :class="[
                                 'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
+                                selectedRow === count
                                     ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
+                                    : count % 2 !== 0
                                       ? 'bg-gray-50'
                                       : 'bg-white',
                             ]"
-                            placeholder="Адрес"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.fullPrice"
-                            @input="updateData(trIndex, 1, $event.target.value)"
-                            :readonly="!row.isFirstRow"
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[0]"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.avans"
-                            @input="updateData(trIndex, 2, $event.target.value)"
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[1]"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.date"
-                            @input="updateData(trIndex, 3, $event.target.value)"
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[2]"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.comment"
-                            @input="updateData(trIndex, 4, $event.target.value)"
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[3]"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.remainingPercent"
-                            readonly
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[4]"
-                        />
-                    </td>
-                    <td
-                        class="px-4"
-                        @click="
-                            !row.isAddButton ? (selectedRow = trIndex) : null
-                        "
-                    >
-                        <input
-                            v-if="!row.isAddButton"
-                            :value="row.remainingAmount"
-                            readonly
-                            :class="[
-                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === trIndex
-                                    ? 'bg-indigo-100'
-                                    : trIndex % 2 !== 0
-                                      ? 'bg-gray-50'
-                                      : 'bg-white',
-                            ]"
-                            :placeholder="placeholders[5]"
+                            :placeholder="props.placeholders[index]"
                         />
                     </td>
                     <td class="px-4">
-                        <div
-                            v-if="!row.isAddButton"
-                            @click="selectedRow = trIndex"
-                        >
-                            <EditDeleteComponent
-                                :id-to-delete="row.id"
-                                :modalType="props.modalType"
-                            />
-                        </div>
-                        <button
-                            v-if="row.isAddButton"
-                            @click="addNewAvance(row.id)"
-                            class="rounded bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
-                        >
-                            Добавить выплату
-                        </button>
+                        <EditDeleteComponent
+                            :id-to-delete="data?.[trIndex]?.id || 0"
+                            :modalType="props.modalType"
+                        />
                     </td>
                 </tr>
             </tbody>

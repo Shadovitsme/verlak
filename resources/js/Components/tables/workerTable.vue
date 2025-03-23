@@ -42,11 +42,16 @@ const computeTableData = () => {
                 avans: avansValue,
                 date: avans.date || '',
                 comment: avans.comment || '',
-                remainingPercent: props.adressData.fullPrice ? (remainingAmount / props.adressData.fullPrice * 100).toFixed(1) : '0.0',
+                remainingPercent: props.adressData.fullPrice
+                    ? (
+                          (remainingAmount / props.adressData.fullPrice) *
+                          100
+                      ).toFixed(1)
+                    : '0.0',
                 remainingAmount: remainingAmount,
                 isFirstRow: index === 0,
                 id: props.adressData.id,
-                avanceId: avans.id || null
+                avanceId: avans.id || null,
             });
         });
     } else {
@@ -60,7 +65,7 @@ const computeTableData = () => {
             remainingAmount: props.adressData.fullPrice,
             isFirstRow: true,
             id: props.adressData.id,
-            avanceId: null
+            avanceId: null,
         });
     }
 
@@ -69,14 +74,22 @@ const computeTableData = () => {
         remainingAmount -= newAvance.avans || 0;
         tableData.value.push({
             ...newAvance,
-            remainingPercent: props.adressData.fullPrice ? (remainingAmount / props.adressData.fullPrice * 100).toFixed(1) : '0.0',
-            remainingAmount: remainingAmount
+            remainingPercent: props.adressData.fullPrice
+                ? (
+                      (remainingAmount / props.adressData.fullPrice) *
+                      100
+                  ).toFixed(1)
+                : '0.0',
+            remainingAmount: remainingAmount,
         });
     });
 };
 
 const handleBodyClick = async (event) => {
-    if (!target.value?.contains(event.target) && selectedRow.value !== undefined) {
+    if (
+        !target.value?.contains(event.target) &&
+        selectedRow.value !== undefined
+    ) {
         const row = tableData.value[selectedRow.value];
         if (row) {
             try {
@@ -85,13 +98,13 @@ const handleBodyClick = async (event) => {
                     row.id,
                     row.comment,
                     row.avans,
-                    row.date
+                    row.date,
                 );
                 if (!row.avanceId && response?.id) {
                     row.avanceId = response.id;
                     // Удаляем строку из newAvances после сохранения
                     newAvances.value = newAvances.value.filter(
-                        (avance) => avance !== row
+                        (avance) => avance !== row,
                     );
                 }
                 computeTableData(); // Пересчитываем остатки
@@ -128,7 +141,7 @@ const addNewAvance = () => {
         remainingAmount: '',
         isFirstRow: false,
         id: props.adressData.id,
-        avanceId: null
+        avanceId: null,
     };
     newAvances.value.push(newRow);
     computeTableData(); // Пересчитываем таблицу с учетом новой строки
@@ -139,23 +152,24 @@ function updateData(trIndex, indexItem, value) {
 
     if (indexItem === 0 && row.isFirstRow) {
         row.address = value;
-    }
-    else if (indexItem === 1 && row.isFirstRow) {
+    } else if (indexItem === 1 && row.isFirstRow) {
         row.fullPrice = parseFloat(value) || 0;
-    }
-    else if (indexItem === 2) {
+    } else if (indexItem === 2) {
         row.avans = parseFloat(value) || 0;
-    }
-    else if (indexItem === 3) row.date = value;
+    } else if (indexItem === 3) row.date = value;
     else if (indexItem === 4) row.comment = value;
 
     if (indexItem === 1 || indexItem === 2) {
         let remainingAmount = tableData.value[0].fullPrice || 0;
-        tableData.value.forEach(r => {
+        tableData.value.forEach((r) => {
             if (r.avans) remainingAmount -= r.avans;
             r.remainingAmount = remainingAmount;
-            r.remainingPercent = r.fullPrice ? (remainingAmount / r.fullPrice * 100).toFixed(1) :
-                               (remainingAmount / tableData.value[0].fullPrice * 100).toFixed(1);
+            r.remainingPercent = r.fullPrice
+                ? ((remainingAmount / r.fullPrice) * 100).toFixed(1)
+                : (
+                      (remainingAmount / tableData.value[0].fullPrice) *
+                      100
+                  ).toFixed(1);
         });
     }
 }
@@ -178,13 +192,13 @@ onUnmounted(() => {
             <table
                 id="table"
                 @click="handleBodyClick"
-                class="border-collapse rounded-lg shadow-sm w-full table-auto"
+                class="w-full table-auto border-collapse rounded-lg shadow-sm"
             >
                 <thead class="rounded-lg bg-indigo-50 text-left text-gray-500">
                     <tr class="h-12 rounded-lg">
                         <th
                             class="px-4 text-xs text-gray-500"
-                            v-for="(item) in headItems"
+                            v-for="item in headItems"
                             :key="item"
                         >
                             {{ item }}
@@ -208,7 +222,9 @@ onUnmounted(() => {
                         <td class="px-4" @click="selectedRow = trIndex">
                             <input
                                 :value="row.address"
-                                @input="updateData(trIndex, 0, $event.target.value)"
+                                @input="
+                                    updateData(trIndex, 0, $event.target.value)
+                                "
                                 :readonly="!row.isFirstRow"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
@@ -224,7 +240,9 @@ onUnmounted(() => {
                         <td class="px-4" @click="selectedRow = trIndex">
                             <input
                                 :value="row.fullPrice"
-                                @input="updateData(trIndex, 1, $event.target.value)"
+                                @input="
+                                    updateData(trIndex, 1, $event.target.value)
+                                "
                                 :readonly="!row.isFirstRow"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
@@ -240,7 +258,9 @@ onUnmounted(() => {
                         <td class="px-4" @click="selectedRow = trIndex">
                             <input
                                 :value="row.avans"
-                                @input="updateData(trIndex, 2, $event.target.value)"
+                                @input="
+                                    updateData(trIndex, 2, $event.target.value)
+                                "
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     selectedRow === trIndex
@@ -255,7 +275,9 @@ onUnmounted(() => {
                         <td class="px-4" @click="selectedRow = trIndex">
                             <input
                                 :value="row.date"
-                                @input="updateData(trIndex, 3, $event.target.value)"
+                                @input="
+                                    updateData(trIndex, 3, $event.target.value)
+                                "
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     selectedRow === trIndex
@@ -270,7 +292,9 @@ onUnmounted(() => {
                         <td class="px-4" @click="selectedRow = trIndex">
                             <input
                                 :value="row.comment"
-                                @input="updateData(trIndex, 4, $event.target.value)"
+                                @input="
+                                    updateData(trIndex, 4, $event.target.value)
+                                "
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     selectedRow === trIndex
@@ -325,7 +349,7 @@ onUnmounted(() => {
         <div class="mt-4">
             <button
                 @click="addNewAvance"
-                class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded"
+                class="rounded bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
             >
                 Добавить выплату
             </button>
