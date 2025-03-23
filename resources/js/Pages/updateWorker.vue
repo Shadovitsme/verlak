@@ -6,7 +6,6 @@ import JustButton from '../Components/justButton.vue';
 import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import { ref, onMounted } from 'vue';
-import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
 
 let rowCounter = ref([]);
@@ -23,8 +22,8 @@ function addAdress() {
     adressItem.value.push('');
 }
 async function saveData() {
-    let workerId = await addUpdateWorker(FIO.value, town.value);
     for (let i = 0; i < adressCounter.value; i++) {
+        console.log(adressItem.value[i])
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
     }
     // window.location.href = '/executors';
@@ -42,8 +41,7 @@ async function fetchData(adressId) {
         data.value = result;
         FIO.value = data.value.name;
         town.value = data.value.town;
-        adressCounter.value = data.value.adressData.length;
-        console.log(data.value);
+
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
@@ -54,7 +52,7 @@ async function fetchData(adressId) {
     <Header></Header>
     <div class="mx-32 mt-20 w-full max-w-[1600px] pt-12">
         <h1 class="my-auto mb-8 mr-4 text-5xl text-gray-900">
-            Добавить исполнителя
+            Добавить исполнителю адрес
         </h1>
 
         <div class="w-[1348px] rounded-3xl bg-white p-10 shadow-sm">
@@ -101,7 +99,7 @@ async function fetchData(adressId) {
                         v-if="adressCounter < 1"
                         class="mb-3 text-sm text-gray-900"
                     >
-                        Адресов пока нет
+                        Дополнительных адресов пока нет
                     </p>
                     <JustButton
                         @click="addAdress"
@@ -114,11 +112,7 @@ async function fetchData(adressId) {
                 </div>
                 <div v-for="i in adressCounter" class="mb-5" :key="i">
                     <customInput
-                        :value="
-                            data.adressData[i - 1]
-                                ? data.adressData[i - 1].name
-                                : ''
-                        "
+
                         class="mb-5"
                         :static-width="true"
                         label-text="Адрес"

@@ -3,42 +3,28 @@ import TextHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import IconButton from '@/Components/iconButton.vue';
 import OpenModal from '@/Components/openModal.vue';
 import { ref } from 'vue';
-import EmptyTable from '@/Components/tables/emptyTable.vue';
 import WorkerTable from '@/Components/tables/workerTable.vue';
-import JustButton from '@/Components/justButton.vue';
+import customInput from '@/Components/customInput.vue';
+import DropdownInputButton from '@/Components/dropdowns/dropdownInputButton.vue';
+import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
 
 const props = defineProps({
     data: Object,
 });
 const toggleModal = ref(false);
-const customAdresses = ref([]);
-const customAvance = ref([]);
-const customIdCounter = ref(0);
-let testRef = ref(null);
-console.log(props.data);
+const editMode = ref(false);
+const town = ref(props.data.town);
+const FIO = ref(props.data.name);
 
-function addAvance(id) {
-    customAvance.value.push({
-        comment: '',
-        date: '',
-        value: 0,
-        workerAdressId: id,
-    });
+function replace() {
+    window.location.href = '/updateWorker/' + props.data.id;
 }
 
-function addAdress() {
-    customAdresses.value.push({
-        id: customIdCounter.value,
-        fullPrice: 0,
-        name: '',
-        workerId: props.data.workerId,
-    });
-    addAvance(customIdCounter.value);
-    customIdCounter.value++;
-}
-
-function getAvanceByWorkerAdressId(id) {
-    return customAvance.value.filter((avance) => avance.workerAdressId === id);
+function editSaveEdit() {
+    if (editMode.value) {
+        addUpdateWorker(FIO.value, town.value, props.data.id);
+    }
+    editMode.value = !editMode.value;
 }
 </script>
 
@@ -52,17 +38,37 @@ function getAvanceByWorkerAdressId(id) {
     <div class="mx-32 mt-20 w-[1348px] pt-12">
         <div class="mb-6 flex w-full justify-between">
             <TextHeadWithAddButton
-                @add-item="addAdress"
+                v-if="!editMode"
+                @add-item="replace()"
                 :shown="true"
-                :text="props.data.name"
+                :text="FIO"
             ></TextHeadWithAddButton>
+            <div v-if="editMode" class="z-20 flex gap-x-10 pb-8">
+                <customInput
+                    :value="FIO"
+                    :static-width="true"
+                    label-text="ФИО"
+                    placeholder="Введите ФИО"
+                    @update:value="(newValue) => (FIO = newValue)"
+                ></customInput>
+
+                <DropdownInputButton
+                    :value="town"
+                    :static-width="true"
+                    label-text="Город"
+                    placeholder="Выберите город"
+                    check-type="radio"
+                    :label-text-arr="['Астрахань', 'Москва', 'Санкт-Петербург']"
+                    @update:value="(newValue) => (town = newValue)"
+                >
+                </DropdownInputButton>
+            </div>
             <div class="flex h-11 gap-x-3">
-                <a :href="'/updateWorker/' + props.data.id">
-                    <IconButton
-                        color="gray"
-                        icon="./assets/icons/system/edit.svg"
-                    ></IconButton
-                ></a>
+                <IconButton
+                    @click="editSaveEdit"
+                    color="gray"
+                    icon="./assets/icons/system/edit.svg"
+                ></IconButton>
 
                 <IconButton
                     @click="toggleModal = !toggleModal"
@@ -81,45 +87,5 @@ function getAvanceByWorkerAdressId(id) {
             "
             :adress-data="item"
         ></WorkerTable>
-        <div v-for="item in customIdCounter" :key="item">
-            <EmptyTable
-                modal-type="deleteWorkerAdress"
-                :all-changable="true"
-                ref="testRef"
-                :id="'table' + i"
-                :scroll-table="false"
-                :row-counter="
-                    getAvanceByWorkerAdressId(customAdresses[item - 1].id)
-                        .length
-                "
-                :headItems="[
-                    'Адрес',
-                    'Общая стоимость, ₽ ',
-                    'Авансы, ₽ ',
-                    'Дата',
-                    'Примечание',
-                    'Остаток, %',
-                    'Остаток, ₽',
-                    'Действия',
-                ]"
-                :placeholders="[
-                    'Сумма',
-                    'Сумма',
-                    'дд.мм.гггг',
-                    'Комментарий',
-                    '-',
-                    '-',
-                ]"
-            ></EmptyTable>
-            <div class="mt-3 flex w-full justify-end">
-                <JustButton
-                    class="w-fit"
-                    @click="addAvance(customAdresses[item - 1].id)"
-                    type="button"
-                    color="blue"
-                    >Добавить вылату</JustButton
-                >
-            </div>
-        </div>
     </div>
 </template>
