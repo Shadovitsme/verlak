@@ -44,6 +44,14 @@ Route::get('/contracts/{contractNumber}/{adressId}', function (string $contractN
     ]);
 });
 
+Route::get('/updateWorker/{workerId}', function (
+    string $workerId,
+) {
+    return Inertia::render('updateWorker', [
+        'workerId' => $workerId,
+    ]);
+});
+
 Route::get('/{contractNumber}/{adressId}/{entranceName}', function (string $contractNumber, string $adressId, string $entranceName) {
     return Inertia::render('entrance', [
         'contractNumber' => $contractNumber,
@@ -80,6 +88,7 @@ Route::get('/getEED', [getDataController::class, 'getEED']);
 Route::get('/getPictures', [getDataController::class, 'getPictures']);
 Route::get('/universalGetter', [getDataController::class, 'universalGetter']);
 Route::get('/getAllWorkerData', [getDataController::class, 'getAllWorkerData']);
+Route::get('/getExecWorkerData', [getDataController::class, 'getExecWorkerData']);
 
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
@@ -102,7 +111,6 @@ Route::post('/addElevator', [setDataController::class, 'addElevator']);
 Route::post('/addWorker', [setDataController::class, 'addUpdateWorker']);
 Route::post('/addWorkerAdress', [setDataController::class, 'addUpdateWorkerAdress']);
 Route::post('/addAvanceForAdress', [setDataController::class, 'addAvanceForAdress']);
-
 
 Route::post('/upload-file', [FileUploadController::class, 'upload']);
 Route::post('/delete-file', [FileUploadController::class, 'delete']);

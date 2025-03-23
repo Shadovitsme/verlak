@@ -3,6 +3,7 @@ import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 import addWorkerAdress from '../jsFunctions/setters/addWorkerAdress';
 import addAvanceForAdress from '../jsFunctions/setters/addAvanceForAdress';
+import JustButton from '../justButton.vue';
 
 const props = defineProps({
     avansData: Array,
@@ -346,13 +347,10 @@ onUnmounted(() => {
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            <button
-                @click="addNewAvance"
-                class="rounded bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
-            >
+        <div class="flex justify-end mt-4 w-full">
+            <JustButton @click="addNewAvance" color="blue">
                 Добавить выплату
-            </button>
+            </JustButton>
         </div>
     </div>
 </template>

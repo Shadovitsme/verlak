@@ -14,6 +14,8 @@ const toggleModal = ref(false);
 const customAdresses = ref([]);
 const customAvance = ref([]);
 const customIdCounter = ref(0);
+let testRef = ref(null);
+console.log(props.data);
 
 function addAvance(id) {
     customAvance.value.push({
@@ -31,7 +33,6 @@ function addAdress() {
         name: '',
         workerId: props.data.workerId,
     });
-    console.log(customAdresses.value);
     addAvance(customIdCounter.value);
     customIdCounter.value++;
 }
@@ -56,10 +57,13 @@ function getAvanceByWorkerAdressId(id) {
                 :text="props.data.name"
             ></TextHeadWithAddButton>
             <div class="flex h-11 gap-x-3">
-                <IconButton
-                    color="gray"
-                    icon="./assets/icons/system/edit.svg"
-                ></IconButton>
+                <a :href="'/updateWorker/' + props.data.id">
+                    <IconButton
+                        color="gray"
+                        icon="./assets/icons/system/edit.svg"
+                    ></IconButton
+                ></a>
+
                 <IconButton
                     @click="toggleModal = !toggleModal"
                     color="gray"
@@ -89,6 +93,7 @@ function getAvanceByWorkerAdressId(id) {
                         .length
                 "
                 :headItems="[
+                    'Адрес',
                     'Общая стоимость, ₽ ',
                     'Авансы, ₽ ',
                     'Дата',

@@ -5,8 +5,9 @@ import Header from '@/Components/header.vue';
 import JustButton from '../Components/justButton.vue';
 import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
+import getExecData from '@/Components/jsFunctions/getters/getExecData';
 
 let rowCounter = ref([]);
 let adressCounter = ref(0);
@@ -26,7 +27,26 @@ async function saveData() {
     for (let i = 0; i < adressCounter.value; i++) {
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
     }
-    window.location.href = '/executors';
+    // window.location.href = '/executors';
+}
+
+const { workerId } = defineProps(['workerId']); // Пример использования
+onMounted(() => {
+    fetchData(workerId);
+});
+
+const data = ref();
+async function fetchData(adressId) {
+    try {
+        const result = await getExecData('/getExecWorkerData', adressId);
+        data.value = result;
+        FIO.value = data.value.name;
+        town.value = data.value.town;
+        adressCounter.value = data.value.adressData.length;
+        console.log(data.value);
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
 }
 </script>
 
@@ -94,7 +114,11 @@ async function saveData() {
                 </div>
                 <div v-for="i in adressCounter" class="mb-5" :key="i">
                     <customInput
-                        :value="adressItem[i - 1]"
+                        :value="
+                            data.adressData[i - 1]
+                                ? data.adressData[i - 1].name
+                                : ''
+                        "
                         class="mb-5"
                         :static-width="true"
                         label-text="Адрес"
