@@ -39,9 +39,13 @@ const toggleModal = ref(false);
         </div>
         <WorkerTable
             v-for="item in data.adressData"
-            :key="item"
-            :avansData="data.avansData"
-            :adress-data="data.adressData"
+            :key="item.id"
+            :avansData="
+                data.avansData.filter(
+                    (avans) => avans.workerAdressId === item.id,
+                )
+            "
+            :adress-data="item"
         ></WorkerTable>
     </div>
 </template>

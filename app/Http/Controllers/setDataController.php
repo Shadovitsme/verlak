@@ -254,7 +254,7 @@ class setDataController extends Controller
     public function addAvanceForAdress(Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        $id = $data['workerAdressId'];
+        $id = $data['id'];
         $workerAdressId = $data['workerAdressId'];
         $comment = $data['comment'];
         $avanceValue = $data['avanceValue'];
