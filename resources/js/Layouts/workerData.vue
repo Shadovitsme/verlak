@@ -8,7 +8,7 @@ import WorkerTable from '@/Components/tables/workerTable.vue';
 const props = defineProps({
     data: Object,
 });
-console.log(props.data)
+console.log(props.data);
 const toggleModal = ref(false);
 </script>
 
@@ -20,7 +20,7 @@ const toggleModal = ref(false);
         modal-type="deleteWorker"
     ></OpenModal>
     <div class="mx-32 mt-20 w-[1348px] pt-12">
-        <div class="flex w-full justify-between">
+        <div class="mb-6 flex w-full justify-between">
             <TextHeadWithAddButton
                 :shown="true"
                 :text="props.data.name"
@@ -37,6 +37,11 @@ const toggleModal = ref(false);
                 ></IconButton>
             </div>
         </div>
-        <WorkerTable :adressData="data.adressData" :avansData="data.avansData"></WorkerTable>
+        <WorkerTable
+            v-for="item in data.adressData"
+            :key="item"
+            :avansData="data.avansData"
+            :adress-data="data.adressData"
+        ></WorkerTable>
     </div>
 </template>

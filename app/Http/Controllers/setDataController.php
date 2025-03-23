@@ -237,13 +237,33 @@ class setDataController extends Controller
         $comment = $data['comment'];
         $avanceValue = $data['avanceValue'];
         $date = $data['date'];
-        $workerAdressId = DB::table('workerAdress')->insertGetId(['name' => $name, 'fullPrice' => $fullPrice, 'workerId' => $workerId]);
+        if ($fullPrice != '0') {
+            $workerAdressId = DB::table('workerAdress')->insertGetId(['name' => $name, 'fullPrice' => $fullPrice, 'workerId' => $workerId]);
+        } else {
+            $workerAdressId = DB::table('workerAdress')->where('workerId', '=', $workerId)->where('name', '=', $name)->value('id');
+        }
         $this->addUpdateAvances($workerAdressId, $comment, $avanceValue, $date);
     }
 
     private function addUpdateAvances($adressId, $comment, $value, $date)
     {
-        DB::table('avances')->insert(['workerAdressId' => $adressId, 'value' => $value, 'date' => $date, 'comment' => $comment]);
+        $id = DB::table('avances')->insertGetId(['workerAdressId' => $adressId, 'value' => $value, 'date' => $date, 'comment' => $comment]);
+        return $id;
+    }
+
+    public function addAvanceForAdress(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['workerAdressId'];
+        $workerAdressId = $data['workerAdressId'];
+        $comment = $data['comment'];
+        $avanceValue = $data['avanceValue'];
+        $date = $data['date'];
+        if ($id) {
+            DB::table('avances')->where('id', '=', $id)->update(['workerAdressId' => $workerAdressId, 'value' => $avanceValue, 'date' => $date, 'comment' => $comment]);
+        } else {
+            $this->addUpdateAvances($workerAdressId, $comment, $avanceValue, $date);
+        }
     }
 
     public function addUpdateWorker(Request $request)

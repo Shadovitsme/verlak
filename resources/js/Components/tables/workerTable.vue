@@ -4,8 +4,8 @@ import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 import addWorkerAdress from '../jsFunctions/setters/addWorkerAdress';
 
 const props = defineProps({
-    adressData: Object,
     avansData: Object,
+    adressData: Object,
 });
 
 const selectedRow = ref(undefined);
@@ -13,6 +13,7 @@ const selectedRowIndex = ref(undefined);
 const target = ref(null);
 
 let headItems = [
+    'Адрес',
     'Общая стоимость, ₽ ',
     'Авансы, ₽ ',
     'Дата',
@@ -23,6 +24,63 @@ let headItems = [
 ];
 let placeholders = ['Сумма', 'Сумма', 'дд.мм.гггг', 'Комментарий', '-', '-'];
 
+// Преобразуем данные в нужный формат
+const tableData = ref([]);
+const computeTableData = () => {
+    tableData.value = [];
+    let avansIndex = 0;
+
+    props.adressData?.forEach((address, addressIndex) => {
+        let remainingAmount = address.fullPrice;
+        let avansCount = Math.ceil(
+            props.avansData.length / props.adressData.length,
+        );
+
+        // Добавляем первую строку с адресом и первым авансом
+        if (props.avansData?.[avansIndex]) {
+            remainingAmount -= props.avansData[avansIndex].value || 0;
+            tableData.value.push({
+                address: address.name,
+                fullPrice: address.fullPrice,
+                avans: props.avansData[avansIndex].value,
+                date: props.avansData[avansIndex].date,
+                comment: props.avansData[avansIndex].comment,
+                remainingPercent: (
+                    (remainingAmount / address.fullPrice) *
+                    100
+                ).toFixed(1),
+                remainingAmount: remainingAmount,
+                isFirstRow: true,
+                id: address.id,
+            });
+            avansIndex++;
+
+            // Добавляем остальные авансы для этого адреса
+            while (
+                avansIndex < props.avansData.length &&
+                avansIndex < (addressIndex + 1) * avansCount
+            ) {
+                remainingAmount -= props.avansData[avansIndex].value || 0;
+                tableData.value.push({
+                    address: '',
+                    fullPrice: '',
+                    avans: props.avansData[avansIndex].value,
+                    date: props.avansData[avansIndex].date,
+                    comment: props.avansData[avansIndex].comment,
+                    remainingPercent: (
+                        (remainingAmount / address.fullPrice) *
+                        100
+                    ).toFixed(1),
+                    remainingAmount: remainingAmount,
+                    isFirstRow: false,
+                    id: address.id,
+                });
+                avansIndex++;
+            }
+        }
+    });
+};
+
 const handleBodyClick = (event) => {
     if (!target.value?.contains(event.target)) {
         selectedRow.value = undefined;
@@ -31,43 +89,61 @@ const handleBodyClick = (event) => {
 };
 
 function addAdress(id, adress) {
-    data.value.forEach((element) => {
-        console.log(element);
-        addWorkerAdress(
-            id,
-            adress,
-            element.summ,
-            element.avans,
-            element.comment,
-            element.date,
-        );
+    tableData.value.forEach((element) => {
+        if (element.isFirstRow) {
+            addWorkerAdress(
+                id,
+                adress,
+                element.fullPrice,
+                element.avans,
+                element.comment,
+                element.date,
+            );
+        }
     });
 }
 
 defineExpose({ addAdress });
 
-// Обновление данных при вводе
 function updateData(trIndex, indexItem, value) {
-    if (!data.value[trIndex]) {
-        data.value[trIndex] = {};
+    let row = tableData.value[trIndex];
+    if (indexItem === 0 && row.isFirstRow) {
+        row.address = value;
+    } else if (indexItem === 1 && row.isFirstRow) {
+        row.fullPrice = parseFloat(value) || 0;
+    } else if (indexItem === 2) {
+        row.avans = parseFloat(value) || 0;
+    } else if (indexItem === 3) row.date = value;
+    else if (indexItem === 4) row.comment = value;
+
+    // Пересчитываем остатки при изменении значений
+    if (indexItem === 1 || indexItem === 2) {
+        let currentAddressId = row.id;
+        let remainingAmount = tableData.value.find(
+            (r) => r.id === currentAddressId && r.isFirstRow,
+        ).fullPrice;
+
+        tableData.value.forEach((r) => {
+            if (r.id === currentAddressId) {
+                if (r.avans) remainingAmount -= r.avans;
+                r.remainingAmount = remainingAmount;
+                r.remainingPercent =
+                    ((remainingAmount / r.fullPrice) * 100).toFixed(1) ||
+                    (
+                        (remainingAmount /
+                            tableData.value.find(
+                                (r) =>
+                                    r.id === currentAddressId && r.isFirstRow,
+                            ).fullPrice) *
+                        100
+                    ).toFixed(1);
+            }
+        });
     }
-
-    if (indexItem === 0) data.value[trIndex].summ = value;
-    else if (indexItem === 1) data.value[trIndex].avans = value;
-    else if (indexItem === 2) data.value[trIndex].date = value;
-    else if (indexItem === 3) data.value[trIndex].comment = value;
-}
-
-function chooseValue(trIndex, indexItem) {
-    if (props.avansData?.[trIndex]) {
-        const val = props.avansData[trIndex];
-
-        return [val.summ, val.avans, val.date, val.comment][indexItem] || '';
-    }
-    return '';
 }
 
 onMounted(() => {
+    computeTableData();
     document.addEventListener('click', handleBodyClick);
 });
 
@@ -102,50 +178,129 @@ onUnmounted(() => {
             </thead>
             <tbody ref="target" @click.stop>
                 <tr
-                    v-for="(count, trIndex) in props.avansData"
-                    :id="headItems[0] + String(count)"
-                    @click="selectedRow = count"
+                    v-for="(row, trIndex) in tableData"
+                    :id="headItems[0] + String(trIndex)"
+                    @click="selectedRow = trIndex"
                     :class="[
                         'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
-                        selectedRow === count
+                        selectedRow === trIndex
                             ? 'bg-indigo-100'
-                            : count % 2 !== 0
+                            : trIndex % 2 !== 0
                               ? 'bg-gray-50'
                               : 'bg-white',
                     ]"
-                    :key="count"
+                    :key="trIndex"
                 >
-                    <td
-                        class="px-4"
-                        v-for="(item, index) in headItems.slice(1)"
-                        :key="item"
-                    >
+                    <td class="px-4">
                         <input
-                            :value="chooseValue(trIndex, index)"
-                            @input="
-                                updateData(trIndex, index, $event.target.value)
-                            "
-                            :readonly="
-                                props.allChangable
-                                    ? props.modalType == 'deleteWorkerAdress'
-                                        ? index == 4 || index == 5
-                                        : false
-                                    : index == 3 || index == 4
-                            "
+                            :value="row.address"
+                            @input="updateData(trIndex, 0, $event.target.value)"
+                            :readonly="!row.isFirstRow"
                             :class="[
                                 'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                selectedRow === count
+                                selectedRow === trIndex
                                     ? 'bg-indigo-100'
-                                    : count % 2 !== 0
+                                    : trIndex % 2 !== 0
                                       ? 'bg-gray-50'
                                       : 'bg-white',
                             ]"
-                            :placeholder="placeholders[index]"
+                            placeholder="Адрес"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.fullPrice"
+                            @input="updateData(trIndex, 1, $event.target.value)"
+                            :readonly="!row.isFirstRow"
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[0]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.avans"
+                            @input="updateData(trIndex, 2, $event.target.value)"
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[1]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.date"
+                            @input="updateData(trIndex, 3, $event.target.value)"
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[2]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.comment"
+                            @input="updateData(trIndex, 4, $event.target.value)"
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[3]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.remainingPercent"
+                            readonly
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[4]"
+                        />
+                    </td>
+                    <td class="px-4">
+                        <input
+                            :value="row.remainingAmount"
+                            readonly
+                            :class="[
+                                'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                selectedRow === trIndex
+                                    ? 'bg-indigo-100'
+                                    : trIndex % 2 !== 0
+                                      ? 'bg-gray-50'
+                                      : 'bg-white',
+                            ]"
+                            :placeholder="placeholders[5]"
                         />
                     </td>
                     <td class="px-4">
                         <EditDeleteComponent
-                            :id-to-delete="adressData?.[trIndex]?.id || 0"
+                            :id-to-delete="row.id"
                             :modalType="props.modalType"
                         />
                     </td>

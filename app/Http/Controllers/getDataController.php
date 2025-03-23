@@ -21,13 +21,13 @@ class getDataController extends Controller
         $result = DB::table('worker')->get();
         foreach ($result as $value) {
             $value->adressData = DB::table('workerAdress')->where('workerId', '=', $value->id)->get();
-            foreach ($value->adressData as $avance) {
-                $value->avansData = DB::table('avances')
-                    ->join('workerAdress', 'avances.workerAdressId', '=', 'workerAdress.id')
-                    ->where('avances.workerAdressId', '=', $avance->id)
-                    ->get(['avances.*', 'workerAdress.fullPrice']);
-
-            };
+            $value->avansData = collect();
+            foreach ($value->adressData as $adress) {
+                $avanceData = DB::table('avances')
+                    ->where('workerAdressId', '=', $adress->id)
+                    ->get();
+                $value->avansData = $value->avansData->merge($avanceData);
+            }
         }
         return response()->json($result);
     }
