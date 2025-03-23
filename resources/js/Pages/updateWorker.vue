@@ -7,6 +7,7 @@ import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import { ref, onMounted } from 'vue';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
+import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
 
 let rowCounter = ref([]);
 let adressCounter = ref(0);
@@ -22,8 +23,9 @@ function addAdress() {
     adressItem.value.push('');
 }
 async function saveData() {
+    addUpdateWorker(FIO.value, town.value, workerId);
     for (let i = 0; i < adressCounter.value; i++) {
-        console.log(adressItem.value[i])
+        console.log(adressItem.value[i]);
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
     }
     // window.location.href = '/executors';
@@ -41,7 +43,6 @@ async function fetchData(adressId) {
         data.value = result;
         FIO.value = data.value.name;
         town.value = data.value.town;
-
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
@@ -112,7 +113,6 @@ async function fetchData(adressId) {
                 </div>
                 <div v-for="i in adressCounter" class="mb-5" :key="i">
                     <customInput
-
                         class="mb-5"
                         :static-width="true"
                         label-text="Адрес"
