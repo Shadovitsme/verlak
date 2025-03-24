@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script setup>
 import CustomInput from '@/Components/customInput.vue';
 import IconButton from '@/Components/iconButton.vue';
+import getODSH from '@/Components/jsFunctions/getters/getODSH';
 import sendHeadODSH from '@/Components/jsFunctions/setters/sendHeadODSHDataToDB';
 import JustButton from '@/Components/justButton.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import ODSHTable from '@/Components/tables/ODSHTable.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     adressId: String,
@@ -19,12 +20,34 @@ const props = defineProps({
 });
 
 const editMode = ref(false);
-const customer = ref(props.customerProps);
-const size = ref(props.SizeProps);
+const customer = ref('');
+const size = ref('');
+const data = ref();
 
 function updateHeadOdsh() {
     sendHeadODSH(props.adressId, props.entrance, customer.value, size.value);
     editMode.value = false;
+}
+
+onMounted(() => {
+    fetchData(props.adressId, props.entrance);
+});
+
+async function fetchData(adressId, entranceName) {
+    try {
+        const result = await getODSH(adressId, entranceName);
+        data.value = result;
+        console.log(data.value);
+        if (data.value != undefined) {
+            customer.value = data.value.customer;
+            size.value = data.value.sizeT;
+        } else {
+            customer.value = '';
+            size.value = '';
+        }
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
 }
 </script>
 
@@ -69,7 +92,7 @@ function updateHeadOdsh() {
             </div>
             <img class="shrink-0" src="/assets/pictures/lifti project 2.png" />
         </div>
-        <RoundedArrowLineDropdown text="Таблица">
+        <RoundedArrowLineDropdown :hide-button="true" text="Таблица">
             <ODSHTable :-o-d-s-h-table-data="props.ODSHTableData"></ODSHTable>
         </RoundedArrowLineDropdown>
     </div>

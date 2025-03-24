@@ -90,6 +90,7 @@ Route::get('/universalGetter', [getDataController::class, 'universalGetter']);
 Route::get('/getAllWorkerData', [getDataController::class, 'getAllWorkerData']);
 Route::get('/getExecWorkerData', [getDataController::class, 'getExecWorkerData']);
 Route::get('/getAllAccountancy', [getDataController::class, 'getAllAccountancy']);
+Route::get('/getODSH', [getDataController::class, 'getODSH']);
 
 Route::post('/deleteManager', [deleteDataController::class, 'deleteManager']);
 Route::post('/universalDelete', [deleteDataController::class, 'universalDelete']);

@@ -16,6 +16,8 @@
 -- DROP TABLE accountancy;
 -- DROP TABLE acceptTable;
 -- DROP TABLE disgardTable;
+DROP TABLE ODSH;
+DROP TABLE ODSHTable;
 -- CREATE TABLE contract (
 --     id integer PRIMARY KEY AUTOINCREMENT,
 --     contractNumber integer unique,
@@ -153,7 +155,7 @@ CREATE TABLE ODSH (
 entrance integer,
 adressId integer,
 customer varchar(100),
-size varchar(100),
+sizeT varchar(100),
 foreign key (adressId) references adressData (id) on Delete cascade
 );
 CREATE TABLE ODSHTable (

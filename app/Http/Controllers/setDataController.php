@@ -19,9 +19,9 @@ class setDataController extends Controller
         $idODSH = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->value('id');
 
         if ($idODSH) {
-            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'size' => $size]);
+            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'sizeT' => $size]);
         } else {
-            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'size' => $size]);
+            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'sizeT' => $size]);
         }
     }
 

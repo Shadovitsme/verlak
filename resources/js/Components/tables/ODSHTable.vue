@@ -1,20 +1,49 @@
 <script setup>
 import JustButton from '../justButton.vue';
 import EditDeleteComponent from '../editDeleteComponent.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
-    avansData: Array,
     ODSHTableData: { type: Object, default: () => ({}) },
 });
+console.log(props.ODSHTableData);
 
-const placeholders = [
-    'Полная стоимость',
-    'Аванс',
-    'Дата',
-    'Комментарий',
-    '% остатка',
-    'Остаток',
-];
+
+
+const besideOdsh = ref([
+    {
+        id: undefined,
+        ODSHid: undefined,
+        level: undefined,
+        topEnter: '',
+        topN: '',
+        topV: '',
+        leftN: '',
+        leftV: '',
+        rightN: '',
+        rightV: '',
+        summ: '',
+        color: '',
+    },
+]);
+
+function addRow() {
+    besideOdsh.value.push({
+        id: undefined,
+        ODSHid: undefined,
+        level: undefined,
+        topEnter: '',
+        topN: '',
+        topV: '',
+        leftN: '',
+        leftV: '',
+        rightN: '',
+        rightV: '',
+        summ: '',
+        color: '',
+    });
+    console.log(besideOdsh.value);
+}
 </script>
 
 <template>
@@ -95,7 +124,6 @@ const placeholders = [
                         >
                             B
                         </th>
-
                         <th
                             class="border-x-[1px] px-4 text-xs text-gray-500"
                             scope="col"
@@ -124,112 +152,146 @@ const placeholders = [
                 </thead>
                 <tbody>
                     <tr
-                        v-for="(row, trIndex) in props.avansData"
-                        :id="headItems[0] + String(trIndex)"
+                        v-for="(row, trIndex) in besideOdsh"
+                        :key="trIndex"
                         :class="[
                             'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
                             trIndex % 2 !== 0 ? 'bg-gray-50' : 'bg-white',
                         ]"
-                        :key="trIndex"
                     >
                         <td class="px-4">
                             <input
-                                :value="row.address"
+                                v-model="row.level"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                placeholder="Адрес"
+                                placeholder="Этаж"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.fullPrice"
+                                v-model="row.topEnter"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[0]"
+                                placeholder="Проем"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.avans"
+                                v-model="row.topN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[1]"
+                                placeholder="H"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.date"
+                                v-model="row.topV"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[2]"
+                                placeholder="B"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.comment"
+                                v-model="row.leftN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[3]"
+                                placeholder="H"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.remainingPercent"
-                                readonly
+                                v-model="row.leftV"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[4]"
+                                placeholder="B"
                             />
                         </td>
                         <td class="px-4">
                             <input
-                                :value="row.remainingAmount"
-                                readonly
+                                v-model="row.rightN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
                                     trIndex % 2 !== 0
                                         ? 'bg-gray-50'
                                         : 'bg-white',
                                 ]"
-                                :placeholder="placeholders[5]"
+                                placeholder="H"
+                            />
+                        </td>
+                        <td class="px-4">
+                            <input
+                                v-model="row.rightV"
+                                :class="[
+                                    'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                    trIndex % 2 !== 0
+                                        ? 'bg-gray-50'
+                                        : 'bg-white',
+                                ]"
+                                placeholder="B"
+                            />
+                        </td>
+                        <td class="px-4">
+                            <input
+                                v-model="row.summ"
+                                :class="[
+                                    'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                    trIndex % 2 !== 0
+                                        ? 'bg-gray-50'
+                                        : 'bg-white',
+                                ]"
+                                placeholder="Количество"
+                            />
+                        </td>
+                        <td class="px-4">
+                            <input
+                                v-model="row.color"
+                                :class="[
+                                    'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
+                                    trIndex % 2 !== 0
+                                        ? 'bg-gray-50'
+                                        : 'bg-white',
+                                ]"
+                                placeholder="Цвет"
                             />
                         </td>
                         <td class="px-4">
                             <EditDeleteComponent
                                 modal-type="deleteAvans"
-                                :id-to-delete="row.avanceId"
+                                :id-to-delete="row.id"
                             />
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="mt-4 flex w-full justify-end">
-            <JustButton color="blue">Добавить выплату</JustButton>
+        <div class="mt-4 flex w-full justify-end gap-3">
+            <JustButton @click="addRow" color="blue">Добавить этаж</JustButton
+            ><JustButton color="blue">Сохранить</JustButton>
         </div>
     </div>
 </template>

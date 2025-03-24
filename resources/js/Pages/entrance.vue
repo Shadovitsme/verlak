@@ -21,7 +21,6 @@ const { contractNumber, adressId, entranceName } = defineProps([
 ]); // Пример использования
 onMounted(() => {
     fetchData(adressId);
-    console.log(entranceName);
 });
 
 // const defaultElevatorTableNamesArray = elevatorDefaultArray;
@@ -30,7 +29,6 @@ async function fetchData(adressId) {
     try {
         const result = await getExecEntrance(adressId, entranceName);
         data.value = result;
-        console.log(data.value.legth);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }

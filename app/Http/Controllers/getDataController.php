@@ -219,4 +219,13 @@ class getDataController extends Controller
 
         return response()->json($result);
     }
+
+    public function getODSH(Request $request)
+    {
+        $adressId = $request->header('adressId');
+        $entrance = $request->header('entrance');
+        $result = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->get()[0];
+        $result->ODSHTableData=DB::table('ODSHTable')->where('ODSHid','=',$result->id)->get();
+        return response()->json($result);
+    }
 }
