@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class getDataController extends Controller
@@ -176,15 +177,46 @@ class getDataController extends Controller
     {
         $result = new \stdClass();
         $result->accountancyData = DB::table('accountancy')->get();
+
+        $currentUserId = Auth::user()->id;
+
         $result->acceptData = DB::table('acceptTable')->get();
         foreach ($result->acceptData as $accept) {
+            $accept->currentUserAcceptItem = $accept->userId == $currentUserId;
             $accept->userId = $this->findElementById($accept->userId, 'users', 'name');
         }
-        $result->disgardData = DB::table('disgardTable')->get();
 
+        $result->disgardData = DB::table('disgardTable')->get();
         foreach ($result->disgardData as $disgard) {
-            $disgard->userId = $this->findElementById($accept->userId, 'users', 'name');
+            $disgard->currentUserDisgardItem = $disgard->userId == $currentUserId;
+            $disgard->userId = $this->findElementById($disgard->userId, 'users', 'name');
         }
+
+        // Добавляем поле hasCurrentUserAction в accountancyData
+        foreach ($result->accountancyData as $accountancyItem) {
+            $accountancyItem->hasCurrentUserAction = 'none';  // По умолчанию - нигде не найдено
+
+            // Проверяем в acceptData
+            foreach ($result->acceptData as $accept) {
+                if ($accept->accountancyId == $accountancyItem->id &&
+                        $accept->currentUserAcceptItem) {
+                    $accountancyItem->hasCurrentUserAction = 'accepted';
+                    break;  // Если нашли в accept, дальше не проверяем
+                }
+            }
+
+            // Проверяем в disgardData, только если еще не нашли в accept
+            if ($accountancyItem->hasCurrentUserAction === 'none') {
+                foreach ($result->disgardData as $disgard) {
+                    if ($disgard->accountancyId == $accountancyItem->id &&
+                            $disgard->currentUserDisgardItem) {
+                        $accountancyItem->hasCurrentUserAction = 'disgarded';
+                        break;
+                    }
+                }
+            }
+        }
+
         return response()->json($result);
     }
 }
