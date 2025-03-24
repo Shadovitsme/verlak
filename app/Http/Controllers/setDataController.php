@@ -281,4 +281,15 @@ class setDataController extends Controller
         };
         return $workerId;
     }
+
+    public function addAcceptAndDisgard(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $accept = $data['accept'];
+        if ($accept == 'true') {
+            DB::table('acceptTable')->insert(['accountancyId' => $data['accountancyId'], 'userId' => Auth::user()->id]);
+        } else {
+            DB::table('disgardTable')->insert(['accountancyId' => $data['accountancyId'], 'userId' => Auth::user()->id, 'comment' => $data['comment']]);
+        }
+    }
 }

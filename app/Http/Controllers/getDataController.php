@@ -171,4 +171,20 @@ class getDataController extends Controller
         }
         return response()->json($result);
     }
+
+    public function getAllAccountancy()
+    {
+        $result = new \stdClass();
+        $result->accountancyData = DB::table('accountancy')->get();
+        $result->acceptData = DB::table('acceptTable')->get();
+        foreach ($result->acceptData as $accept) {
+            $accept->userId = $this->findElementById($accept->userId, 'users', 'name');
+        }
+        $result->disgardData = DB::table('disgardTable')->get();
+
+        foreach ($result->disgardData as $disgard) {
+            $disgard->userId = $this->findElementById($accept->userId, 'users', 'name');
+        }
+        return response()->json($result);
+    }
 }

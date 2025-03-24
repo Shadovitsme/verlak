@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import JustButton from './justButton.vue';
-const props = defineProps(['text', 'href']);
+const props = defineProps(['text', 'href', 'hideButton']);
 const emit = defineEmits(['delete', 'add']);
 let openDropDown = ref(false);
 </script>
@@ -29,7 +29,7 @@ let openDropDown = ref(false);
         </div>
         <div class="mt-3" v-if="openDropDown">
             <slot></slot>
-            <div class="mt-3 flex w-full justify-end">
+            <div v-if="!props.hideButton" class="mt-3 flex w-full justify-end">
                 <JustButton @click="emit('add')" color="blue"
                     >Добавить наименование</JustButton
                 >
