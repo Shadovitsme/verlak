@@ -129,22 +129,45 @@
 -- phone varchar(100),
 -- foreign key (adressId) references adressData (id) on Delete cascade
 -- )
-CREATE TABLE accountancy (
+-- CREATE TABLE accountancy (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     pathToDirectory text
+-- );
+-- CREATE TABLE acceptTable (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     userId integer,
+--     accountancyId integer,
+--     foreign key (userId) references users (id) on Delete cascade,
+--     foreign key (accountancyId) references accountancy (id) on Delete cascade
+-- );
+-- CREATE TABLE disgardTable (
+--     id integer PRIMARY KEY AUTOINCREMENT,
+--     userId integer,
+--     accountancyId integer,
+--     comment varchar(100),
+--     foreign key (userId) references users (id) on Delete cascade,
+--     foreign key (accountancyId) references accountancy (id) on Delete cascade
+-- )
+CREATE TABLE ODSH (
     id integer PRIMARY KEY AUTOINCREMENT,
-    pathToDirectory text
+entrance integer,
+adressId integer,
+customer varchar(100),
+size varchar(100),
+foreign key (adressId) references adressData (id) on Delete cascade
 );
-CREATE TABLE acceptTable (
+CREATE TABLE ODSHTable (
     id integer PRIMARY KEY AUTOINCREMENT,
-    userId integer,
-    accountancyId integer,
-    foreign key (userId) references users (id) on Delete cascade,
-    foreign key (accountancyId) references accountancy (id) on Delete cascade
-);
-CREATE TABLE disgardTable (
-    id integer PRIMARY KEY AUTOINCREMENT,
-    userId integer,
-    accountancyId integer,
-    comment varchar(100),
-    foreign key (userId) references users (id) on Delete cascade,
-    foreign key (accountancyId) references accountancy (id) on Delete cascade
+ODSHid integer,
+level integer,
+topEnter varchar(100),
+topN varchar(100),
+topV varchar(100),
+leftN varchar(100),
+leftV varchar(100),
+rightN varchar(100),
+rightV varchar(100),
+summ varchar(100),
+color varchar(100),
+foreign key (ODSHid) references ODSH (id) on Delete cascade
 )

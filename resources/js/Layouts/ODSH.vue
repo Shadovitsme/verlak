@@ -65,7 +65,7 @@ const size = ref(props.SizeProps);
             <img class="shrink-0" src="/assets/pictures/lifti project 2.png" />
         </div>
         <RoundedArrowLineDropdown text="Таблица">
-            <ODSHTable></ODSHTable>
+            <ODSHTable :-o-d-s-h-table-data="props.ODSHTableData"></ODSHTable>
         </RoundedArrowLineDropdown>
     </div>
 </template>
