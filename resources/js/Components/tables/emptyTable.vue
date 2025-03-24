@@ -95,7 +95,6 @@ const handleBodyClick = (event) => {
 
 function addAdress(id, adress) {
     data.value.forEach((element) => {
-        console.log(element)
         addWorkerAdress(
             id,
             adress,
@@ -154,9 +153,8 @@ function chooseValue(trIndex, indexItem) {
                 return [val.name, val.summ, val.comment][indexItem] || '';
             case 'deleteWorkerAdress':
                 return (
-                    [val.summ, val.avans, val.date, val.comment][
-                        indexItem
-                    ] || ''
+                    [val.summ, val.avans, val.date, val.comment][indexItem] ||
+                    ''
                 );
         }
     }

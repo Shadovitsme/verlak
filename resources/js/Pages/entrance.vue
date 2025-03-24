@@ -10,6 +10,7 @@ import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue'
 import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import OpenModal from '@/Components/openModal.vue';
 import addElevator from '@/Components/jsFunctions/setters/addElevator';
+import ODSH from '@/Layouts/ODSH.vue';
 let data = ref(null);
 
 // Объявляем пропсы
@@ -93,5 +94,6 @@ function closeModal() {
                 ></CustomUniversalTable>
             </RoundedArrowLineDropdown>
         </div>
+        <ODSH></ODSH>
     </div>
 </template>
