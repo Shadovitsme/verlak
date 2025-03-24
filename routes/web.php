@@ -104,6 +104,8 @@ Route::post('/updateHomeData', [setDataController::class, 'updateHomeData']);
 Route::post('/updateContactPerson', [setDataController::class, 'updateContactPerson']);
 Route::post('/universalUpdate', [setDataController::class, 'universalUpdate']);
 
+Route::post('/setHeadODSH', [setDataController::class, 'setHeadODSH']);
+
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);
 Route::post('/addEntrance', [setDataController::class, 'addEntrance']);

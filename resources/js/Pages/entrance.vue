@@ -94,6 +94,6 @@ function closeModal() {
                 ></CustomUniversalTable>
             </RoundedArrowLineDropdown>
         </div>
-        <ODSH></ODSH>
+        <ODSH :adress-id="adressId" :entrance="entranceName"></ODSH>
     </div>
 </template>

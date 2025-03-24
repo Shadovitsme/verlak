@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import CustomInput from '@/Components/customInput.vue';
 import IconButton from '@/Components/iconButton.vue';
+import sendHeadODSH from '@/Components/jsFunctions/setters/sendHeadODSHDataToDB';
 import JustButton from '@/Components/justButton.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import ODSHTable from '@/Components/tables/ODSHTable.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
+    adressId: String,
+    entrance: String,
     customerProps: { type: String, default: () => '' },
     Adress: { type: String, default: () => '' },
     Manager: { type: String, default: () => '' },
@@ -18,6 +21,11 @@ const props = defineProps({
 const editMode = ref(false);
 const customer = ref(props.customerProps);
 const size = ref(props.SizeProps);
+
+function updateHeadOdsh() {
+    sendHeadODSH(props.adressId, props.entrance, customer.value, size.value);
+    editMode.value = false;
+}
 </script>
 
 <template>
@@ -55,10 +63,7 @@ const size = ref(props.SizeProps);
                 <p v-if="!editMode" class="mt-10 text-gray-700">
                     {{ 'Размер С: ' + size }}
                 </p>
-                <JustButton
-                    v-if="editMode"
-                    @click="editMode = false"
-                    color="blue"
+                <JustButton v-if="editMode" @click="updateHeadOdsh" color="blue"
                     >Сохранить</JustButton
                 >
             </div>

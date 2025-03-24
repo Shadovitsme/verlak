@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\Hash;
 
 class setDataController extends Controller
 {
+    public function setHeadODSH(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $adressId = $data['adressId'];
+        $entrance = $data['entrance'];
+        $customer = $data['customer'];
+        $size = $data['size'];
+        $idODSH = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->value('id');
+
+        if ($idODSH) {
+            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'size' => $size]);
+        } else {
+            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'size' => $size]);
+        }
+    }
+
     private function addElevatorFromContract($adressId, $entrance, $elevatorCount)
     {
         for ($i = 0; $i < $elevatorCount; $i++) {
