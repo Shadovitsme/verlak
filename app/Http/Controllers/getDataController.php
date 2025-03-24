@@ -225,7 +225,14 @@ class getDataController extends Controller
         $adressId = $request->header('adressId');
         $entrance = $request->header('entrance');
         $result = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->get()[0];
-        $result->ODSHTableData=DB::table('ODSHTable')->where('ODSHid','=',$result->id)->get();
+        $result->ODSHTableData = DB::table('ODSHTable')->where('ODSHid', '=', $result->id)->get();
+
+        $contractId = DB::table('adressData')->where('id', '=', $adressId)->get(['contractId', 'adress'])[0];
+        $result->adressId = $contractId->adress;
+
+        $managerId = DB::table('contract')->where('id', '=', $contractId->contractId)->value('manager');
+        $result->manager = DB::table('users')->where('id', '=', $managerId)->get(['name', 'phone'])[0];
+
         return response()->json($result);
     }
 }

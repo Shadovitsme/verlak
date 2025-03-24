@@ -73,9 +73,13 @@ async function fetchData(adressId, entranceName) {
                     label-text="Заказчик"
                     @update:value="(newValue) => (customer = newValue)"
                 ></CustomInput>
-                <p class="text-gray-700">{{ 'Адресс: ' + props.Adress }}</p>
-                <p class="text-gray-700">{{ 'Сотрудник: ' + props.Manager }}</p>
-                <p class="text-gray-700">{{ 'Телефон: ' + props.Phone }}</p>
+                <p class="text-gray-700">{{ 'Адресс: ' + data.adressId }}</p>
+                <p class="text-gray-700">
+                    {{ 'Сотрудник: ' + data.manager.name }}
+                </p>
+                <p class="text-gray-700">
+                    {{ 'Телефон: ' + data.manager.phone }}
+                </p>
                 <CustomInput
                     :value="size"
                     v-if="editMode"
