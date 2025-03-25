@@ -78,16 +78,20 @@ async function saveData() {
     }
 
     if (props.data) {
-        updateContract(
-            props.data.id,
-            number,
-            organization,
-            date,
-            town,
-            state,
-            adressData,
-        );
-        emit('close');
+        try {
+            await updateContract(
+                props.data.id,
+                number,
+                organization,
+                date,
+                town,
+                state,
+                adressData,
+            );
+            emit('close');
+        } catch (error) {
+            errorState.value = true;
+        }
     } else {
         try {
             await addNewContract(

@@ -61,13 +61,13 @@ class setDataController extends Controller
                 'contractId' => $contractId,
                 'price' => $tableRow['price'],
             ]);
-            $entrance = $tableRow['entrance'];
-            $elevatorCount = $tableRow['elevatorCount'];
+            // $entrance = $tableRow['entrance'];
+            // $elevatorCount = $tableRow['elevatorCount'];
             $arr = ['До', 'В работе', 'После'];
             foreach ($arr as $value) {
                 DB::table('adressPhotoUserFolders')->insert(['fatherId' => $adressId, 'name' => $value]);
             }
-            $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
+            // $this->addElevatorFromContract($adressId, $entrance, $elevatorCount);
         }
     }
 
@@ -130,6 +130,16 @@ class setDataController extends Controller
     {
         $data = json_decode($request->getContent(), true);
         $contractId = $data['id'];
+        $exists = DB::table('contract')
+            ->where('contractNumber', $data['contractNumber'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'error' => 'Contract number already exists',
+                'contractNumber' => $data['contractNumber']
+            ], 409);
+        }
         DB::table('contract')->where('id', '=', $contractId)->update([
             'contractNumber' => $data['contractNumber'],
             'date' => $data['date'],
