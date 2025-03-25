@@ -106,6 +106,7 @@ function saveData() {
                 <div class="z-20 pb-8">
                     <div id="contractNumber" class="z-20 mb-4 flex gap-x-10">
                         <CustomInput
+                            inputType="number"
                             :static-width="false"
                             label-text="Номер контракта"
                             placeholder="Введите номер контракта"
