@@ -4,26 +4,26 @@
 
 @font-face {
     font-family: 'Verdana'; /* Задайте имя шрифта */
-    src: url('./Verdana.ttf') format('truetype'); /* Путь к файлу в public */
+    src: url('./Verdana/Verdana.ttf') format('truetype'); /* Путь к файлу в public */
     font-weight: normal; /* Укажите вес шрифта, если нужно */
     font-style: normal; /* Укажите стиль, если нужно */
 }
 
 @font-face {
     font-family: 'Verdana'; /* Задайте имя шрифта */
-    src: url('./Verdana-Bold.ttf') format('truetype'); /* Путь к файлу в public */
+    src: url('./Verdana/Verdana-Bold.ttf') format('truetype'); /* Путь к файлу в public */
     font-weight: bold; /* Укажите вес шрифта, если нужно */
     font-style: normal; /* Укажите стиль, если нужно */
 }
 @font-face {
     font-family: 'Verdana'; /* Задайте имя шрифта */
-    src: url('./Verdana-BoldItalic.ttf') format('truetype'); /* Путь к файлу в public */
+    src: url('./Verdana/Verdana-BoldItalic.ttf') format('truetype'); /* Путь к файлу в public */
     font-weight: bold; /* Укажите вес шрифта, если нужно */
     font-style: italic; /* Укажите стиль, если нужно */
 }
 @font-face {
     font-family: 'Verdana'; /* Задайте имя шрифта */
-    src: url('./Verdana-Italic.ttf') format('truetype'); /* Путь к файлу в public */
+    src: url('./Verdana/Verdana-Italic.ttf') format('truetype'); /* Путь к файлу в public */
     font-weight: normal; /* Укажите вес шрифта, если нужно */
     font-style: italic; /* Укажите стиль, если нужно */
 }

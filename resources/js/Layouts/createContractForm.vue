@@ -20,8 +20,6 @@ const headItems = [
     'Административный округ',
     'Район',
     'Адрес многоквартирного дома ',
-    'Кол-во лифтов',
-    'Подъезд',
     'Серия дома',
     'Тип проекта',
     'Дата начала',
@@ -33,8 +31,6 @@ const dbAdressColumnNames = [
     'adminDistrict',
     'townDistrict',
     'adress',
-    'elevatorCount',
-    'entrance',
     'buildingSerial',
     'projectType',
     'dateStart',
@@ -124,7 +120,7 @@ function saveData() {
                                 label-text="Название организации"
                                 placeholder="Введите названии организации"
                                 check-type="radio"
-                                :label-text-arr="['верлак', 'не верлак']"
+                                :label-text-arr="['ВЕРЛАК', 'ПСК']"
                                 :value="
                                     props.data != null
                                         ? props.data.organization
@@ -205,8 +201,6 @@ function saveData() {
                         'Название округа',
                         'Название района',
                         'Адрес ',
-                        'n',
-                        '№',
                         '№',
                         'Наименование типа',
                         'дд.мм.гггг',

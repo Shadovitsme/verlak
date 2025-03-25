@@ -60,7 +60,18 @@ async function fetchData() {
                 }));
             break;
         default:
-            data.value = [];
+            data.value = Array(props.rowCounter)
+                .fill()
+                .map(() => ({
+                    adminDistrict: '',
+                    townDistrict: '',
+                    adress: '',
+                    buildingSerial: '',
+                    projectType: '',
+                    dateStart: '',
+                    dateEnd: '',
+                    price: '',
+                }));
             break;
     }
 }
@@ -136,12 +147,24 @@ function updateData(trIndex, indexItem, value) {
             else if (indexItem === 2) data.value[trIndex].date = value;
             else if (indexItem === 3) data.value[trIndex].comment = value;
             break;
+        default:
+            if (indexItem === 0) data.value[trIndex].adminDistrict = value;
+            else if (indexItem === 1) data.value[trIndex].townDistrict = value;
+            else if (indexItem === 2) data.value[trIndex].adress = value;
+            else if (indexItem === 3)
+                data.value[trIndex].buildingSerial = value;
+            else if (indexItem === 4) data.value[trIndex].projectType = value;
+            else if (indexItem === 5) data.value[trIndex].dateStart = value;
+            else if (indexItem === 6) data.value[trIndex].dateEnd = value;
+            else if (indexItem === 7) data.value[trIndex].price = value;
+
+            break;
     }
 }
 
 function chooseValue(trIndex, indexItem) {
     if (data.value?.[trIndex]) {
-        const val = data.value[trIndex];
+        let val = data.value[trIndex];
         switch (props.modalType) {
             case 'deleteContactListItem':
                 return (
@@ -155,6 +178,19 @@ function chooseValue(trIndex, indexItem) {
                 return (
                     [val.summ, val.avans, val.date, val.comment][indexItem] ||
                     ''
+                );
+            default:
+                return (
+                    [
+                        val.adminDistrict,
+                        val.townDistrict,
+                        val.adress,
+                        val.buildingSerial,
+                        val.projectType,
+                        val.dateStart,
+                        val.dateEnd,
+                        val.price,
+                    ][indexItem] || ''
                 );
         }
     }
@@ -203,7 +239,9 @@ watch(selectedRow, async (newValue, oldValue) => {
                 );
                 break;
         }
-        await fetchData(); // Обновляем данные после сохранения
+        if (props.modalType) {
+            await fetchData(); // Обновляем данные после сохранения
+        }
     }
 });
 
@@ -267,11 +305,9 @@ onUnmounted(() => {
                                 updateData(trIndex, index, $event.target.value)
                             "
                             :readonly="
-                                props.allChangable
-                                    ? props.modalType == 'deleteWorkerAdress'
-                                        ? index == 4 || index == 5
-                                        : false
-                                    : index == 3 || index == 4
+                                props.modalType == 'deleteWorkerAdress'
+                                    ? index == 4 || index == 5
+                                    : false
                             "
                             :class="[
                                 'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
