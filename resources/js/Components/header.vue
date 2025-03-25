@@ -14,17 +14,15 @@ let lastPart = locationParts[locationParts.length - 1];
             <div class="flex gap-3">
                 <a class="my-auto" href="/contracts">
                     <JustButton
-                        :selected="lastPart == 'contracts'"
+                        :selected="
+                            lastPart == 'contracts' || lastPart == 'dashboard'
+                        "
                         color="noColor"
                         >Договоры</JustButton
                     ></a
                 >
                 <a class="my-auto" href="/admin"
-                    ><JustButton
-                        :selected="
-                            lastPart == 'admin' || lastPart == 'dashboard'
-                        "
-                        color="noColor"
+                    ><JustButton :selected="lastPart == 'admin'" color="noColor"
                         >Сотрудники</JustButton
                     ></a
                 >

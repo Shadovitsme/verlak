@@ -33,7 +33,8 @@ if (
     props.modalType == 'deletePhoto' ||
     props.modalType == 'deleteMontazh' ||
     props.modalType == 'deleteWorker' ||
-    props.modalType == 'deleteAvans'
+    props.modalType == 'deleteAvans' ||
+    props.modalType == 'deleteODSH'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -89,8 +90,12 @@ function selectText(type) {
             body.value = 'Вы уверены, что хотите удалить данные исполнителя?';
             break;
         case 'deleteAvans':
-            top.value = 'Удалить исполнителя';
-            body.value = 'Вы уверены, что хотите удалить данные исполнителя?';
+            top.value = 'Удалить аванс';
+            body.value = 'Вы уверены, что хотите удалить аванс?';
+            break;
+        case 'deleteODSH':
+            top.value = 'Удалить этаж';
+            body.value = 'Вы уверены, что хотите удалить этаж?';
             break;
         default:
             break;
@@ -164,6 +169,9 @@ async function send() {
             break;
         case 'deleteWorker':
             universalDelete(props.idToDelete, '/universalDelete', 'worker');
+            break;
+        case 'deleteODSH':
+            universalDelete(props.idToDelete, '/universalDelete', 'ODSHTable');
             break;
         case 'addManager':
             addNewManager(

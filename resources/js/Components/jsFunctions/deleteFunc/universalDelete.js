@@ -17,6 +17,8 @@ export default async function universalDelete(id, api, where = null) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+        window.location.reload();
+
         return 'success';
     } catch (error) {
         console.error('Error fetching data:', error);

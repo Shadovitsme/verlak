@@ -16,7 +16,6 @@ const props = defineProps({
     Manager: { type: String, default: () => '' },
     Phone: { type: String, default: () => '' },
     SizeProps: { type: String, default: () => '' },
-    ODSHTableData: { type: Object, default: () => ({}) },
 });
 
 const editMode = ref(false);
@@ -44,6 +43,7 @@ async function fetchData(adressId, entranceName) {
             customer.value = '';
             size.value = '';
         }
+        console.log(data.value);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
@@ -107,7 +107,7 @@ async function fetchData(adressId, entranceName) {
             <ODSHTable
                 :adress-id="props.adressId"
                 :entrance="props.entrance"
-                :-o-d-s-h-table-data="props.ODSHTableData"
+                :-o-d-s-h-table-data="data.ODSHTableData"
             ></ODSHTable>
         </RoundedArrowLineDropdown>
     </div>

@@ -29,8 +29,21 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Выполняем аутентификацию через LoginRequest
         $request->authenticate();
 
+        // Проверяем, активен ли пользователь
+        if (Auth::user()->active != 1) {
+            Auth::guard('web')->logout(); // Выход, если неактивен
+            $request->session()->invalidate(); // Сбрасываем сессию
+            $request->session()->regenerateToken(); // Регенерируем CSRF-токен
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Ваш аккаунт неактивен.',
+            ]);
+        }
+
+        // Если активен, регенерируем сессию и перенаправляем
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

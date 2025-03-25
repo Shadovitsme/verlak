@@ -5,14 +5,31 @@ import { ref } from 'vue';
 import insertOdshTable from '../jsFunctions/setters/insertODSHTable';
 
 const props = defineProps({
-    ODSHTableData: { type: Object, default: () => ({}) },
+    ODSHTableData: { type: Array, default: () => [] },
     adressId: String,
     entrance: String,
 });
-console.log(props.ODSHTableData);
 
-const besideOdsh = ref([
-    {
+const besideOdsh = ref([]);
+console.log(props.ODSHTableData[0]);
+if (props.ODSHTableData.length) {
+    props.ODSHTableData.forEach((element) => {
+        besideOdsh.value.push({
+            id: element.id,
+            level: element.level,
+            topEnter: element.topEnter,
+            topN: element.topN,
+            topV: element.topV,
+            leftN: element.leftN,
+            leftV: element.leftV,
+            rightN: element.rightN,
+            rightV: element.rightV,
+            summ: element.summ,
+            color: element.color,
+        });
+    });
+} else {
+    besideOdsh.value.push({
         id: '',
         level: '',
         topEnter: '',
@@ -24,8 +41,8 @@ const besideOdsh = ref([
         rightV: '',
         summ: '',
         color: '',
-    },
-]);
+    });
+}
 
 function addRow() {
     besideOdsh.value.push({
@@ -41,11 +58,11 @@ function addRow() {
         summ: '',
         color: '',
     });
-    console.log(besideOdsh.value);
 }
 
 function save() {
     insertOdshTable(besideOdsh.value, props.adressId, props.entrance);
+    window.location.reload();
 }
 </script>
 
@@ -284,7 +301,7 @@ function save() {
                         </td>
                         <td class="px-4">
                             <EditDeleteComponent
-                                modal-type="deleteAvans"
+                                modal-type="deleteODSH"
                                 :id-to-delete="row.id"
                             />
                         </td>

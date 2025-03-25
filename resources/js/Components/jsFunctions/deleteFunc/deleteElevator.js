@@ -18,6 +18,8 @@ export default async function deleteElevator(name, adressId, entrance) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+        window.location.reload();
+
         return 'success'; // Возвращаем данные как массив
     } catch (error) {
         console.error('Error fetching data:', error);
