@@ -106,6 +106,7 @@ Route::post('/updateContactPerson', [setDataController::class, 'updateContactPer
 Route::post('/universalUpdate', [setDataController::class, 'universalUpdate']);
 
 Route::post('/setHeadODSH', [setDataController::class, 'setHeadODSH']);
+Route::post('/setOdshTable', [setDataController::class, 'setOdshTable']);
 
 Route::post('/addManager', [setDataController::class, 'setNewManager']);
 Route::post('/addContract', [setDataController::class, 'addNewContract']);

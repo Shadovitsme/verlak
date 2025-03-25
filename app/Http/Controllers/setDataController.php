@@ -308,4 +308,10 @@ class setDataController extends Controller
             DB::table('disgardTable')->insert(['accountancyId' => $data['accountancyId'], 'userId' => Auth::user()->id, 'comment' => $data['comment']]);
         }
     }
+
+    public function setOdshTable(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        var_dump($data);
+    }
 }

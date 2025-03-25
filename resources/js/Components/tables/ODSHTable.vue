@@ -2,13 +2,14 @@
 import JustButton from '../justButton.vue';
 import EditDeleteComponent from '../editDeleteComponent.vue';
 import { ref } from 'vue';
+import insertOdshTable from '../jsFunctions/setters/insertODSHTable';
 
 const props = defineProps({
     ODSHTableData: { type: Object, default: () => ({}) },
+    adressId: String,
+    entrance: String,
 });
 console.log(props.ODSHTableData);
-
-
 
 const besideOdsh = ref([
     {
@@ -42,7 +43,10 @@ function addRow() {
         summ: '',
         color: '',
     });
-    console.log(besideOdsh.value);
+}
+
+function save() {
+    insertOdshTable(besideOdsh.value, props.adressId, props.entrance);
 }
 </script>
 
@@ -291,7 +295,7 @@ function addRow() {
         </div>
         <div class="mt-4 flex w-full justify-end gap-3">
             <JustButton @click="addRow" color="blue">Добавить этаж</JustButton
-            ><JustButton color="blue">Сохранить</JustButton>
+            ><JustButton @click="save" color="blue">Сохранить</JustButton>
         </div>
     </div>
 </template>

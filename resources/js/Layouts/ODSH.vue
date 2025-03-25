@@ -37,7 +37,6 @@ async function fetchData(adressId, entranceName) {
     try {
         const result = await getODSH(adressId, entranceName);
         data.value = result;
-        console.log(data.value);
         if (data.value != undefined) {
             customer.value = data.value.customer;
             size.value = data.value.sizeT;
@@ -73,12 +72,20 @@ async function fetchData(adressId, entranceName) {
                     label-text="Заказчик"
                     @update:value="(newValue) => (customer = newValue)"
                 ></CustomInput>
-                <p class="text-gray-700">{{ 'Адресс: ' + data.adressId }}</p>
                 <p class="text-gray-700">
-                    {{ 'Сотрудник: ' + data.manager.name }}
+                    {{ 'Адресс: ' + (data != undefined ? data.adressId : '') }}
                 </p>
                 <p class="text-gray-700">
-                    {{ 'Телефон: ' + data.manager.phone }}
+                    {{
+                        'Сотрудник: ' +
+                        (data != undefined ? data.manager.name : '')
+                    }}
+                </p>
+                <p class="text-gray-700">
+                    {{
+                        'Телефон: ' +
+                        (data != undefined ? data.manager.phone : '')
+                    }}
                 </p>
                 <CustomInput
                     :value="size"
@@ -97,7 +104,11 @@ async function fetchData(adressId, entranceName) {
             <img class="shrink-0" src="/assets/pictures/lifti project 2.png" />
         </div>
         <RoundedArrowLineDropdown :hide-button="true" text="Таблица">
-            <ODSHTable :-o-d-s-h-table-data="props.ODSHTableData"></ODSHTable>
+            <ODSHTable
+                :adress-id="props.adressId"
+                :entrance="props.entrance"
+                :-o-d-s-h-table-data="props.ODSHTableData"
+            ></ODSHTable>
         </RoundedArrowLineDropdown>
     </div>
 </template>
