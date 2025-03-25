@@ -32,10 +32,7 @@ async function fetchData() {
     }
 }
 
-function closeOneCOntractForm() {
-    toggleOneContract.value = !toggleOneContract.value;
-    selectedContractNumber.value = null;
-}
+
 
 function close() {
     toggleCreateContract.value = false;
@@ -83,12 +80,12 @@ function close() {
         :data="data"
     >
         <BreadWay
-            @goto-main="toggleCreateContract = !toggleCreateContract"
+            @goto-main="close()"
             start-point-text="Учёт договоров"
             :middle-point-text="
                 editContract ? 'Договор №' + selectedContractNumber : ''
             "
-            @goto-middle="closeAll()"
+            @goto-middle="editContract.value = false;"
             :current-point-text="
                 toggleCreateContract
                     ? 'Создание договора'
@@ -117,7 +114,7 @@ function close() {
         v-if="toggleOneContract && !editContract"
     >
         <BreadWay
-            @goto-main="closeOneCOntractForm"
+            @goto-main="close()"
             start-point-text="Учёт договоров"
             :current-point-text="'Договор №' + selectedContractNumber"
         ></BreadWay
