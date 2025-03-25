@@ -13,9 +13,8 @@ console.log(props.ODSHTableData);
 
 const besideOdsh = ref([
     {
-        id: undefined,
-        ODSHid: undefined,
-        level: undefined,
+        id: '',
+        level: '',
         topEnter: '',
         topN: '',
         topV: '',
@@ -30,9 +29,8 @@ const besideOdsh = ref([
 
 function addRow() {
     besideOdsh.value.push({
-        id: undefined,
-        ODSHid: undefined,
-        level: undefined,
+        id: '',
+        level: '',
         topEnter: '',
         topN: '',
         topV: '',
@@ -43,6 +41,7 @@ function addRow() {
         summ: '',
         color: '',
     });
+    console.log(besideOdsh.value);
 }
 
 function save() {

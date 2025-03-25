@@ -9,22 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class setDataController extends Controller
 {
-    public function setHeadODSH(Request $request)
-    {
-        $data = json_decode($request->getContent(), true);
-        $adressId = $data['adressId'];
-        $entrance = $data['entrance'];
-        $customer = $data['customer'];
-        $size = $data['size'];
-        $idODSH = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->value('id');
-
-        if ($idODSH) {
-            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'sizeT' => $size]);
-        } else {
-            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'sizeT' => $size]);
-        }
-    }
-
     private function addElevatorFromContract($adressId, $entrance, $elevatorCount)
     {
         for ($i = 0; $i < $elevatorCount; $i++) {
@@ -309,9 +293,92 @@ class setDataController extends Controller
         }
     }
 
+    public function setHeadODSH(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $adressId = $data['adressId'];
+        $entrance = $data['entrance'];
+        $customer = $data['customer'];
+        $size = $data['size'];
+        $idODSH = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->value('id');
+
+        if ($idODSH) {
+            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'sizeT' => $size]);
+        } else {
+            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'sizeT' => $size]);
+        }
+    }
+
+    private function createODSHHeadItem($adressId, $entrance)
+    {
+        $id = DB::table('ODSH')->insertGetId(['entrance' => $entrance, 'adressId' => $adressId]);
+        return $id;
+    }
+
+    private function createODSHtableItem(
+        $ODSHId,
+        $level,
+        $topEnter,
+        $topN,
+        $topV,
+        $leftN,
+        $leftV,
+        $rightN,
+        $rightV,
+        $summ,
+        $color,
+    ) {
+        DB::table('ODSHTable')->insert([
+            'level' => $level,
+            'topEnter' => $topEnter,
+            'topN' => $topN,
+            'topV' => $topV,
+            'leftN' => $leftN,
+            'leftV' => $leftV,
+            'rightN' => $rightN,
+            'rightV' => $rightV,
+            'summ' => $summ,
+            'color' => $color,
+            'ODSHid' => $ODSHId
+        ]);
+    }
+
     public function setOdshTable(Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        var_dump($data);
+        $ODSHId = DB::table('ODSH')->where('adressId', '=', $data['adressId'])->where('entrance', '=', $data['entrance'])->value('id');
+        if (!$ODSHId) {
+            $ODSHId = $this->createODSHHeadItem($data['adressId'], $data['entrance']);
+        }
+        foreach ($data['objectArray'] as $value) {
+            if ($value['id'] != '') {
+                DB::table('ODSHTable')->where('id', '=', $value['id'])->update([
+                    'level' => $value['level'],
+                    'topEnter' => $value['topEnter'],
+                    'topN' => $value['topN'],
+                    'topV' => $value['topV'],
+                    'leftN' => $value['leftN'],
+                    'leftV' => $value['leftV'],
+                    'rightN' => $value['rightN'],
+                    'rightV' => $value['rightV'],
+                    'summ' => $value['summ'],
+                    'color' => $value['color'],
+                ]);
+            } else {
+                $this->createODSHtableItem(
+                    $ODSHId,
+                    $value['level'],
+                    $value['topEnter'],
+                    $value['topN'],
+                    $value['topV'],
+                    $value['leftN'],
+                    $value['leftV'],
+                    $value['rightN'],
+                    $value['rightV'],
+                    $value['summ'],
+                    $value['color'],
+                );
+            }
+        }
     }
 }
