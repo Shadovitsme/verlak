@@ -87,6 +87,7 @@ async function saveData() {
             state,
             adressData,
         );
+        emit('close');
     } else {
         try {
             await addNewContract(

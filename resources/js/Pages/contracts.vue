@@ -36,6 +36,13 @@ function closeOneCOntractForm() {
     toggleOneContract.value = !toggleOneContract.value;
     selectedContractNumber.value = null;
 }
+
+function close() {
+    toggleCreateContract.value = false;
+    toggleOneContract.value = false;
+    editContract.value = false;
+    selectedContractNumber.value = undefined;
+}
 </script>
 
 <template>
@@ -70,7 +77,7 @@ function closeOneCOntractForm() {
     </div>
 
     <CreateContractForm
-        @close="toggleCreateContract = !toggleCreateContract"
+        @close="close()"
         v-if="toggleCreateContract || editContract"
         :contractNumber="selectedContractNumber"
         :data="data"
