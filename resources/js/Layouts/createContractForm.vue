@@ -9,8 +9,9 @@ import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 import updateContract from '@/Components/jsFunctions/setters/updateContract';
-const tableShow = ref(false);
-let rowCounter = ref(1);
+let rowCounter = ref(0);
+const errorState = ref(false);
+
 const props = defineProps({
     contractNumber: String,
     organization: String,
@@ -52,7 +53,8 @@ function getDropDownValue(id) {
     return besideResult;
 }
 const emit = defineEmits(['close']);
-function saveData() {
+
+async function saveData() {
     event.preventDefault();
     let number = document
         .getElementById('contractNumber')
@@ -61,7 +63,6 @@ function saveData() {
     let date = getDropDownValue('date');
     let town = getDropDownValue('town');
     let state = getDropDownValue('state');
-
     let adressData = [];
     for (let i = 0; i <= rowCounter.value - 1; i++) {
         let besideResult = {};
@@ -87,9 +88,21 @@ function saveData() {
             adressData,
         );
     } else {
-        addNewContract(number, organization, date, town, state, adressData);
+        try {
+            await addNewContract(
+                number,
+                organization,
+                date,
+                town,
+                state,
+                adressData,
+            );
+            console.log('Contract added successfully');
+            emit('close');
+        } catch (error) {
+            errorState.value = true;
+        }
     }
-    emit('close');
 }
 </script>
 
@@ -105,15 +118,27 @@ function saveData() {
                 <p class="mb-5 text-2xl text-gray-900">Основная информация</p>
                 <div class="z-20 pb-8">
                     <div id="contractNumber" class="z-20 mb-4 flex gap-x-10">
-                        <CustomInput
-                            inputType="number"
-                            :static-width="false"
-                            label-text="Номер контракта"
-                            placeholder="Введите номер контракта"
-                            :value="
-                                props.contractNumber ? props.contractNumber : ''
-                            "
-                        ></CustomInput>
+                        <div class="w-full">
+                            <CustomInput
+                                :errorState="errorState"
+                                inputType="number"
+                                :static-width="false"
+                                label-text="Номер контракта"
+                                placeholder="Введите номер контракта"
+                                :value="
+                                    props.contractNumber
+                                        ? props.contractNumber
+                                        : ''
+                                "
+                            ></CustomInput>
+                            <p
+                                class="mt-1.5 text-xs text-rose-600"
+                                v-if="errorState"
+                            >
+                                Такой договор уже существует. Проверьте
+                                введённый номер.
+                            </p>
+                        </div>
 
                         <div id="organization" class="z-20 w-full">
                             <DropdownInputButton
@@ -175,19 +200,22 @@ function saveData() {
                         </p>
                         <IconButton
                             @click="rowCounter++"
-                            v-if="tableShow"
+                            v-if="rowCounter > 0"
                             type="button"
                             class="my-auto rotate-45"
                             icon="/assets/icons/system/x.svg"
                             color="blue"
                         ></IconButton>
                     </div>
-                    <p v-if="!tableShow" class="mb-3 text-sm text-gray-900">
+                    <p
+                        v-if="rowCounter == 0"
+                        class="mb-3 text-sm text-gray-900"
+                    >
                         Адресов пока нет
                     </p>
                     <JustButton
-                        @click="tableShow = !tableShow"
-                        v-if="!tableShow"
+                        @click="rowCounter++"
+                        v-if="rowCounter == 0"
                         type="button"
                         class="w-full"
                         color="blue"
@@ -196,7 +224,7 @@ function saveData() {
                 </div>
                 <EmptyTable
                     :row-counter="rowCounter"
-                    v-if="tableShow"
+                    v-if="rowCounter > 0"
                     :headItems="headItems"
                     :placeholders="[
                         'Название округа',

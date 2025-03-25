@@ -75,6 +75,16 @@ class setDataController extends Controller
     {
         $data = json_decode($request->getContent(), true);
         $userId = Auth::user()->id;
+        $exists = DB::table('contract')
+            ->where('contractNumber', $data['contractNumber'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'error' => 'Contract number already exists',
+                'contractNumber' => $data['contractNumber']
+            ], 409);
+        }
         $contractId = DB::table('contract')->insertGetId([
             'contractNumber' => $data['contractNumber'],
             'date' => $data['date'],
