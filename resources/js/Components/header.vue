@@ -43,7 +43,7 @@ let lastPart = locationParts[locationParts.length - 1];
                         >Счета</JustButton
                     ></a
                 >
-                <a class="my-auto" href="/notifications">
+                <a class="group my-auto" href="/notifications">
                     <JustButton
                         :selected="lastPart == 'notifications'"
                         class="flex align-middle"
@@ -92,7 +92,7 @@ let lastPart = locationParts[locationParts.length - 1];
 </template>
 
 <style>
-.imgColorlessButton:hover {
+.group:hover .imgColorlessButton {
     filter: brightness(0) saturate(100%) invert(20%) sepia(83%) saturate(3179%)
         hue-rotate(242deg) brightness(80%) contrast(96%);
 }

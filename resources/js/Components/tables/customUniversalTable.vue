@@ -121,7 +121,7 @@ watch(
                 switch (props.deleteCommand) {
                     case 'deleteManager':
                         updateManagerData(
-                            id,
+                            data.value[oldSelectedRowIndex][0],
                             data.value[oldSelectedRowIndex][1],
                             data.value[oldSelectedRowIndex][2],
                             data.value[oldSelectedRowIndex][3],
@@ -160,7 +160,7 @@ watch(
                     }
                     checkUndefinedTableColumn(oldReadonlyFlag, index);
                     refillDataArray(0, index, id);
-
+                    console.log(data.value);
                     if (props.deleteCommand == 'deleteManager') {
                         updateManagerData(
                             id,
