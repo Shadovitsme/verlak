@@ -1,11 +1,18 @@
-<script setup lang="ts">
+<script setup>
 import IconButton from './iconButton.vue';
 import JustButton from './justButton.vue';
-let notificateStatus = 'Default';
 import DropdownLink from './DropdownLink.vue';
+
+// Статус уведомлений
+let notificateStatus = 'Default';
+
+// Разбиваем URL для определения текущей страницы
 let locationParts = location.href.split('/');
 let lastPart = locationParts[locationParts.length - 1];
+
+// Получаем ID текущего пользователя из props Inertia
 </script>
+
 <template>
     <div
         class="fixed top-0 z-30 mx-auto flex h-20 w-full max-w-[1600px] bg-white pl-28 pr-32"
@@ -21,15 +28,18 @@ let lastPart = locationParts[locationParts.length - 1];
                         >Договоры</JustButton
                     ></a
                 >
-                <a class="my-auto" href="/admin"
-                    ><JustButton :selected="lastPart == 'admin'" color="noColor"
+                <!-- Условная отрисовка для "Сотрудники" -->
+                <a
+                    v-if="$page.props.auth.user.id === 1"
+                    class="my-auto"
+                    href="/admin"
+                >
+                    <JustButton :selected="lastPart == 'admin'" color="noColor"
                         >Сотрудники</JustButton
                     ></a
                 >
-                <a class="my-auto" href="/scores"
-                    ><JustButton
-                        :selected="lastPart == 'scores'"
-                        color="noColor"
+                <a class="my-auto" href="/scores">
+                    <JustButton :selected="lastPart == 'scores'" color="noColor"
                         >Счета</JustButton
                     ></a
                 >
@@ -46,11 +56,15 @@ let lastPart = locationParts[locationParts.length - 1];
                                 notificateStatus +
                                 '.svg'
                             "
-                    /></JustButton>
-                    <!-- TODO сделать отдельный класс для таких текстов с иконками чтоб красить иконку -->
-                    <!-- TODO заставить колокольчик подкрашиваться при наведении на кнопку--></a
+                        />
+                    </JustButton>
+                </a>
+                <!-- Условная отрисовка для "Выплаты" -->
+                <a
+                    v-if="$page.props.auth.user.id === 1"
+                    class="my-auto"
+                    href="/executors"
                 >
-                <a class="my-auto" href="/executors">
                     <JustButton
                         :selected="lastPart == 'executors'"
                         color="noColor"
@@ -59,7 +73,9 @@ let lastPart = locationParts[locationParts.length - 1];
                 </a>
             </div>
             <div class="flex">
-                <p class="my-auto mr-3.5 flex font-medium text-indigo-600">
+                <p
+                    class="my-auto mr-3.5 flex-shrink-0 whitespace-nowrap font-medium text-indigo-600"
+                >
                     {{ $page.props.auth.user.name }}
                 </p>
 
@@ -74,6 +90,7 @@ let lastPart = locationParts[locationParts.length - 1];
         </div>
     </div>
 </template>
+
 <style>
 .imgColorlessButton:hover {
     filter: brightness(0) saturate(100%) invert(20%) sepia(83%) saturate(3179%)

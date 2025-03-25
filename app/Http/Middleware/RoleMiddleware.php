@@ -26,7 +26,7 @@ class RoleMiddleware
         $user = Auth::user();
         echo (!$user->role == 'administrator');
         if ($user->role != 'administrator') {
-            abort(403, 'aasasas');
+            abort(403, 'Недостаточно прав');
         }
 
         return $next($request);

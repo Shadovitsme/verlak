@@ -27,9 +27,7 @@ Route::get('/up', function () {
 Route::get('/notifications', function () {
     return Inertia::render('notifications');
 });
-Route::get('/executors', function () {
-    return Inertia::render('workers');
-});
+
 Route::get('/addWorker', function () {
     return Inertia::render('addWorker');
 });
@@ -69,6 +67,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', RoleMiddleware::class . ':administrator'])->group(function () {
     Route::get('/admin', function () {
         return Inertia::render('managerListPage');
+    });
+    Route::get('/executors', function () {
+        return Inertia::render('workers');
     });
 });
 
