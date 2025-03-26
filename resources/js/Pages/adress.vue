@@ -13,8 +13,9 @@ import DocumentsData from '@/Components/documentsData.vue';
 import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
 import Montazh from '@/Layouts/montazh.vue';
 import BuildingMaterials from '@/Layouts/buildingMaterials.vue';
+import OpenModal from '@/Components/openModal.vue';
 let data = ref(null);
-
+const toggleModal = ref(false);
 // Объявляем пропсы
 const { contractNumber, adressId } = defineProps([
     'contractNumber',
@@ -32,21 +33,32 @@ async function fetchData(adressId) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
+function deleteClose() {
+    window.location.href = '/contracts';
+}
 </script>
 
 <template>
     <Header></Header>
+    <OpenModal
+        @close="deleteClose"
+        modal-type="deleteAdress"
+        :toggle-modal="toggleModal"
+        :id-to-delete="adressId"
+    ></OpenModal>
     <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pb-24 pt-12">
         <BreadWay
             start-point-text="Учёт договоров"
             :middle-point-text="'Договор №' + contractNumber"
             :current-point-text="data != null ? data.adress : ''"
+            @gotoMain="deleteClose"
         ></BreadWay>
         <div class="mb-6 flex w-full justify-between">
             <h1 class="my-auto mr-4 text-5xl text-gray-900">
                 {{ data != null ? data.adress : '' }}
             </h1>
             <IconButton
+                @click="toggleModal = !toggleModal"
                 icon="/assets/icons/system/delete.svg"
                 color="gray"
             ></IconButton>

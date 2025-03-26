@@ -132,6 +132,7 @@ class setDataController extends Controller
         $contractId = $data['id'];
         $exists = DB::table('contract')
             ->where('contractNumber', $data['contractNumber'])
+            ->where('id','<>', $contractId)
             ->exists();
 
         if ($exists) {

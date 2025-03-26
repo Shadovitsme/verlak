@@ -12,7 +12,7 @@ import OpenModal from '@/Components/openModal.vue';
 import addElevator from '@/Components/jsFunctions/setters/addElevator';
 import ODSH from '@/Layouts/ODSH.vue';
 let data = ref(null);
-
+let customUniversalTable = ref(null);
 // Объявляем пропсы
 const { contractNumber, adressId, entranceName } = defineProps([
     'contractNumber',
@@ -43,6 +43,10 @@ function closeModal() {
     currentToDelete.value = null;
     toggleModal.value = !toggleModal.value;
 }
+
+function add() {
+    customUniversalTable.value[0].addLine('aaaaa');
+}
 </script>
 
 <template>
@@ -71,13 +75,15 @@ function closeModal() {
             text="Лифты"
             @add-item="addElevator(data.length + 1, adressId, entranceName)"
         ></textHeadWithAddButton>
-        <div v-for="(dat, index) in data" :key="dat">
+        <div class="mt-3" v-for="(dat, index) in data" :key="dat">
             <RoundedArrowLineDropdown
+                @add="add()"
                 class="mb-2"
                 @delete="deleteElevator(index + 1)"
                 :text="'Лифт ' + index"
             >
                 <CustomUniversalTable
+                    ref="customUniversalTable"
                     delete-command="deleteElevatorData"
                     :readonly-fields="[true, false, false, false]"
                     specialGetters="elevator"

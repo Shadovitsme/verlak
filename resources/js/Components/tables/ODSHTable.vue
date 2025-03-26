@@ -11,7 +11,6 @@ const props = defineProps({
 });
 
 const besideOdsh = ref([]);
-console.log(props.ODSHTableData[0]);
 if (props.ODSHTableData.length) {
     props.ODSHTableData.forEach((element) => {
         besideOdsh.value.push({

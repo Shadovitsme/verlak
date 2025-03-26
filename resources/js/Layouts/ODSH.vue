@@ -43,7 +43,6 @@ async function fetchData(adressId, entranceName) {
             customer.value = '';
             size.value = '';
         }
-        console.log(data.value);
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }

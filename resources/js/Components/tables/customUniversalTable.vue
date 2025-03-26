@@ -37,11 +37,18 @@ let readonlyFlag = ref('');
 let selectedRow = ref(null);
 let selectedRowIndex = ref();
 
+function addLine(name) {
+    data.value.push([name, '-', '-']);
+}
+
+defineExpose({ addLine });
+
 async function fetchData() {
     if (props.specialGetters == 'elevator') {
         const result = await elevatorFillerForUniversalTable(
             props.speciallData,
         );
+        console.log(data.value)
         data.value = result;
         return 0;
     }

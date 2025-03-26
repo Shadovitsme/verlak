@@ -14,6 +14,7 @@ function save() {
     switch (props.place) {
         case 'entrance':
             addEntrance(props.id, name);
+            window.location.reload();
             break;
         case 'contact':
             addContactFolder(props.id, name);

@@ -26,7 +26,7 @@ function deleteAction(entranceName) {
         text="Подъезды"
         @click="showAdd = !showAdd"
     ></textHeadWithAddButton>
-    <div class="space-y-3">
+    <div class="mt-3 space-y-3">
         <RoundedArrowLineToNextPage
             :href="props.hrefStart + '/' + item.entrance"
             @delete="deleteAction(item.entrance)"

@@ -26,15 +26,33 @@ export default async function elevatorFillerForUniversalTable(elevatorData) {
             });
         });
 
-        // Формируем результат, проходя по всем элементам elevatorArrNames
-        const besideArr = elevatorArrNames.map((name) => {
-            if (dataMap.has(name)) {
-                const item = dataMap.get(name);
-                return [name, item.value, item.comment];
+        // Формируем результат
+        const besideArr = [];
+        const processedNames = new Set(); // Для отслеживания обработанных имен
+
+        // Добавляем все элементы из ответа сервера (data), включая кастомные, но только с непустым name
+        data.forEach((element) => {
+            const name = element.descriptionName;
+            // Проверяем, что name не пустой (не null, не undefined, не пустая строка)
+            if (name && name.trim() !== '') {
+                besideArr.push([
+                    name,
+                    element.descriptionValue,
+                    element.commentValue,
+                ]);
+                processedNames.add(name); // Отмечаем имя как обработанное
             }
-            return [name, '-', '-'];
         });
 
+        // Затем добавляем недостающие элементы из elevatorArrNames, если их нет в data
+        elevatorArrNames.forEach((name) => {
+            // Проверяем, что name не пустой и еще не обработан
+            if (name && name.trim() !== '' && !processedNames.has(name)) {
+                besideArr.push([name, '-', '-']);
+            }
+        });
+
+        console.log(besideArr);
         return besideArr;
     } catch (error) {
         console.error('Error fetching data:', error);
