@@ -1,23 +1,23 @@
--- DROP TABLE contract;
--- DROP TABLE adressData;
--- DROP TABLE building;
--- DROP TABLE contactList;
--- DROP TABLE contactPerson;
--- DROP TABLE adressDocument;
--- DROP TABLE EED;
--- DROP TABLE adressPhotoUserFolders;
--- DROP TABLE adressPhoto;
--- DROP TABLE worker;
--- DROP TABLE avances;
--- DROP TABLE workerAdress;
--- DROP TABLE buildingMaterials;
--- DROP TABLE elevator;
--- DROP TABLE montazh;
--- DROP TABLE accountancy;
--- DROP TABLE acceptTable;
--- DROP TABLE disgardTable;
--- DROP TABLE ODSH;
--- DROP TABLE ODSHTable;
+DROP TABLE contract;
+DROP TABLE adressData;
+DROP TABLE building;
+DROP TABLE contactList;
+DROP TABLE contactPerson;
+DROP TABLE adressDocument;
+DROP TABLE EED;
+DROP TABLE adressPhotoUserFolders;
+DROP TABLE adressPhoto;
+DROP TABLE worker;
+DROP TABLE avances;
+DROP TABLE workerAdress;
+DROP TABLE buildingMaterials;
+DROP TABLE elevator;
+DROP TABLE montazh;
+DROP TABLE accountancy;
+DROP TABLE acceptTable;
+DROP TABLE disgardTable;
+DROP TABLE ODSH;
+DROP TABLE ODSHTable;
 CREATE TABLE contract (
     id integer PRIMARY KEY AUTOINCREMENT,
     contractNumber integer unique,

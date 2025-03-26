@@ -4,26 +4,26 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 import Header from '@/Components/header.vue';
 import getExecEntrance from '@/Components/jsFunctions/getters/getExecEntrance';
-// import elevatorDefaultArray from '@/Components/jsFunctions/elevatorDefaultArray';
 import textHeadWithAddButton from '@/Components/textHeadWithAddButton.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import OpenModal from '@/Components/openModal.vue';
 import addElevator from '@/Components/jsFunctions/setters/addElevator';
 import ODSH from '@/Layouts/ODSH.vue';
+import CustomInput from '@/Components/customInput.vue';
+import JustButton from '@/Components/justButton.vue';
+
 let data = ref(null);
-let customUniversalTable = ref(null);
-// Объявляем пропсы
+let customUniversalTable = ref([]); // Теперь массив для хранения всех таблиц
 const { contractNumber, adressId, entranceName } = defineProps([
     'contractNumber',
     'adressId',
     'entranceName',
-]); // Пример использования
+]);
+
 onMounted(() => {
     fetchData(adressId);
 });
-
-// const defaultElevatorTableNamesArray = elevatorDefaultArray;
 
 async function fetchData(adressId) {
     try {
@@ -33,6 +33,7 @@ async function fetchData(adressId) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
+
 let toggleModal = ref(false);
 let currentToDelete = ref();
 function deleteElevator(name) {
@@ -44,8 +45,18 @@ function closeModal() {
     toggleModal.value = !toggleModal.value;
 }
 
-function add() {
-    customUniversalTable.value[0].addLine('aaaaa');
+const addItemVisible = ref([]); // Массив для отслеживания видимости по индексу
+const newItem = ref('');
+
+// Функция add теперь принимает индекс элемента
+function add(index) {
+    if (customUniversalTable.value[index]) {
+        customUniversalTable.value[index].addLine(newItem.value);
+        newItem.value = '';
+        addItemVisible.value[index] = false;
+    } else {
+        console.error(`Таблица с индексом ${index} не найдена`);
+    }
 }
 </script>
 
@@ -77,13 +88,14 @@ function add() {
         ></textHeadWithAddButton>
         <div class="mt-3" v-for="(dat, index) in data" :key="dat">
             <RoundedArrowLineDropdown
-                @add="add()"
+                :hide-button="addItemVisible[index]"
+                @add="addItemVisible[index] = true"
                 class="mb-2"
                 @delete="deleteElevator(index + 1)"
                 :text="'Лифт ' + index"
             >
                 <CustomUniversalTable
-                    ref="customUniversalTable"
+                    :ref="(el) => (customUniversalTable[index] = el)"
                     delete-command="deleteElevatorData"
                     :readonly-fields="[true, false, false, false]"
                     specialGetters="elevator"
@@ -96,6 +108,24 @@ function add() {
                         'Действие',
                     ]"
                 ></CustomUniversalTable>
+                <div
+                    v-if="addItemVisible[index]"
+                    class="mt-3 flex w-fit items-center gap-3"
+                >
+                    <CustomInput
+                        :value="newItem"
+                        :static-width="true"
+                        @update:value="(newValue) => (newItem = newValue)"
+                    ></CustomInput>
+                    <JustButton
+                        @click="addItemVisible[index] = false"
+                        color="gray"
+                        >Отмена</JustButton
+                    >
+                    <JustButton @click="add(index)" color="blue"
+                        >Сохранить</JustButton
+                    >
+                </div>
             </RoundedArrowLineDropdown>
         </div>
         <ODSH :adress-id="adressId" :entrance="entranceName"></ODSH>
