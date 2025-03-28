@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
     <input
         :class="
-            'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
+            'h-full w-full border-none bg-none px-4 placeholder:text-gray-400 group-hover:bg-indigo-100 ' +
             (props.selected
                 ? 'bg-indigo-100'
                 : props.even

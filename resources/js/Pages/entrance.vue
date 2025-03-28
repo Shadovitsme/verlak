@@ -87,7 +87,7 @@ function add(index) {
                 @add="add(index)"
                 class="mb-2"
                 @delete="deleteElevator(dat)"
-                :text="'Лифт ' + (index+1)"
+                :text="'Лифт ' + (index + 1)"
             >
                 <CustomUniversalTable
                     :ref="(el) => (customUniversalTable[index] = el)"

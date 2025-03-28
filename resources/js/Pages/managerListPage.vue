@@ -1,12 +1,13 @@
 <template>
     <PagePlace add-modal-type="addManager" page-name="Список сотрудников">
         <TablePlaceholder
+        class="w-[1348px]"
             deleteCommand="deleteManager"
             :exec="false"
             api="/user"
             :lastAction="true"
             :head-items="['ФИО', 'email', 'phone', 'pass', 'action']"
-            :readonly-fields="[false, false, false, false, false]"
+            :readonly-fields="[]"
             dataQuery="getAllManagers"
         ></TablePlaceholder>
     </PagePlace>

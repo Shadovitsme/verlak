@@ -111,7 +111,7 @@ const emit = defineEmits(['rowClick']);
 </script>
 
 <template>
-    <table class="table-auto border-collapse rounded-lg shadow-sm">
+    <table class="w-[1348px] table-auto border-collapse rounded-lg shadow-sm">
         <thead class="bg-indigo-50 text-left text-gray-500">
             <tr class="h-12">
                 <th
@@ -139,11 +139,7 @@ const emit = defineEmits(['rowClick']);
                 v-for="(dataItem, index) in data"
                 :key="index"
             >
-                <td
-                    class="px-4"
-                    v-for="field in data[index].slice(1, -1)"
-                    :key="field"
-                >
+                <td v-for="field in data[index].slice(1, -1)" :key="field">
                     <TableInpueElement
                         :selected="selectedRow === dataItem"
                         :even="index % 2 !== 0"

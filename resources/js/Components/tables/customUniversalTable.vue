@@ -26,10 +26,23 @@ const props = defineProps({
     columnQueue: Array,
     readonlyFields: { type: Array, default: () => [] },
     placeholders: { type: Array, default: () => [] },
+    scrollWidth: Boolean,
 });
 
 let data = ref([]);
-const columnWidths = ref([]);
+const columnWidths = [
+    'w-72',
+    'w-60',
+    'w-80',
+    'w-32',
+    'w-32',
+    'w-32',
+    'w-60',
+    'w-36',
+    'w-36',
+    'w-44',
+    'w-24',
+];
 let readonlyFlag = ref('');
 let selectedRow = ref(null);
 let selectedRowIndex = ref(null);
@@ -42,14 +55,15 @@ function generateUniqueId() {
 function addLine(name) {
     const newRow = [generateUniqueId(), name, '-', '-'];
     data.value.push(newRow);
-    console.log(data.value);
 }
 
 defineExpose({ addLine });
 
 async function fetchData() {
     if (props.specialGetters === 'elevator') {
-        const result = await elevatorFillerForUniversalTable(props.speciallData);
+        const result = await elevatorFillerForUniversalTable(
+            props.speciallData,
+        );
         data.value = result;
     } else if (props.specialGetters === 'building') {
         const result = await universalFillerForUniversalTable(
@@ -101,7 +115,8 @@ watch(
             newReadonlyFlag !== oldReadonlyFlag ||
             newSelectedRowIndex !== oldSelectedRowIndex
         ) {
-            if (oldSelectedRowIndex == null || !data.value[oldSelectedRowIndex]) return;
+            if (oldSelectedRowIndex == null || !data.value[oldSelectedRowIndex])
+                return;
 
             const rowId = data.value[oldSelectedRowIndex][0];
             const element = document.getElementById(rowId);
@@ -171,81 +186,85 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <table
-        @click="handleBodyClick"
-        class="w-full border-collapse rounded-lg shadow-sm"
-    >
-        <thead class="bg-indigo-50 text-left text-gray-500">
-            <tr class="h-12">
-                <th
-                    class="px-4"
-                    v-for="(item, index) in props.headItems"
-                    :style="{ width: columnWidths[index] }"
-                    :key="item"
+    <div :class="props.scrollWidth ? 'w-full overflow-x-auto' : ''">
+        <table
+            @click="handleBodyClick"
+            class="w-full table-auto border-collapse rounded-lg shadow-sm"
+            :class="props.scrollWidth ? 'min-w-max' : 'w-full table-auto'"
+        >
+            <thead class="bg-indigo-50 text-left text-xs text-gray-500">
+                <tr :class="props.scrollWidth ? 'h-12' : ''">
+                    <th
+                        class="flex-wrap px-4 py-4"
+                        v-for="(item, index) in props.headItems"
+                        :key="item"
+                        :style="{
+                            width: props.scrollWidth ? columnWidths[index] : '',
+                            'white-space': 'nowrap',
+                        }"
+                        v-html="item"
+                    ></th>
+                </tr>
+            </thead>
+            <tbody ref="target" @click.stop>
+                <tr
+                    :id="props.exec ? data[index].id : data[index][0]"
+                    @click="selectedRow = dataItem"
+                    :class="[
+                        'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
+                        selectedRow === dataItem
+                            ? 'bg-indigo-100'
+                            : index % 2 !== 0
+                              ? 'bg-gray-50'
+                              : 'bg-white',
+                    ]"
+                    v-for="(dataItem, index) in data"
+                    :key="dataItem[0]"
                 >
-                    {{ item }}
-                </th>
-            </tr>
-        </thead>
-        <tbody ref="target" @click.stop>
-            <tr
-                :id="props.exec ? data[index].id : data[index][0]"
-                @click="selectedRow = dataItem"
-                :class="[
-                    'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
-                    selectedRow === dataItem
-                        ? 'bg-indigo-100'
-                        : index % 2 !== 0
-                          ? 'bg-gray-50'
-                          : 'bg-white',
-                ]"
-                v-for="(dataItem, index) in data"
-                :key="dataItem[0]"
-            >
-                <td
-                    class="px-4"
-                    v-for="(field, indexElem) in props.exec
-                        ? props.columnQueue
-                        : data[index].slice(1)"
-                    :key="field"
-                >
-                    <TableInpueElement
-                        :selected="selectedRow === dataItem"
-                        :even="index % 2 !== 0"
-                        :placeholder="props.placeholders[indexElem] || ''"
-                        :readonly-state="
-                            readonlyFlag !== dataItem[0]
-                                ? true
-                                : props.exec
-                                  ? true
-                                  : props.readonlyFields[indexElem]
+                    <td
+                        v-for="(field, indexElem) in props.exec
+                            ? props.columnQueue
+                            : data[index].slice(1)"
+                        :key="field"
+                    >
+                        <TableInpueElement
+                            :selected="selectedRow === dataItem"
+                            :even="index % 2 !== 0"
+                            :placeholder="props.placeholders[indexElem] || ''"
+                            :readonly-state="
+                                readonlyFlag !== dataItem[0]
                                     ? true
-                                    : false
-                        "
-                        :value="props.exec ? data[index][field] : field"
-                    />
-                </td>
-                <td v-if="props.lastAction" class="px-4">
-                    <EditDeleteComponent
-                        :id-to-delete="
-                            props.exec ? data[index].id : data[index][0]
-                        "
-                        :add-data="props.speciallData.adressId"
-                        :key="index"
-                        :modalType="props.deleteCommand"
-                        @editable="
-                            props.exec
-                                ? router.visit(
-                                      `/contracts/${props.searchForeignKey}/${data[index].id}`,
-                                  )
-                                : toggleChangableStatus(dataItem[0], index)
-                        "
-                    />
-                </td>
-                <td v-if="props.lastStatus" class="px-4">
-                    <StatusLabel :key="index" :state="true" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                                    : props.exec
+                                      ? true
+                                      : props.readonlyFields[indexElem]
+                                        ? true
+                                        : false
+                            "
+                            :value="props.exec ? data[index][field] : field"
+                        />
+                    </td>
+                    <td v-if="props.lastAction" class="px-4">
+                        <EditDeleteComponent
+                            :id-to-delete="
+                                props.exec ? data[index].id : data[index][0]
+                            "
+                            :add-data="props.speciallData.adressId"
+                            :key="index"
+                            :modalType="props.deleteCommand"
+                            @editable="
+                                props.exec
+                                    ? router.visit(
+                                          `/contracts/${props.searchForeignKey}/${data[index].id}`,
+                                      )
+                                    : toggleChangableStatus(dataItem[0], index)
+                            "
+                        />
+                    </td>
+                    <td v-if="props.lastStatus" class="px-4">
+                        <StatusLabel :key="index" :state="true" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>

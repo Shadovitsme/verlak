@@ -72,6 +72,7 @@ const dbAdressColumnNames = [
             <p class="my-auto mr-4 text-2xl text-gray-900">Адреса</p>
         </div>
         <CustomUniversalTable
+            :scrollWidth="true"
             deleteCommand="deleteAdress"
             :column-queue="dbAdressColumnNames"
             api="/getAdressesforContract"
