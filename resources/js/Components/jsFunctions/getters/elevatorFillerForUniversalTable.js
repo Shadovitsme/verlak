@@ -37,6 +37,7 @@ export default async function elevatorFillerForUniversalTable(elevatorData) {
             if (name && name.trim() !== '') {
                 besideArr.push([
                     name,
+                    name,
                     element.descriptionValue,
                     element.commentValue,
                 ]);
@@ -48,11 +49,10 @@ export default async function elevatorFillerForUniversalTable(elevatorData) {
         elevatorArrNames.forEach((name) => {
             // Проверяем, что name не пустой и еще не обработан
             if (name && name.trim() !== '' && !processedNames.has(name)) {
-                besideArr.push([name, '-', '-']);
+                besideArr.push([name, name, '-', '-']);
             }
         });
 
-        console.log(besideArr);
         return besideArr;
     } catch (error) {
         console.error('Error fetching data:', error);

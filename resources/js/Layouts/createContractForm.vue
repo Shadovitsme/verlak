@@ -151,7 +151,7 @@ async function saveData() {
                                 label-text="Название организации"
                                 placeholder="Введите названии организации"
                                 check-type="radio"
-                                :label-text-arr="['ВЕРЛАК', 'ПСК']"
+                                :label-text-arr="['ВЕРЕЛАК', 'ПСК']"
                                 :value="
                                     props.data != null
                                         ? props.data.organization

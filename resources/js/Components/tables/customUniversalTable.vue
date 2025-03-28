@@ -1,13 +1,11 @@
 <script setup>
 import EditDeleteComponent from '../editDeleteComponent.vue';
 import StatusLabel from '../statusLabel.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import TableInpueElement from '../tableInpueElement.vue';
 import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import defaultHouseArray from '../jsFunctions/default data array/defaultHouseArray';
-import { watch } from 'vue';
 import { router } from '@inertiajs/vue3';
-import { onUnmounted } from 'vue';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
 import getExecData from '../jsFunctions/getters/getExecData';
 import elevatorFillerForUniversalTable from '../jsFunctions/getters/elevatorFillerForUniversalTable';
@@ -23,7 +21,6 @@ const props = defineProps({
     api: String,
     speciallData: { type: Object, default: () => ({}) },
     searchForeignKey: String,
-    // TODO заменить эксек на стринг
     exec: Boolean,
     specialGetters: String,
     columnQueue: Array,
@@ -35,33 +32,33 @@ let data = ref([]);
 const columnWidths = ref([]);
 let readonlyFlag = ref('');
 let selectedRow = ref(null);
-let selectedRowIndex = ref();
+let selectedRowIndex = ref(null);
+
+// Generate a unique ID for new rows
+function generateUniqueId() {
+    return 'row_' + Math.random().toString(36).substr(2, 9);
+}
 
 function addLine(name) {
-    data.value.push([name, '-', '-']);
+    const newRow = [generateUniqueId(), name, '-', '-'];
+    data.value.push(newRow);
+    console.log(data.value);
 }
 
 defineExpose({ addLine });
 
 async function fetchData() {
-    if (props.specialGetters == 'elevator') {
-        const result = await elevatorFillerForUniversalTable(
-            props.speciallData,
-        );
-        console.log(data.value)
+    if (props.specialGetters === 'elevator') {
+        const result = await elevatorFillerForUniversalTable(props.speciallData);
         data.value = result;
-        return 0;
-    }
-    if (props.specialGetters == 'building') {
+    } else if (props.specialGetters === 'building') {
         const result = await universalFillerForUniversalTable(
             defaultHouseArray,
             '/getBuildingData',
             props.speciallData.adressId,
         );
         data.value = result;
-        return 0;
-    }
-    if (props.exec) {
+    } else if (props.exec) {
         try {
             const result = await getExecData(props.api, props.searchForeignKey);
             data.value = result;
@@ -83,22 +80,15 @@ function toggleChangableStatus(id, index) {
     selectedRowIndex.value = Number(index);
 }
 
-function checkUndefinedTableColumn(oldReadonlyFlag, index) {
-    if (
-        document.getElementById(oldReadonlyFlag).getElementsByTagName('input')[
-            index - 1
-        ] == undefined
-    ) {
-        return 1;
+function refillDataArray(selectedRowIndex, columnIndex, id) {
+    const element = document.getElementById(id);
+    if (!element) return; // Safeguard against null element
+    const inputs = element.getElementsByTagName('input');
+    // Map DOM input index to data array index (shift by 1 due to slice(1))
+    const dataIndex = columnIndex + 1;
+    if (inputs[columnIndex]) {
+        data.value[selectedRowIndex][dataIndex] = inputs[columnIndex].value;
     }
-}
-
-function refillDataArray(selectedRowIndex, columtIndex, id) {
-    let index =
-        props.deleteCommand != 'deleteManager' ? columtIndex : columtIndex - 1;
-    data.value[selectedRowIndex][columtIndex] = document
-        .getElementById(id)
-        .getElementsByTagName('input')[index].value;
 }
 
 watch(
@@ -111,117 +101,66 @@ watch(
             newReadonlyFlag !== oldReadonlyFlag ||
             newSelectedRowIndex !== oldSelectedRowIndex
         ) {
-            let id = data.value[0][0];
-            if (oldSelectedRowIndex != undefined && oldSelectedRowIndex > 0) {
-                data.value[oldSelectedRowIndex].forEach((element, index) => {
-                    if (index == 0) {
-                        return;
-                    }
-                    checkUndefinedTableColumn(oldReadonlyFlag, index);
-                    refillDataArray(
-                        oldSelectedRowIndex,
-                        index,
-                        oldReadonlyFlag,
+            if (oldSelectedRowIndex == null || !data.value[oldSelectedRowIndex]) return;
+
+            const rowId = data.value[oldSelectedRowIndex][0];
+            const element = document.getElementById(rowId);
+            if (!element) return;
+
+            // Only update the editable fields (skip ID at index 0)
+            data.value[oldSelectedRowIndex].slice(1).forEach((_, index) => {
+                refillDataArray(oldSelectedRowIndex, index, rowId);
+            });
+
+            switch (props.deleteCommand) {
+                case 'deleteManager':
+                    updateManagerData(
+                        data.value[oldSelectedRowIndex][0],
+                        data.value[oldSelectedRowIndex][1],
+                        data.value[oldSelectedRowIndex][2],
+                        data.value[oldSelectedRowIndex][3],
+                        data.value[oldSelectedRowIndex][4],
                     );
-                });
-
-                switch (props.deleteCommand) {
-                    case 'deleteManager':
-                        updateManagerData(
-                            data.value[oldSelectedRowIndex][0],
-                            data.value[oldSelectedRowIndex][1],
-                            data.value[oldSelectedRowIndex][2],
-                            data.value[oldSelectedRowIndex][3],
-                            data.value[oldSelectedRowIndex][4],
-                        );
-                        break;
-                    case 'deleteElevatorData':
-                        updateElevatorData(
-                            props.speciallData.adressId,
-                            props.speciallData.name,
-                            data.value[oldSelectedRowIndex][0],
-                            data.value[oldSelectedRowIndex][1],
-                            data.value[oldSelectedRowIndex][2],
-                            props.speciallData.entrance,
-                        );
-                        return;
-                    case 'deleteBuildingData':
-                        universalUpdate(
-                            props.speciallData.adressId,
-                            data.value[oldSelectedRowIndex][0],
-                            data.value[oldSelectedRowIndex][1],
-                            data.value[oldSelectedRowIndex][2],
-                            '/updateHomeData',
-                        );
-                        return;
-                    default:
-                        break;
-                }
-
-                return;
-            }
-            if (oldSelectedRowIndex == 0) {
-                data.value[0].forEach((element, index) => {
-                    if (index == 0 && props.deleteCommand == 'deleteManager') {
-                        return;
-                    }
-                    checkUndefinedTableColumn(oldReadonlyFlag, index);
-                    refillDataArray(0, index, id);
-                    console.log(data.value);
-                    if (props.deleteCommand == 'deleteManager') {
-                        updateManagerData(
-                            id,
-                            data.value[0][1],
-                            data.value[0][2],
-                            data.value[0][3],
-                            data.value[0][4],
-                        );
-                    }
-                });
-                switch (props.deleteCommand) {
-                    case 'deleteElevatorData':
-                        updateElevatorData(
-                            props.speciallData.adressId,
-                            props.speciallData.name,
-                            data.value[0][0],
-                            data.value[0][1],
-                            data.value[0][2],
-                            props.speciallData.entrance,
-                        );
-                        break;
-                    case 'deleteBuildingData':
-                        universalUpdate(
-                            props.speciallData.adressId,
-                            data.value[0][0],
-                            data.value[0][1],
-                            data.value[0][2],
-                            '/updateHomeData',
-                        );
-                        break;
-
-                    default:
-                        break;
-                }
-
-                return;
+                    break;
+                case 'deleteElevatorData':
+                    updateElevatorData(
+                        props.speciallData.adressId,
+                        props.speciallData.name,
+                        data.value[oldSelectedRowIndex][1],
+                        data.value[oldSelectedRowIndex][2],
+                        data.value[oldSelectedRowIndex][3],
+                        props.speciallData.entrance,
+                    );
+                    break;
+                case 'deleteBuildingData':
+                    universalUpdate(
+                        props.speciallData.adressId,
+                        data.value[oldSelectedRowIndex][0],
+                        data.value[oldSelectedRowIndex][1],
+                        data.value[oldSelectedRowIndex][2],
+                        '/updateHomeData',
+                    );
+                    break;
+                default:
+                    break;
             }
         }
     },
+    { immediate: false },
 );
 
 onMounted(() => {
     fetchData();
 });
+
 const target = ref(null);
 const handleBodyClick = (event) => {
-    if (target.value || !target.value.contains(event.target)) {
+    if (!target.value || !target.value.contains(event.target)) {
         readonlyFlag.value = undefined;
         selectedRow.value = undefined;
-        selectedRowIndex.value = undefined;
+        selectedRowIndex.value = null;
     }
 };
-
-// Добавляем и убираем слушатель через onMounted/onUnmounted
 
 onMounted(() => {
     document.addEventListener('click', handleBodyClick);
@@ -240,7 +179,7 @@ onUnmounted(() => {
             <tr class="h-12">
                 <th
                     class="px-4"
-                    v-for="item in props.headItems"
+                    v-for="(item, index) in props.headItems"
                     :style="{ width: columnWidths[index] }"
                     :key="item"
                 >
@@ -261,15 +200,13 @@ onUnmounted(() => {
                           : 'bg-white',
                 ]"
                 v-for="(dataItem, index) in data"
-                :key="index"
+                :key="dataItem[0]"
             >
                 <td
                     class="px-4"
                     v-for="(field, indexElem) in props.exec
                         ? props.columnQueue
-                        : props.specialGetters != null
-                          ? data[index]
-                          : data[index].slice(1)"
+                        : data[index].slice(1)"
                     :key="field"
                 >
                     <TableInpueElement
@@ -277,7 +214,7 @@ onUnmounted(() => {
                         :even="index % 2 !== 0"
                         :placeholder="props.placeholders[indexElem] || ''"
                         :readonly-state="
-                            readonlyFlag != dataItem[0]
+                            readonlyFlag !== dataItem[0]
                                 ? true
                                 : props.exec
                                   ? true
