@@ -7,10 +7,15 @@ import TableWithStatus from '@/Components/tables/tableWithStatus.vue';
 import BreadWay from '@/Components/breadWay.vue';
 import ExecContractData from '@/Components/execContractData.vue';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
+import gotocontracts from '@/Components/jsFunctions/goToContract';
 let toggleCreateContract = ref(false);
 let toggleOneContract = ref(false);
 let selectedContractNumber = ref(null);
 let editContract = ref(false);
+
+const { contractNumber } = defineProps(['contractNumber']);
+
+contractNumber != undefined ? fetchData() : '';
 
 const handleRowClick = (event) => {
     selectedContractNumber.value = event;
@@ -21,6 +26,10 @@ const handleRowClick = (event) => {
 
 let data = ref(null);
 async function fetchData() {
+    if (contractNumber != undefined) {
+        selectedContractNumber.value = contractNumber;
+        toggleOneContract.value = true;
+    }
     try {
         const result = await getExecData(
             '/getExecContract',
@@ -78,7 +87,7 @@ function close() {
         :data="data"
     >
         <BreadWay
-            @goto-main="close()"
+            @goto-main="contractNumber != undefined ? gotocontracts() : close()"
             start-point-text="Учёт договоров"
             :middle-point-text="
                 editContract ? 'Договор №' + selectedContractNumber : ''
@@ -112,7 +121,7 @@ function close() {
         v-if="toggleOneContract && !editContract"
     >
         <BreadWay
-            @goto-main="close()"
+            @goto-main="contractNumber != undefined ? gotocontracts() : close()"
             start-point-text="Учёт договоров"
             :current-point-text="'Договор №' + selectedContractNumber"
         ></BreadWay

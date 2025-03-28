@@ -58,12 +58,12 @@ const dbAdressColumnNames = [
                 <IconButton
                     @click="emit('editContract')"
                     color="gray"
-                    icon="./assets/icons/system/edit.svg"
+                    icon="/assets/icons/system/edit.svg"
                 ></IconButton>
                 <IconButton
                     @click="openModal = !openModal"
                     color="gray"
-                    icon="./assets/icons/system/delete.svg"
+                    icon="/assets/icons/system/delete.svg"
                 ></IconButton>
             </div>
         </div>

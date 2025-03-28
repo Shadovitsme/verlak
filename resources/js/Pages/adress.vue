@@ -14,6 +14,7 @@ import ObjectPhotoBLock from '@/Components/objectPhotoBLock.vue';
 import Montazh from '@/Layouts/montazh.vue';
 import BuildingMaterials from '@/Layouts/buildingMaterials.vue';
 import OpenModal from '@/Components/openModal.vue';
+import gotocontracts from '@/Components/jsFunctions/goToContract';
 let data = ref(null);
 const toggleModal = ref(false);
 // Объявляем пропсы
@@ -33,15 +34,15 @@ async function fetchData(adressId) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
-function deleteClose() {
-    window.location.href = '/contracts';
+function goMiddle() {
+    window.location.href = '/execContract/' + contractNumber;
 }
 </script>
 
 <template>
     <Header></Header>
     <OpenModal
-        @close="deleteClose"
+        @close="gotocontracts"
         modal-type="deleteAdress"
         :toggle-modal="toggleModal"
         :id-to-delete="adressId"
@@ -51,7 +52,8 @@ function deleteClose() {
             start-point-text="Учёт договоров"
             :middle-point-text="'Договор №' + contractNumber"
             :current-point-text="data != null ? data.adress : ''"
-            @gotoMain="deleteClose"
+            @gotoMain="gotocontracts"
+            @gotoMiddle="goMiddle"
         ></BreadWay>
         <div class="mb-6 flex w-full justify-between">
             <h1 class="my-auto mr-4 text-5xl text-gray-900">

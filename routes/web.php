@@ -35,12 +35,22 @@ Route::get('/dashboard', function () {
     return Inertia::render('contracts');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/contracts', function () {
+    return Inertia::render('contracts');
+});
+
 Route::get('/contracts/{contractNumber}/{adressId}', function (string $contractNumber, string $adressId) {
     return Inertia::render('adress', [
         'contractNumber' => $contractNumber,
         'adressId' => $adressId,
     ]);
 });
+
+Route::get('/execContract/{contractNumber?}', function (?string $contractNumber = null) {
+    return Inertia::render('contracts', [
+        'contractNumber' => $contractNumber,
+    ]);
+})->where('contractNumber', '[^\/]+');
 
 Route::get('/updateWorker/{workerId}', function (
     string $workerId,

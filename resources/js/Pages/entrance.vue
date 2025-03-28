@@ -11,6 +11,8 @@ import OpenModal from '@/Components/openModal.vue';
 import addElevator from '@/Components/jsFunctions/setters/addElevator';
 import ODSH from '@/Layouts/ODSH.vue';
 import JustButton from '@/Components/justButton.vue';
+import IconButton from '@/Components/iconButton.vue';
+import gotocontracts from '@/Components/jsFunctions/goToContract';
 
 let data = ref(null);
 let customUniversalTable = ref([]); // Теперь массив для хранения всех таблиц
@@ -54,6 +56,19 @@ function add(index) {
         console.error(`Таблица с индексом ${index} не найдена`);
     }
 }
+
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
+}
+
+function goToAdress(adressId) {
+    let pathToAdress = '/contracts/' + contractNumber + '/' + adressId;
+
+    window.location.href = pathToAdress;
+}
 </script>
 
 <template>
@@ -68,11 +83,14 @@ function add(index) {
         }"
     ></OpenModal>
     <Header></Header>
-    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pt-12">
+    <!-- TODO спросить у саши правильно ли что в фигме оотступ от дна 235 -->
+    <div class="mx-32 mt-20 w-[1348px] max-w-[1600px] pb-56 pt-12">
         <BreadWay
             start-point-text="Учёт договоров"
+            @gotoMain="gotocontracts()"
+            @gotoMiddle="goToAdress(adressId)"
             :middle-point-text="'Договор №' + contractNumber"
-            :current-point-text="data != null ? data.adress : ''"
+            :current-point-text="data != null ? data[0].adressName : ''"
         ></BreadWay>
         <p class="mb-8 text-4xl text-gray-900">
             {{ 'Подъезд ' + entranceName }}
@@ -108,6 +126,20 @@ function add(index) {
             </RoundedArrowLineDropdown>
         </div>
         <ODSH :adress-id="adressId" :entrance="entranceName"></ODSH>
-        <JustButton color="blue"></JustButton>
+        <div class="mt-8 flex w-full justify-between">
+            <JustButton
+                @click="goToAdress(adressId)"
+                color="blue"
+                src="/assets/icons/arrows/arrow-left.svg"
+                >К адресу</JustButton
+            >
+
+
+            <IconButton
+                icon="/assets/icons/arrows/arrow-up.svg"
+                color="gray"
+                @click="scrollToTop"
+            ></IconButton>
+        </div>
     </div>
 </template>

@@ -138,5 +138,7 @@ async function fetchData(adressId, entranceName) {
             :value="comment"
             @update:value="(newValue) => (comment = newValue)"
         ></CommentComponent>
+
+
     </div>
 </template>

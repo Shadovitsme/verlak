@@ -5,7 +5,6 @@ import { ref, onMounted, watch, onUnmounted } from 'vue';
 import TableInpueElement from '../tableInpueElement.vue';
 import getDataForTableFill from '../jsFunctions/getters/getDataForTableFill.js';
 import defaultHouseArray from '../jsFunctions/default data array/defaultHouseArray';
-import { router } from '@inertiajs/vue3';
 import updateManagerData from '../jsFunctions/setters/updateManagerData';
 import getExecData from '../jsFunctions/getters/getExecData';
 import elevatorFillerForUniversalTable from '../jsFunctions/getters/elevatorFillerForUniversalTable';
@@ -183,6 +182,11 @@ onMounted(() => {
 onUnmounted(() => {
     document.removeEventListener('click', handleBodyClick);
 });
+
+function replaceTo(contractNumber, adressId) {
+
+    window.location.href = '/contracts/' + contractNumber + '/' + adressId;
+}
 </script>
 
 <template>
@@ -295,8 +299,9 @@ onUnmounted(() => {
                             :modalType="props.deleteCommand"
                             @editable="
                                 props.exec
-                                    ? router.visit(
-                                          `/contracts/${props.searchForeignKey}/${data[index].id}`,
+                                    ? replaceTo(
+                                          props.searchForeignKey,
+                                          data[index].id,
                                       )
                                     : toggleChangableStatus(dataItem[0], index)
                             "

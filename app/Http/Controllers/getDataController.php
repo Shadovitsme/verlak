@@ -46,6 +46,10 @@ class getDataController extends Controller
         $adressId = $request->header('adressId');
         $entranceName = $request->header('entranceName');
         $entranceData = DB::table('elevator')->where('adressId', '=', $adressId)->where('entrance', '=', $entranceName)->groupBy('name')->get();
+        $adressName = DB::table('adressData')->where('id', '=', $adressId)->value('adress');
+        foreach ($entranceData as $value) {
+            $value->adressName = $adressName;
+        }
         return response()->json($entranceData);
     }
 
