@@ -29,6 +29,9 @@ export default {
             fontFamily: {
                 Verdana: ['Verdana'],
             },
+            width: {
+                337: '1348px', // Custom width
+            },
         },
     },
 

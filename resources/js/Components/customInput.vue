@@ -21,7 +21,7 @@ const handleInput = (event) => {
         <input
             :type="props.inputType || 'text'"
             :data-error="props.error"
-            class="invalid:bg-red h-fit rounded-lg border-[1px] px-4 py-3.5 text-base text-gray-900 duration-300"
+            class="invalid:bg-red h-12 rounded-lg border-[1px] px-4 py-3.5 text-base text-gray-900 duration-300"
             :placeholder="props.placeholder"
             :class="[
                 props.staticWidth ? 'w-[364px]' : 'w-full',

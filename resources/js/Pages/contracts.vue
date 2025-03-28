@@ -83,7 +83,7 @@ function close() {
             :middle-point-text="
                 editContract ? 'Договор №' + selectedContractNumber : ''
             "
-            @goto-middle="editContract.value = false"
+            @goto-middle="editContract = false"
             :current-point-text="
                 toggleCreateContract
                     ? 'Создание договора'

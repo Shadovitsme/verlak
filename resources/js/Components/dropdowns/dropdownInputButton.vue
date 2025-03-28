@@ -31,7 +31,7 @@ const emit = defineEmits(['update:value']); // Объявляем событие
             <button
                 @click="showDrop = !showDrop"
                 type="button"
-                class="h-fit rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4 py-3.5 text-left text-base text-gray-500"
+                class="h-12 rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4  text-left text-base text-gray-500"
                 :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
             >
                 {{ content }}

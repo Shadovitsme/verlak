@@ -72,6 +72,7 @@ async function fetchData() {
                     dateEnd: '',
                     price: '',
                 }));
+
             break;
     }
 }
@@ -251,6 +252,13 @@ onMounted(() => {
 onUnmounted(() => {
     document.removeEventListener('click', handleBodyClick);
 });
+
+const emits = defineEmits(['delete']);
+
+const deleteItem = (index) => {
+    data.value.splice(index, 1); // Удаляем элемент по индексу
+    emits('delete');
+};
 </script>
 
 <template>
@@ -354,9 +362,17 @@ onUnmounted(() => {
                         "
                     >
                         <EditDeleteComponent
+                            v-if="props.modalType"
                             :id-to-delete="data?.[trIndex]?.id || 0"
                             :modalType="props.modalType"
                         />
+                        <div v-else class="flex gap-3">
+                            <img src="/assets/icons/system/edit.svg" />
+                            <img
+                                @click="deleteItem(count)"
+                                src="/assets/icons/system/delete.svg"
+                            />
+                        </div>
                     </td>
                 </tr>
             </tbody>
