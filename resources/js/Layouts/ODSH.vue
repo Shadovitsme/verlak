@@ -37,8 +37,9 @@ async function fetchData(adressId, entranceName) {
         const result = await getODSH(adressId, entranceName);
         data.value = result;
         if (data.value != undefined) {
-            customer.value = data.value.customer;
-            size.value = data.value.sizeT;
+            customer.value =
+                data.value.customer != undefined ? data.value.customer : '';
+            size.value = data.value.sizeT != undefined ? data.value.sizeT : '';
         } else {
             customer.value = '';
             size.value = '';
@@ -51,7 +52,7 @@ async function fetchData(adressId, entranceName) {
 
 <template>
     <div class="mt-8">
-        <div class="flex w-full justify-between">
+        <div class="mb-6 flex w-full justify-between">
             <div>
                 <div class="mb-5 flex items-center gap-4">
                     <p class="text-2xl text-gray-900">ОДШ</p>
@@ -65,6 +66,7 @@ async function fetchData(adressId, entranceName) {
                     {{ 'Заказчик: ' + customer }}
                 </p>
                 <CustomInput
+                    class="mb-3"
                     :value="customer"
                     v-if="editMode"
                     :static-width="true"
@@ -87,6 +89,7 @@ async function fetchData(adressId, entranceName) {
                     }}
                 </p>
                 <CustomInput
+                    class="mt-3"
                     :value="size"
                     v-if="editMode"
                     :static-width="true"
@@ -96,7 +99,11 @@ async function fetchData(adressId, entranceName) {
                 <p v-if="!editMode" class="mt-10 text-gray-700">
                     {{ 'Размер С: ' + size }}
                 </p>
-                <JustButton v-if="editMode" @click="updateHeadOdsh" color="blue"
+                <JustButton
+                    class="mt-3"
+                    v-if="editMode"
+                    @click="updateHeadOdsh"
+                    color="blue"
                     >Сохранить</JustButton
                 >
             </div>

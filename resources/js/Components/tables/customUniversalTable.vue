@@ -195,7 +195,7 @@ onUnmounted(() => {
             <thead class="bg-indigo-50 text-left text-xs text-gray-500">
                 <tr :class="props.scrollWidth ? 'h-12' : ''">
                     <th
-                        class="inset-shadow-black flex-wrap px-4 py-4"
+                        class="flex-wrap px-4 py-4"
                         v-for="(item, index) in props.headItems"
                         :key="item"
                         :class="[props.scrollWidth ? columnWidths[index] : '']"
@@ -208,13 +208,18 @@ onUnmounted(() => {
                                     ? 'sticky'
                                     : '',
                             right:
-                                index === props.headItems.length - 1 ? '0' : '',
+                                index === props.headItems.length - 1 &&
+                                props.scrollWidth
+                                    ? '0'
+                                    : '',
                             'background-color':
-                                index === props.headItems.length - 1
+                                index === props.headItems.length - 1 &&
+                                props.scrollWidth
                                     ? '#eef2ff'
                                     : '',
                             'z-index':
-                                index === props.headItems.length - 1
+                                index === props.headItems.length - 1 &&
+                                props.scrollWidth
                                     ? '10'
                                     : '',
                             'box-shadow':
@@ -266,17 +271,20 @@ onUnmounted(() => {
                     </td>
                     <td
                         v-if="props.lastAction"
-                        class="sticky right-0 z-10 px-4 shadow-md group-hover:bg-indigo-100"
+                        class="px-4 group-hover:bg-indigo-100"
                         :style="{
-                            'box-shadow': 'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)',
+                            'box-shadow': props.scrollWidth
+                                ? 'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)'
+                                : '',
                         }"
-                        :class="
+                        :class="[
                             selectedRow === dataItem
                                 ? 'bg-indigo-100'
                                 : index % 2 !== 0
                                   ? 'bg-gray-50'
-                                  : 'bg-white'
-                        "
+                                  : 'bg-white',
+                            props.scrollWidth ? 'sticky right-0 z-10' : '',
+                        ]"
                     >
                         <EditDeleteComponent
                             :id-to-delete="
@@ -301,5 +309,4 @@ onUnmounted(() => {
             </tbody>
         </table>
     </div>
-    <div class="inset-shadow-sm inset-shadow-black m-5 size-10"></div>
 </template>

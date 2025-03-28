@@ -224,8 +224,15 @@ class getDataController extends Controller
     {
         $adressId = $request->header('adressId');
         $entrance = $request->header('entrance');
-        $result = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->get()[0];
-        $result->ODSHTableData = DB::table('ODSHTable')->where('ODSHid', '=', $result->id)->get();
+
+        $query = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->get();
+
+        if (!$query->isEmpty()) {
+            $result = $query[0];
+            $result->ODSHTableData = DB::table('ODSHTable')->where('ODSHid', '=', $result->id)->get();
+        } else {
+            $result = new \stdClass();
+        }
 
         $contractId = DB::table('adressData')->where('id', '=', $adressId)->get(['contractId', 'adress'])[0];
         $result->adressId = $contractId->adress;

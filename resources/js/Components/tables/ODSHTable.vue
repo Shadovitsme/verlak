@@ -1,7 +1,7 @@
 <script setup>
 import JustButton from '../justButton.vue';
 import EditDeleteComponent from '../editDeleteComponent.vue';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import insertOdshTable from '../jsFunctions/setters/insertODSHTable';
 
 const props = defineProps({
@@ -11,6 +11,7 @@ const props = defineProps({
 });
 
 const besideOdsh = ref([]);
+const selectedRow = ref();
 if (props.ODSHTableData.length) {
     props.ODSHTableData.forEach((element) => {
         besideOdsh.value.push({
@@ -61,14 +62,32 @@ function addRow() {
 
 function save() {
     insertOdshTable(besideOdsh.value, props.adressId, props.entrance);
-    window.location.reload();
 }
+
+watch(selectedRow, () => {
+    save();
+});
+
+const target = ref(null);
+const handleBodyClick = (event) => {
+    if (!target.value || !target.value.contains(event.target)) {
+        selectedRow.value = undefined;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', handleBodyClick);
+});
+onUnmounted(() => {
+    document.removeEventListener('click', handleBodyClick);
+});
 </script>
 
 <template>
     <div class="w-full">
         <div class="overflow-x-auto">
             <table
+                @click="handleBodyClick"
                 id="table"
                 class="w-full table-auto border-collapse rounded-lg shadow-sm"
             >
@@ -169,13 +188,18 @@ function save() {
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody ref="target" @click.stop>
                     <tr
+                        @click="selectedRow = trIndex"
                         v-for="(row, trIndex) in besideOdsh"
                         :key="trIndex"
                         :class="[
                             'group h-14 border-y-[1px] border-gray-200 hover:bg-indigo-100',
-                            trIndex % 2 !== 0 ? 'bg-gray-50' : 'bg-white',
+                            selectedRow == trIndex
+                                ? 'bg-indigo-100'
+                                : trIndex % 2 !== 0
+                                  ? 'bg-gray-50'
+                                  : 'bg-white',
                         ]"
                     >
                         <td class="px-4">
@@ -183,9 +207,11 @@ function save() {
                                 v-model="row.level"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="Этаж"
                             />
@@ -195,9 +221,11 @@ function save() {
                                 v-model="row.topEnter"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="Проем"
                             />
@@ -207,9 +235,11 @@ function save() {
                                 v-model="row.topN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="H"
                             />
@@ -219,9 +249,11 @@ function save() {
                                 v-model="row.topV"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="B"
                             />
@@ -231,9 +263,11 @@ function save() {
                                 v-model="row.leftN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="H"
                             />
@@ -243,9 +277,11 @@ function save() {
                                 v-model="row.leftV"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="B"
                             />
@@ -255,9 +291,11 @@ function save() {
                                 v-model="row.rightN"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="H"
                             />
@@ -267,9 +305,11 @@ function save() {
                                 v-model="row.rightV"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="B"
                             />
@@ -279,9 +319,11 @@ function save() {
                                 v-model="row.summ"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="Количество"
                             />
@@ -291,9 +333,11 @@ function save() {
                                 v-model="row.color"
                                 :class="[
                                     'h-full w-full border-none bg-none placeholder:text-gray-400 group-hover:bg-indigo-100',
-                                    trIndex % 2 !== 0
-                                        ? 'bg-gray-50'
-                                        : 'bg-white',
+                                    selectedRow == trIndex
+                                        ? 'bg-indigo-100'
+                                        : trIndex % 2 !== 0
+                                          ? 'bg-gray-50'
+                                          : 'bg-white',
                                 ]"
                                 placeholder="Цвет"
                             />
@@ -309,8 +353,7 @@ function save() {
             </table>
         </div>
         <div class="mt-4 flex w-full justify-end gap-3">
-            <JustButton @click="addRow" color="blue">Добавить этаж</JustButton
-            ><JustButton @click="save" color="blue">Сохранить</JustButton>
+            <JustButton @click="addRow" color="blue">Добавить этаж</JustButton>
         </div>
     </div>
 </template>

@@ -90,6 +90,7 @@ function add(index) {
                 :text="'Лифт ' + (index + 1)"
             >
                 <CustomUniversalTable
+                    :scroll-width="false"
                     :ref="(el) => (customUniversalTable[index] = el)"
                     delete-command="deleteElevatorData"
                     :readonly-fields="[]"
