@@ -30,6 +30,7 @@ export default {
                 Verdana: ['Verdana'],
             },
             width: {
+                128: '512px',
                 337: '1348px', // Custom width
             },
         },

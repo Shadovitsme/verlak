@@ -10,6 +10,7 @@ import CustomUniversalTable from '@/Components/tables/customUniversalTable.vue';
 import OpenModal from '@/Components/openModal.vue';
 import addElevator from '@/Components/jsFunctions/setters/addElevator';
 import ODSH from '@/Layouts/ODSH.vue';
+import JustButton from '@/Components/justButton.vue';
 
 let data = ref(null);
 let customUniversalTable = ref([]); // Теперь массив для хранения всех таблиц
@@ -107,5 +108,6 @@ function add(index) {
             </RoundedArrowLineDropdown>
         </div>
         <ODSH :adress-id="adressId" :entrance="entranceName"></ODSH>
+        <JustButton color="blue"></JustButton>
     </div>
 </template>

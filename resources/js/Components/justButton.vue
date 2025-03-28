@@ -4,6 +4,7 @@ import checkStyle from './jsFunctions/buttonStyleArray';
 const props = defineProps({
     color: String,
     selected: Boolean,
+    src: String,
 });
 
 let style = checkStyle(props.color);
@@ -17,6 +18,7 @@ let style = checkStyle(props.color);
             (props.selected ? 'text-indigo-700' : '')
         "
     >
+        <img class="mr-2" :src="props.src" />
         <slot></slot>
     </button>
 </template>

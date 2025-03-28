@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import JustButton from './justButton.vue';
-const props = defineProps(['text', 'href', 'hideButton']);
+const props = defineProps(['text', 'href', 'hideButton', 'hideDelete']);
 const emit = defineEmits(['delete', 'add']);
 let openDropDown = ref(false);
 </script>
@@ -23,6 +23,7 @@ let openDropDown = ref(false);
                 />
             </div>
             <img
+                v-if="!props.hideDelete"
                 @click="emit('delete')"
                 src="/assets/icons/system/delete.svg"
             />

@@ -6,6 +6,7 @@ import sendHeadODSH from '@/Components/jsFunctions/setters/sendHeadODSHDataToDB'
 import JustButton from '@/Components/justButton.vue';
 import RoundedArrowLineDropdown from '@/Components/roundedArrowLineDropdown.vue';
 import ODSHTable from '@/Components/tables/ODSHTable.vue';
+import CommentComponent from '@/Pages/commentComponent.vue';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
@@ -22,9 +23,16 @@ const editMode = ref(false);
 const customer = ref('');
 const size = ref('');
 const data = ref();
+const comment = ref('');
 
 function updateHeadOdsh() {
-    sendHeadODSH(props.adressId, props.entrance, customer.value, size.value);
+    sendHeadODSH(
+        props.adressId,
+        props.entrance,
+        customer.value,
+        size.value,
+        comment.value,
+    );
     editMode.value = false;
 }
 
@@ -36,10 +44,13 @@ async function fetchData(adressId, entranceName) {
     try {
         const result = await getODSH(adressId, entranceName);
         data.value = result;
+        console.log(data.value);
         if (data.value != undefined) {
             customer.value =
                 data.value.customer != undefined ? data.value.customer : '';
             size.value = data.value.sizeT != undefined ? data.value.sizeT : '';
+            comment.value =
+                data.value.comment != undefined ? data.value.comment : '';
         } else {
             customer.value = '';
             size.value = '';
@@ -109,12 +120,23 @@ async function fetchData(adressId, entranceName) {
             </div>
             <img class="shrink-0" src="/assets/pictures/lifti project 2.png" />
         </div>
-        <RoundedArrowLineDropdown :hide-button="true" text="Таблица">
+        <RoundedArrowLineDropdown
+            :hide-delete="true"
+            :hide-button="true"
+            text="Таблица"
+            class="mb-5"
+        >
             <ODSHTable
                 :adress-id="props.adressId"
                 :entrance="props.entrance"
                 :-o-d-s-h-table-data="data.ODSHTableData"
             ></ODSHTable>
         </RoundedArrowLineDropdown>
+
+        <CommentComponent
+            @save="updateHeadOdsh()"
+            :value="comment"
+            @update:value="(newValue) => (comment = newValue)"
+        ></CommentComponent>
     </div>
 </template>

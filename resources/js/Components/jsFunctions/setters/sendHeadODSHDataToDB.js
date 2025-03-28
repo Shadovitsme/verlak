@@ -1,4 +1,10 @@
-export default async function sendHeadODSH(adressId, entrance, customer, size) {
+export default async function sendHeadODSH(
+    adressId,
+    entrance,
+    customer,
+    size,
+    comment,
+) {
     try {
         const response = await fetch('/setHeadODSH', {
             method: 'POST',
@@ -7,6 +13,7 @@ export default async function sendHeadODSH(adressId, entrance, customer, size) {
                 entrance: entrance,
                 customer: customer,
                 size: size,
+                comment: comment,
             }),
             headers: {
                 Accept: 'application/json',

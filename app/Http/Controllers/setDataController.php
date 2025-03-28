@@ -132,7 +132,7 @@ class setDataController extends Controller
         $contractId = $data['id'];
         $exists = DB::table('contract')
             ->where('contractNumber', $data['contractNumber'])
-            ->where('id','<>', $contractId)
+            ->where('id', '<>', $contractId)
             ->exists();
 
         if ($exists) {
@@ -320,13 +320,15 @@ class setDataController extends Controller
         $adressId = $data['adressId'];
         $entrance = $data['entrance'];
         $customer = $data['customer'];
+        $comment = $data['comment'];
+
         $size = $data['size'];
         $idODSH = DB::table('ODSH')->where('adressId', '=', $adressId)->where('entrance', '=', $entrance)->value('id');
 
         if ($idODSH) {
-            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'sizeT' => $size]);
+            DB::table('ODSH')->where('id', '=', $idODSH)->update(['customer' => $customer, 'sizeT' => $size, 'comment' => $comment]);
         } else {
-            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'sizeT' => $size]);
+            DB::table('ODSH')->insert(['entrance' => $entrance, 'adressId' => $adressId, 'customer' => $customer, 'sizeT' => $size, 'comment' => $comment]);
         }
     }
 

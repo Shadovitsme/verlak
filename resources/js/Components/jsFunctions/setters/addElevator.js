@@ -17,6 +17,8 @@ export default async function addElevator(name, adressId, entrance) {
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
+        } else {
+            window.location.reload();
         }
     } catch (error) {
         console.error('Error fetching data:', error);
