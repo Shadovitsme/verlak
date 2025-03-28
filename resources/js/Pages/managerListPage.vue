@@ -1,7 +1,7 @@
 <template>
     <PagePlace add-modal-type="addManager" page-name="Список сотрудников">
         <TablePlaceholder
-        class="w-[1348px]"
+            class="w-[1348px]"
             deleteCommand="deleteManager"
             :exec="false"
             api="/user"

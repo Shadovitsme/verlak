@@ -9,6 +9,7 @@ import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 import updateContract from '@/Components/jsFunctions/setters/updateContract';
+import towns from '@/Components/jsFunctions/towns';
 let rowCounter = ref(0);
 const errorState = ref(false);
 
@@ -25,7 +26,7 @@ const headItems = [
     'Тип проекта',
     'Дата начала',
     'Дата окончания',
-    'Стоимость(с НДС 20%),₽',
+    'Стоимость <br />(с НДС 20%),₽',
     'Действия',
 ];
 const dbAdressColumnNames = [
@@ -178,11 +179,7 @@ async function saveData() {
                             placeholder="Выберите город"
                             :value="props.data != null ? props.data.town : ''"
                             check-type="radio"
-                            :label-text-arr="[
-                                'Астрахань',
-                                'Москва',
-                                'Санкт-Петербург',
-                            ]"
+                            :label-text-arr="towns"
                         >
                         </DropdownInputButton>
                         <DropdownStatusButton

@@ -272,9 +272,30 @@ onUnmounted(() => {
                         :class="props.scrollTable ? columnWidths[index] : ''"
                         v-for="(item, index) in props.headItems"
                         :key="item"
-                    >
-                        {{ item }}
-                    </th>
+                        v-html="item"
+                        :style="{
+                            position:
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
+                                    ? 'sticky'
+                                    : '',
+                            right:
+                                index === props.headItems.length - 1 ? '0' : '',
+                            'background-color':
+                                index === props.headItems.length - 1
+                                    ? '#eef2ff'
+                                    : '',
+                            'z-index':
+                                index === props.headItems.length - 1
+                                    ? '10'
+                                    : '',
+                            'box-shadow':
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
+                                    ? 'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)'
+                                    : '',
+                        }"
+                    ></th>
                 </tr>
             </thead>
             <tbody ref="target" @click.stop>
@@ -318,7 +339,20 @@ onUnmounted(() => {
                             :placeholder="props.placeholders[index]"
                         />
                     </td>
-                    <td class="px-4">
+                    <td
+                        class="sticky right-0 z-10 px-4 shadow-md group-hover:bg-indigo-100"
+                        :style="{
+                            'box-shadow':
+                                'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)',
+                        }"
+                        :class="
+                            selectedRow === count
+                                ? 'bg-indigo-100'
+                                : index % 2 !== 0
+                                  ? 'bg-gray-50'
+                                  : 'bg-white'
+                        "
+                    >
                         <EditDeleteComponent
                             :id-to-delete="data?.[trIndex]?.id || 0"
                             :modalType="props.modalType"

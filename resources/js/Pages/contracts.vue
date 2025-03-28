@@ -32,8 +32,6 @@ async function fetchData() {
     }
 }
 
-
-
 function close() {
     toggleCreateContract.value = false;
     toggleOneContract.value = false;
@@ -85,7 +83,7 @@ function close() {
             :middle-point-text="
                 editContract ? 'Договор №' + selectedContractNumber : ''
             "
-            @goto-middle="editContract.value = false;"
+            @goto-middle="editContract.value = false"
             :current-point-text="
                 toggleCreateContract
                     ? 'Создание договора'
