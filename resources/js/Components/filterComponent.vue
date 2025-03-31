@@ -8,23 +8,30 @@ import town from './jsFunctions/town';
 const city = ref('');
 const organization = ref([]);
 const state = ref([]);
+const date = ref();
 
 const emit = defineEmits(['changeFilter']);
 
-watch([city, organization, state], ([newCity, newOrganization, newState]) => {
-    emit('changeFilter', {
-        city: newCity,
-        organization: newOrganization,
-        state: newState,
-    });
-});
+watch(
+    [date, city, organization, state],
+    ([newDate, newCity, newOrganization, newState]) => {
+        emit('changeFilter', {
+            date: newDate,
+            city: newCity,
+            organization: newOrganization,
+            state: newState,
+        });
+    },
+);
 </script>
 
 <template>
     <div class="mb-6 flex w-337 justify-end">
         <div class="flex w-[1004px] gap-8">
             <DropdownCalendarButton
+                :value="date"
                 placeholder="Выбрать дату"
+                @update:value="(newValue) => (date = newValue)"
             ></DropdownCalendarButton>
             <DropdownInputButton
                 :value="city"

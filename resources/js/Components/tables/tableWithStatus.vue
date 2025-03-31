@@ -41,9 +41,11 @@ async function fetchData() {
 }
 
 function applyFilters() {
-    const { city, organization, state } = filtersObject.value;
+    const { date, city, organization, state } = filtersObject.value;
 
     data.value = originalData.value.filter((row) => {
+        const matchesDate = !date || date == row[2];
+
         // Проверяем, входит ли значение city (индекс 3) в массив city, если массив задан
         const matchesCity = !city || !city.length || city.includes(row[3]);
         // Проверяем, входит ли значение organization (индекс 4) в массив organization
@@ -55,7 +57,7 @@ function applyFilters() {
         const matchesState = !state || !state.length || state.includes(row[6]);
         console.log(row);
         // Возвращаем true только если все условия совпадают (или фильтр не задан)
-        return matchesCity && matchesOrg && matchesState;
+        return matchesCity && matchesOrg && matchesState && matchesDate;
     });
 }
 // Отслеживание изменений фильтров из props

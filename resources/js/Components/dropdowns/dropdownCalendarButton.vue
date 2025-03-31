@@ -7,12 +7,25 @@ const props = defineProps({
     staticWidth: Boolean,
     value: String,
 });
+
+const emit = defineEmits(['update:value']); // Для v-model
+
 let showDrop = ref(false);
 let selectedDate = ref(null); // Реактивная переменная для хранения выбранной даты
 
 // Обработка выбранной даты
 const handleDateUpdate = (date) => {
     selectedDate.value = date;
+    const formattedDate = formatDate(date);
+    emit('update:value', formattedDate);
+};
+
+const formatDate = (date) => {
+    if (!date) return null;
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 так как месяцы начинаются с 0
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
 };
 
 // Закрытие календаря
