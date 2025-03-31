@@ -35,9 +35,6 @@ Route::get('/dashboard', function () {
     return Inertia::render('contracts');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/contracts', function () {
-    return Inertia::render('contracts');
-});
 
 Route::get('/contracts/{contractNumber}/{adressId}', function (string $contractNumber, string $adressId) {
     return Inertia::render('adress', [

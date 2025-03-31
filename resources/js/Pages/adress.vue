@@ -15,6 +15,7 @@ import Montazh from '@/Layouts/montazh.vue';
 import BuildingMaterials from '@/Layouts/buildingMaterials.vue';
 import OpenModal from '@/Components/openModal.vue';
 import gotocontracts from '@/Components/jsFunctions/goToContract';
+import BackAndUpComponent from '@/Components/backAndUpComponent.vue';
 let data = ref(null);
 const toggleModal = ref(false);
 // Объявляем пропсы
@@ -104,5 +105,9 @@ function goMiddle() {
         <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
         <Montazh :id="adressId"></Montazh>
         <BuildingMaterials :id="adressId"></BuildingMaterials>
+        <BackAndUpComponent
+            button-text="К договору"
+            :back-link="'/execContract/' + contractNumber"
+        ></BackAndUpComponent>
     </div>
 </template>
