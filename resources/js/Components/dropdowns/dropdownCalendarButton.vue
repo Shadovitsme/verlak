@@ -23,7 +23,10 @@ const closeCalendar = () => {
 
 <template>
     <div class="z-0 h-10 w-full">
-        <div class="z-0" :class="props.staticWidth ? 'w-[364px]' : 'w-full'">
+        <div
+            class="relative z-0"
+            :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
+        >
             <p class="mb-1.5 text-sm text-gray-900">{{ props.labelText }}</p>
             <button
                 @click="showDrop = !showDrop"
@@ -39,14 +42,12 @@ const closeCalendar = () => {
                           : props.placeholder
                 }}
             </button>
-        </div>
-        <div>
-            <DatePicker
-                v-if="showDrop"
-                class="mt-1.5"
-                @update:selected-date="handleDateUpdate"
-                @close="closeCalendar"
-            />
+            <div v-if="showDrop" class="absolute right-0 mt-1.5">
+                <DatePicker
+                    @update:selected-date="handleDateUpdate"
+                    @close="closeCalendar"
+                />
+            </div>
         </div>
     </div>
 </template>

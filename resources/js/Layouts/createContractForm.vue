@@ -9,7 +9,7 @@ import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import addNewContract from '@/Components/jsFunctions/setters/addNewContract';
 import updateContract from '@/Components/jsFunctions/setters/updateContract';
-import towns from '@/Components/jsFunctions/towns';
+import towns from '@/Components/jsFunctions/town';
 let rowCounter = ref(0);
 const errorState = ref(false);
 

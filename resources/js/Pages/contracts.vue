@@ -8,10 +8,13 @@ import BreadWay from '@/Components/breadWay.vue';
 import ExecContractData from '@/Components/execContractData.vue';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
 import gotocontracts from '@/Components/jsFunctions/goToContract';
+import FilterComponent from '@/Components/filterComponent.vue';
+import JustButton from '@/Components/justButton.vue';
 let toggleCreateContract = ref(false);
 let toggleOneContract = ref(false);
 let selectedContractNumber = ref(null);
 let editContract = ref(false);
+const filterShow = ref(false);
 
 const { contractNumber } = defineProps(['contractNumber']);
 
@@ -56,15 +59,34 @@ function close() {
         v-if="!toggleCreateContract && !toggleOneContract"
         class="mx-32 mt-20 min-w-full max-w-[1600px] pt-12"
     >
-        <div class="mb-8 flex">
-            <h1 class="my-auto mr-4 text-5xl text-gray-900">Учёт договоров</h1>
-            <IconButton
-                @click="toggleCreateContract = !toggleCreateContract"
-                class="my-auto rotate-45"
-                color="blue"
-                icon="/assets/icons/system/x.svg"
-            ></IconButton>
+        <div
+            :class="filterShow ? 'mb-3' : 'mb-6'"
+            class="flex w-337 items-center justify-between"
+        >
+            <div class="flex">
+                <h1 class="my-auto mr-4 text-5xl text-gray-900">
+                    Учёт договоров
+                </h1>
+                <IconButton
+                    @click="toggleCreateContract = !toggleCreateContract"
+                    class="my-auto rotate-45"
+                    color="blue"
+                    icon="/assets/icons/system/x.svg"
+                ></IconButton>
+            </div>
+            <JustButton
+                @click="filterShow = !filterShow"
+                class="flex align-middle"
+                color="noColor"
+                ><p class="my-auto">Фильтровать</p>
+                <img
+                    class="imgColorlessButton my-auto ml-2 inline-block size-5"
+                    src="/assets/icons/arrows/arrow-down-1.svg"
+                />
+            </JustButton>
         </div>
+        <FilterComponent class="mb-4" v-if="filterShow"></FilterComponent>
+
         <TableWithStatus
             @row-click="handleRowClick"
             api="/getContracts"
@@ -79,7 +101,6 @@ function close() {
             :last-status="true"
         ></TableWithStatus>
     </div>
-
     <CreateContractForm
         @close="close()"
         v-if="toggleCreateContract || editContract"
