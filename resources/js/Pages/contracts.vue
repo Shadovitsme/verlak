@@ -50,6 +50,16 @@ function close() {
     editContract.value = false;
     selectedContractNumber.value = undefined;
 }
+
+const filters = ref({
+    city: '',
+    organization: [],
+    state: [],
+});
+
+function test(filterData) {
+    filters.value = filterData;
+}
 </script>
 
 <template>
@@ -85,9 +95,13 @@ function close() {
                 />
             </JustButton>
         </div>
-        <FilterComponent class="mb-4" v-if="filterShow"></FilterComponent>
+        <FilterComponent
+            @change-filter="test"
+            v-if="filterShow"
+        ></FilterComponent>
 
         <TableWithStatus
+            :filters="filters"
             @row-click="handleRowClick"
             api="/getContracts"
             :head-items="[

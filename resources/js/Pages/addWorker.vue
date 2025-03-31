@@ -55,11 +55,7 @@ async function saveData() {
                         label-text="Город"
                         placeholder="Выберите город"
                         check-type="radio"
-                        :label-text-arr="[
-                            'Астрахань',
-                            'Москва',
-                            'Санкт-Петербург',
-                        ]"
+                        :label-text-arr="town"
                         @update:value="(newValue) => (town = newValue)"
                     >
                     </DropdownInputButton>

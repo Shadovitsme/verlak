@@ -1,37 +1,54 @@
-<script setup lang="ts">
+<script setup>
+import { ref, watch } from 'vue';
 import DropdownCalendarButton from './dropdowns/dropdownCalendarButton.vue';
+import DropdownCheckBox from './dropdowns/dropdownCheckBox.vue';
 import DropdownInputButton from './dropdowns/dropdownInputButton.vue';
-import DropdownStatusButton from './dropdowns/dropdownStatusButton.vue';
 import town from './jsFunctions/town';
+
+const city = ref('');
+const organization = ref([]);
+const state = ref([]);
+
+const emit = defineEmits(['changeFilter']);
+
+watch([city, organization, state], ([newCity, newOrganization, newState]) => {
+    emit('changeFilter', {
+        city: newCity,
+        organization: newOrganization,
+        state: newState,
+    });
+});
 </script>
 
 <template>
-    <div class="flex w-337 justify-end">
+    <div class="mb-6 flex w-337 justify-end">
         <div class="flex w-[1004px] gap-8">
             <DropdownCalendarButton
                 placeholder="Выбрать дату"
             ></DropdownCalendarButton>
             <DropdownInputButton
-                :static-width="false"
+                :value="city"
+                :static-width="true"
                 placeholder="Выберите город"
                 check-type="radio"
                 :label-text-arr="town"
+                @update:value="(newValue) => (city = newValue)"
             >
             </DropdownInputButton>
-            <DropdownInputButton
-                :static-width="false"
+            <DropdownCheckBox
+                :value="organization"
                 placeholder="Организация"
-                check-type="radio"
                 :label-text-arr="['ВЕРЕЛАК', 'ПСК']"
-            ></DropdownInputButton>
-            <DropdownStatusButton
-                id="state"
                 :static-width="false"
-                placeholder="Выберите статус"
-                check-type="radio"
-                :label-text-arr="['В работе', 'Выполнено']"
-            >
-            </DropdownStatusButton>
+                @update:value="(newValue) => (organization = newValue)"
+            ></DropdownCheckBox>
+            <DropdownCheckBox
+                :value="state"
+                :static-width="false"
+                placeholder="Статус"
+                :label-text-arr="['В работе', 'Выполненный']"
+                @update:value="(newValue) => (state = newValue)"
+            ></DropdownCheckBox>
         </div>
     </div>
 </template>

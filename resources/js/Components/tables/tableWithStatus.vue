@@ -13,6 +13,14 @@ const props = defineProps({
     api: String,
     readonlyFields: { type: Array, default: () => [] },
     placeholders: { type: Array, default: () => [] },
+    filters: {
+        type: Object,
+        default: () => ({
+            city: undefined,
+            organization: undefined,
+            state: undefined,
+        }),
+    },
 });
 
 let data = ref([]);
@@ -20,15 +28,54 @@ const columnWidths = ref([]);
 let readonlyFlag = ref('');
 let selectedRow = ref(null);
 let selectedRowIndex = ref();
-
+let filtersObject = ref({});
+let originalData = ref([]);
 async function fetchData() {
     try {
         const result = await getDataForTableFill(props.api);
         data.value = result;
+        originalData.value = result;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 }
+
+function applyFilters() {
+    const { city, organization, state } = filtersObject.value;
+
+    data.value = originalData.value.filter((row) => {
+        // Проверяем, входит ли значение city (индекс 3) в массив city, если массив задан
+        const matchesCity = !city || !city.length || city.includes(row[3]);
+        // Проверяем, входит ли значение organization (индекс 4) в массив organization
+        const matchesOrg =
+            !organization ||
+            !organization.length ||
+            organization.includes(row[4]);
+        // Проверяем, входит ли значение state (индекс 6) в массив state
+        const matchesState = !state || !state.length || state.includes(row[6]);
+        console.log(row);
+        // Возвращаем true только если все условия совпадают (или фильтр не задан)
+        return matchesCity && matchesOrg && matchesState;
+    });
+}
+// Отслеживание изменений фильтров из props
+watch(
+    () => props.filters,
+    (newFilters) => {
+        filtersObject.value = { ...newFilters }; // Обновляем реактивный объект
+
+        if (
+            filtersObject.value.city == undefined &&
+            filtersObject.value.organization.length == 0 &&
+            filtersObject.value.state.length == 0
+        ) {
+            data.value = originalData.value;
+        } else {
+            applyFilters();
+        }
+    },
+    { deep: true }, // Глубокое отслеживание объекта
+);
 
 function checkUndefinedTableColumn(oldReadonlyFlag, index) {
     if (

@@ -63,7 +63,9 @@ async function saveData() {
     let organization = getDropDownValue('organization');
     let date = getDropDownValue('date');
     let town = getDropDownValue('town');
-    let state = getDropDownValue('state');
+    let state = getDropDownValue('state')
+        ? getDropDownValue('state')
+        : 'В работе';
     let adressData = [];
     for (let i = 0; i <= rowCounter.value - 1; i++) {
         let besideResult = {};
