@@ -28,11 +28,15 @@ watch(
 <template>
     <div class="mb-6 flex w-337 justify-end">
         <div class="flex w-[1004px] gap-8">
-            <DropdownCalendarButton
-                :value="date"
-                placeholder="Выбрать дату"
-                @update:value="(newValue) => (date = newValue)"
-            ></DropdownCalendarButton>
+            <div class="relative w-full">
+
+                <DropdownCalendarButton
+                    :value="date"
+                    placeholder="Выбрать дату"
+                    @update:value="(newValue) => (date = newValue)"
+                ></DropdownCalendarButton>
+            </div>
+
             <DropdownInputButton
                 :value="city"
                 :static-width="true"

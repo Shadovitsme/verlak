@@ -6,9 +6,10 @@ import RoundedArrowLineToNextPage from '@/Components/roundedArrowLineToNextPage.
 import { onMounted, ref, computed } from 'vue';
 import getAllWorkerData from '@/Components/jsFunctions/getters/getAllWorkerData.js';
 import workerData from '@/Layouts/workerData.vue';
+import town from '@/Components/jsFunctions/town';
 
 const data = ref();
-const town = ref();
+const selectedTown = ref();
 const selected = ref();
 console.log(selected.value);
 
@@ -24,10 +25,10 @@ const filteredData = computed(() => {
     if (data.value == undefined) {
         return;
     }
-    if (!town.value) {
+    if (!selectedTown.value) {
         return data.value;
     }
-    return data.value.filter((item) => item.town === town.value);
+    return data.value.filter((item) => item.town === selectedTown.value);
 });
 </script>
 
@@ -48,13 +49,13 @@ const filteredData = computed(() => {
             ></a>
         </div>
         <DropdownInputButton
-            :value="town"
+            :value="selectedTown"
             :static-width="true"
             label-text="Город"
             placeholder="Выберите город"
             check-type="radio"
-            :label-text-arr="['Астрахань', 'Москва', 'Санкт-Петербург']"
-            @update:value="(newValue) => (town = newValue)"
+            :label-text-arr="town"
+            @update:value="(newValue) => (selectedTown = newValue)"
         >
         </DropdownInputButton>
         <div class="z-0 mt-14 w-[1348px] space-y-5">

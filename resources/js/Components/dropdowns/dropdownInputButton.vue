@@ -21,6 +21,11 @@ function checked(id) {
     emit('update:value', content.value);
 }
 
+function clearSelected() {
+    content.value = props.placeholder;
+    emit('update:value', '');
+}
+
 const emit = defineEmits(['update:value']); // Объявляем событие для v-model
 </script>
 
@@ -31,10 +36,16 @@ const emit = defineEmits(['update:value']); // Объявляем событие
             <button
                 @click="showDrop = !showDrop"
                 type="button"
-                class="h-12 rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4 text-left text-base text-gray-500"
+                class="flex h-12 items-center justify-between rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4 text-left text-sm text-gray-500"
                 :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
             >
                 {{ content }}
+                <img
+                    @click="clearSelected"
+                    v-if="content != props.placeholder"
+                    class="h-3"
+                    src="/assets/icons/system/x.svg"
+                />
             </button>
         </div>
         <div

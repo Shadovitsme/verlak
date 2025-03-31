@@ -3,6 +3,9 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    build: {
+        target: 'es2022', // Supports top-level await
+    },
     plugins: [
         laravel({
             input: 'resources/js/app.js',

@@ -11,7 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['update:value']); // Для v-model
 
 let showDrop = ref(false);
-let selectedDate = ref(null); // Реактивная переменная для хранения выбранной даты
+let selectedDate = ref(props.value); // Реактивная переменная для хранения выбранной даты
 
 // Обработка выбранной даты
 const handleDateUpdate = (date) => {
@@ -27,6 +27,11 @@ const formatDate = (date) => {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
 };
+
+function clearSelected() {
+    selectedDate.value = '';
+    emit('update:value', '');
+}
 
 // Закрытие календаря
 const closeCalendar = () => {
@@ -44,16 +49,20 @@ const closeCalendar = () => {
             <button
                 @click="showDrop = !showDrop"
                 type="button"
-                class="h-12 rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4 text-left text-base text-gray-500"
+                class="flex h-12 items-center justify-between rounded-lg border-[1px] border-gray-300 bg-gray-50 px-4 text-left text-sm text-gray-500"
                 :class="props.staticWidth ? 'w-[364px]' : 'w-full'"
             >
                 {{
-                    props.value
-                        ? props.value
-                        : selectedDate
-                          ? selectedDate.toLocaleDateString()
-                          : props.placeholder
+                    selectedDate
+                        ? selectedDate.toLocaleDateString()
+                        : props.placeholder
                 }}
+                <img
+                    @click="clearSelected"
+                    v-if="selectedDate"
+                    class="h-3"
+                    src="/assets/icons/system/x.svg"
+                />
             </button>
             <div v-if="showDrop" class="absolute right-0 mt-1.5">
                 <DatePicker

@@ -8,12 +8,13 @@ import IconButton from '../Components/iconButton.vue';
 import { ref, onMounted } from 'vue';
 import getExecData from '@/Components/jsFunctions/getters/getExecData';
 import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
+import town from '@/Components/jsFunctions/town';
 
 let rowCounter = ref([]);
 let adressCounter = ref(0);
 let testRef = ref(null);
 
-const town = ref('');
+const currentTown = ref('');
 const FIO = ref('');
 const adressItem = ref([]);
 
@@ -23,7 +24,7 @@ function addAdress() {
     adressItem.value.push('');
 }
 async function saveData() {
-    addUpdateWorker(FIO.value, town.value, workerId);
+    addUpdateWorker(FIO.value, currentTown.value, workerId);
     for (let i = 0; i < adressCounter.value; i++) {
         console.log(adressItem.value[i]);
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
@@ -42,7 +43,7 @@ async function fetchData(adressId) {
         const result = await getExecData('/getExecWorkerData', adressId);
         data.value = result;
         FIO.value = data.value.name;
-        town.value = data.value.town;
+        currentTown.value = data.value.town;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
@@ -69,17 +70,13 @@ async function fetchData(adressId) {
                     ></customInput>
 
                     <DropdownInputButton
-                        :value="town"
+                        :value="currentTown"
                         :static-width="true"
                         label-text="Город"
                         placeholder="Выберите город"
                         check-type="radio"
-                        :label-text-arr="[
-                            'Астрахань',
-                            'Москва',
-                            'Санкт-Петербург',
-                        ]"
-                        @update:value="(newValue) => (town = newValue)"
+                        :label-text-arr="town"
+                        @update:value="(newValue) => (currentTown = newValue)"
                     >
                     </DropdownInputButton>
                 </div>

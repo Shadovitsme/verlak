@@ -7,12 +7,13 @@ import EmptyTable from '../Components/tables/emptyTable.vue';
 import IconButton from '../Components/iconButton.vue';
 import { ref } from 'vue';
 import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
+import town from '@/Components/jsFunctions/town';
 
 let rowCounter = ref([]);
 let adressCounter = ref(0);
 let testRef = ref(null);
 
-const town = ref('');
+const selectedTown = ref('');
 const FIO = ref('');
 const adressItem = ref([]);
 
@@ -22,7 +23,7 @@ function addAdress() {
     adressItem.value.push('');
 }
 async function saveData() {
-    let workerId = await addUpdateWorker(FIO.value, town.value);
+    let workerId = await addUpdateWorker(FIO.value, selectedTown.value);
     for (let i = 0; i < adressCounter.value; i++) {
         testRef.value[i].addAdress(workerId, adressItem.value[i]);
     }
@@ -50,13 +51,13 @@ async function saveData() {
                     ></customInput>
 
                     <DropdownInputButton
-                        :value="town"
+                        :value="selectedTown"
                         :static-width="true"
                         label-text="Город"
                         placeholder="Выберите город"
                         check-type="radio"
                         :label-text-arr="town"
-                        @update:value="(newValue) => (town = newValue)"
+                        @update:value="(newValue) => (selectedTown = newValue)"
                     >
                     </DropdownInputButton>
                 </div>

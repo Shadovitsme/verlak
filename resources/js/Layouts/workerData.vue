@@ -7,13 +7,14 @@ import WorkerTable from '@/Components/tables/workerTable.vue';
 import customInput from '@/Components/customInput.vue';
 import DropdownInputButton from '@/Components/dropdowns/dropdownInputButton.vue';
 import addUpdateWorker from '@/Components/jsFunctions/setters/addWorker';
+import town from '@/Components/jsFunctions/town';
 
 const props = defineProps({
     data: Object,
 });
 const toggleModal = ref(false);
 const editMode = ref(false);
-const town = ref(props.data.town);
+const currentTown = ref(props.data.town);
 const FIO = ref(props.data.name);
 
 function replace() {
@@ -22,7 +23,7 @@ function replace() {
 
 function editSaveEdit() {
     if (editMode.value) {
-        addUpdateWorker(FIO.value, town.value, props.data.id);
+        addUpdateWorker(FIO.value, currentTown.value, props.data.id);
     }
     editMode.value = !editMode.value;
 }
@@ -53,13 +54,13 @@ function editSaveEdit() {
                 ></customInput>
 
                 <DropdownInputButton
-                    :value="town"
+                    :value="currentTown"
                     :static-width="true"
                     label-text="Город"
                     placeholder="Выберите город"
                     check-type="radio"
-                    :label-text-arr="['Астрахань', 'Москва', 'Санкт-Петербург']"
-                    @update:value="(newValue) => (town = newValue)"
+                    :label-text-arr="town"
+                    @update:value="(newValue) => (currentTown = newValue)"
                 >
                 </DropdownInputButton>
             </div>
