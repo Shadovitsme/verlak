@@ -92,12 +92,14 @@ function goMiddle() {
             table-name="adressDocument"
             :id="adressId"
             text="Документы"
+            table="adressDocument"
         ></DocumentsData>
         <DocumentsData
             where-fetch="/getEED"
             table-name="EED"
             :id="adressId"
             text="ИД"
+            table="EED"
         ></DocumentsData>
         <ObjectPhotoBLock :id="adressId"></ObjectPhotoBLock>
         <Montazh :id="adressId"></Montazh>

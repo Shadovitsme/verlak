@@ -24,7 +24,7 @@ const data = ref([]);
 async function fetchData() {
     let result;
     switch (props.modalType) {
-        case 'deleteContactListItem':
+        case 'deleteContact':
             result = await getExecData(
                 '/getContactPersonData',
                 props.addData.groupId,
@@ -124,7 +124,7 @@ function updateData(trIndex, indexItem, value) {
         data.value[trIndex] = {};
     }
     switch (props.modalType) {
-        case 'deleteContactListItem':
+        case 'deleteContact':
             if (indexItem === 0) data.value[trIndex].name = value;
             else if (indexItem === 1) data.value[trIndex].work = value;
             else if (indexItem === 2) data.value[trIndex].phone = value;
@@ -165,7 +165,7 @@ function chooseValue(trIndex, indexItem) {
     if (data.value?.[trIndex]) {
         let val = data.value[trIndex];
         switch (props.modalType) {
-            case 'deleteContactListItem':
+            case 'deleteContact':
                 return (
                     [val.name, val.work, val.phone, val.adress][indexItem] || ''
                 );
@@ -205,7 +205,8 @@ watch(selectedRow, async (newValue, oldValue) => {
     ) {
         const val = data.value[oldValue - 1];
         switch (props.modalType) {
-            case 'deleteContactListItem':
+            case 'deleteContact':
+                console.log(val);
                 await addUpdateContactPerson(
                     val.name || '',
                     val.work || '',
@@ -288,13 +289,18 @@ const deleteItem = (index) => {
                                     ? 'sticky'
                                     : '',
                             right:
-                                index === props.headItems.length - 1 ? '0' : '',
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
+                                    ? '0'
+                                    : '',
                             'background-color':
-                                index === props.headItems.length - 1
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
                                     ? '#eef2ff'
                                     : '',
                             'z-index':
-                                index === props.headItems.length - 1
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
                                     ? '10'
                                     : '',
                             'box-shadow':
@@ -351,7 +357,10 @@ const deleteItem = (index) => {
                         class="sticky right-0 z-10 px-4 shadow-md group-hover:bg-indigo-100"
                         :style="{
                             'box-shadow':
-                                'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)',
+                                index === props.headItems.length - 1 &&
+                                props.scrollTable
+                                    ? 'inset 4px 0 6px -1px rgba(0, 0, 0, 0.1)'
+                                    : '',
                         }"
                         :class="
                             selectedRow === count

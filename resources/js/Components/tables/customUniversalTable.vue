@@ -184,7 +184,6 @@ onUnmounted(() => {
 });
 
 function replaceTo(contractNumber, adressId) {
-
     window.location.href = '/contracts/' + contractNumber + '/' + adressId;
 }
 </script>

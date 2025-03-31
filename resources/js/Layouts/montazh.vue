@@ -35,6 +35,7 @@ const props = defineProps({
             text="Монтажники"
         ></TextHeadWithAddButton>
         <EmptyTable
+            :scroll-table="false"
             v-if="rowCounter > 0"
             :head-items="['ФИО', 'Телефон', 'Примечание', 'Действия']"
             :row-counter="rowCounter"

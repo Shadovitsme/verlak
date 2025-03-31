@@ -113,7 +113,7 @@ async function saveData() {
 </script>
 
 <template>
-    <div class="w-337 mx-32 mt-20 pt-12">
+    <div class="mx-32 mt-20 w-337 pt-12">
         <slot></slot>
         <h1 class="mb-3 text-4xl text-gray-900">Создание договора</h1>
         <p class="mb-6 text-base text-gray-700">

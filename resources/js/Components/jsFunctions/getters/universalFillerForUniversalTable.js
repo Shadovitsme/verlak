@@ -30,11 +30,10 @@ export default async function universalFillerForUniversalTable(
         const besideArr = defaultArray.map((name) => {
             if (dataMap.has(name)) {
                 const item = dataMap.get(name);
-                return [name, item.value, item.comment];
+                return [name, name, item.value, item.comment];
             }
-            return [name, '-', '-'];
+            return [name, name, '-', '-'];
         });
-        console.log(besideArr);
         return besideArr;
     } catch (error) {
         console.error('Error fetching data:', error);

@@ -60,6 +60,7 @@ function closeDelete() {
         :text="elem.name"
         :key="elem"
         ><EmptyTable
+            :scroll-table="false"
             modalType="deleteContact"
             :add-data="{ groupId: elem.id }"
             :all-changable="true"

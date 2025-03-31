@@ -11,7 +11,8 @@ const props = defineProps({
     adressId: String,
 });
 let toggleModal = ref(false);
-let folder = props.adressId + '/' + transliterate(props.text);
+let folder =
+    props.adressId + '/' + transliterate(props.text).replace(/ /g, '_');
 </script>
 
 <template>

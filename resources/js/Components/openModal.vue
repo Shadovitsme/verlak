@@ -20,7 +20,7 @@ let submitButtonText;
 let deleteForm = ref(true);
 let top = ref();
 let body = ref();
-
+// TODO сделать это через поиск слова в массиве
 if (
     props.modalType == 'deleteManager' ||
     props.modalType == 'deleteContract' ||
@@ -34,7 +34,8 @@ if (
     props.modalType == 'deleteMontazh' ||
     props.modalType == 'deleteWorker' ||
     props.modalType == 'deleteAvans' ||
-    props.modalType == 'deleteODSH'
+    props.modalType == 'deleteODSH' ||
+    props.modalType == 'deleteFile'
 ) {
     submitButtonText = 'Удалить';
     selectText(props.modalType);
@@ -96,6 +97,10 @@ function selectText(type) {
         case 'deleteODSH':
             top.value = 'Удалить этаж';
             body.value = 'Вы уверены, что хотите удалить этаж?';
+            break;
+        case 'deleteFile':
+            top.value = 'Удалить фаил';
+            body.value = 'Вы уверены, что хотите удалить фаил?';
             break;
         default:
             break;
@@ -172,6 +177,13 @@ async function send() {
             break;
         case 'deleteODSH':
             universalDelete(props.idToDelete, '/universalDelete', 'ODSHTable');
+            break;
+        case 'deleteFile':
+            universalDelete(
+                props.idToDelete,
+                '/universalDelete',
+                props.speciallAddData.table,
+            );
             break;
         case 'addManager':
             addNewManager(

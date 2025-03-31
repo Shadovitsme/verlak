@@ -12,7 +12,7 @@ const handleInput = (event) => {
 <template>
     <p class="text-sm text-gray-900">Комментарий</p>
     <div
-        class="w-128 relative mt-1.5 min-h-36 overflow-hidden rounded-lg border-[1px] border-gray-300 bg-gray-50"
+        class="relative mt-1.5 min-h-36 w-128 overflow-hidden rounded-lg border-[1px] border-gray-300 bg-gray-50"
     >
         <textarea
             maxlength="100"

@@ -35,6 +35,7 @@ const props = defineProps({
             text="Учёт строительных материалов"
         ></TextHeadWithAddButton>
         <EmptyTable
+            :scroll-table="false"
             v-if="rowCounter > 0"
             :head-items="[
                 'Наименования',

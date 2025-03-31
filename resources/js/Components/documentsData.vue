@@ -10,6 +10,7 @@ const props = defineProps({
     id: String,
     tableName: String,
     whereFetch: String,
+    table: String,
 });
 let toggleModal = ref(false);
 let folder = props.id + '/' + transliterate(props.text);
@@ -53,6 +54,8 @@ function getLastWordFromString(str) {
         </TextHeadWithAddButton>
         <div class="mt-3 flex w-full gap-2">
             <DocumentlittleCard
+                :table="props.table"
+                :id="item.id"
                 v-for="item in data"
                 :text="getLastWordFromString(item.pathToDirectory)"
                 :key="item"

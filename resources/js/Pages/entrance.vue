@@ -134,7 +134,6 @@ function goToAdress(adressId) {
                 >К адресу</JustButton
             >
 
-
             <IconButton
                 icon="/assets/icons/arrows/arrow-up.svg"
                 color="gray"
